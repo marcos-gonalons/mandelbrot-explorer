@@ -1,0 +1,17 @@
+node_modules
+.vscode
+*.wasm
+mandelbrot_renderer/dist
+todo.txt
+.DS_Store
+/build
+/.svelte-kit
+/package
+.env
+.env.*
+!.env.example
+.vercel
+.output
+vite.config.js.timestamp-*
+vite.config.ts.timestamp-*
+static/mandelbrot_renderer

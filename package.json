@@ -1,0 +1,46 @@
+{
+	"name": "mandelbrot",
+	"version": "1.0.0",
+	"description": "",
+	"scripts": {
+		"update-everything-to-latest-versions": "npx npm-check-updates -u; npm install",
+		"build-wasm-golang": "cd mandelbrot_renderer/wasm/golang; cross-env GOOS=js GOARCH=wasm go build -o \"../../../static/mandelbrot_renderer/main.wasm\";",
+		"build-mandelbrot-renderer": "cd mandelbrot_renderer; webpack;",
+		"dev": "vite dev",
+		"build": "vite build",
+		"preview": "vite preview",
+		"check": "svelte-kit sync; svelte-check --tsconfig ./tsconfig.json",
+		"check:watch": "svelte-kit sync; svelte-check --tsconfig ./tsconfig.json --watch",
+		"format": "prettier --write ."
+	},
+	"author": "Marcos Goñalons",
+	"license": "ISC",
+	"devDependencies": {
+		"@fontsource/fira-mono": "^5.0.13",
+		"@neoconfetti/svelte": "^2.2.1",
+		"@sveltejs/adapter-auto": "^3.2.1",
+		"@sveltejs/kit": "^2.5.10",
+		"@sveltejs/vite-plugin-svelte": "^3.1.0",
+		"@types/eslint": "^8.56.10",
+		"@types/progressbar.js": "^1.1.7",
+		"cross-env": "^7.0.3",
+		"eslint": "^9.3.0",
+		"eslint-config-prettier": "^9.1.0",
+		"eslint-plugin-svelte": "^2.39.0",
+		"http-server": "^14.1.1",
+		"prettier": "^3.2.5",
+		"prettier-plugin-svelte": "^3.2.3",
+		"svelte": "^4.2.17",
+		"svelte-check": "^3.7.1",
+		"ts-loader": "^9.5.1",
+		"tslib": "^2.6.2",
+		"typescript": "^5.4.5",
+		"vite": "^5.2.11",
+		"webpack": "^5.91.0",
+		"webpack-cli": "^5.1.4"
+	},
+	"dependencies": {
+		"progressbar.js": "^1.1.1"
+	},
+	"type": "module"
+}
