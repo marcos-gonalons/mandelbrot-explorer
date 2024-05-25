@@ -1,9 +1,6 @@
 const path = require('path');
 
 module.exports = {
-	mode: 'development',
-	devtool: 'inline-source-map',
-	//  mode: "production",
 	entry: {
 		bundle: './src/main.ts',
 		'golang-wasm-worker': './src/wasm_worker/main.js'

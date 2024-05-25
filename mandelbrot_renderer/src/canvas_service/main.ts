@@ -1,7 +1,7 @@
 import Line = require('progressbar.js/line');
 import { createDragHandler } from './dragHandler';
 import { createMouseCoordinatesHandler } from './mouseCoordinatesHandler';
-import { WorkerFunction, WorkersManager, createWorkersManager } from './workers_manager/manager';
+import { WorkerFunction, createWorkersManager } from './workers_manager/manager';
 import { createZoomHandler } from './zoomHandler';
 import { createKeypressHandler } from './keypressHandler';
 
