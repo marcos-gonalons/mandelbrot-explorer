@@ -105,3 +105,15 @@ button:focus:not(:focus-visible) {
 	width: 1px;
 	white-space: nowrap;
 }
+#progress-bar {
+	position: fixed;
+	top: 0;
+	left: 0;
+	width: 100%;
+}
+#canvas {
+	position: fixed;
+	top: 0;
+	left: 0;
+	cursor: grab;
+}

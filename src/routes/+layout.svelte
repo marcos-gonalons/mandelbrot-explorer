@@ -18,7 +18,7 @@
 		display: flex;
 		flex-direction: column;
 		min-height: 100vh;
-		background: rgb(0, 0, 0);
+		background: #000;
 	}
 
 	main {
