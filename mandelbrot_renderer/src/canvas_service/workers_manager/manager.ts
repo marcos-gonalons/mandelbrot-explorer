@@ -1,3 +1,4 @@
+import * as Bowser from 'bowser';
 import Line = require('progressbar.js/line');
 import {
 	AdjustOffsetsData,
@@ -7,7 +8,12 @@ import {
 	MainToWorkerPostMessage
 } from '../../wasm_worker/types/mainToWorker';
 import { Listeners, createListeners } from './listeners';
-import { WASM_FILE_PATH, MAX_WORKERS_TO_SPAWN, WORKERS_SCRIPT_PATH } from './constants';
+import {
+	WASM_FILE_PATH,
+	MAX_WORKERS_TO_SPAWN,
+	MAX_WORKERS_TO_SPAWN_FIREFOX,
+	WORKERS_SCRIPT_PATH
+} from './constants';
 import { Size } from '../../types';
 
 export enum WorkerFunction {
@@ -29,8 +35,8 @@ export const createWorkersManager = (
 	let listeners: Listeners = createListeners(
 		getCanvas,
 		getCtx,
+		() => workers,
 		progressBar,
-		workers,
 		() => (isCalculating = false)
 	);
 
@@ -44,7 +50,7 @@ export const createWorkersManager = (
 	): Promise<void> => {
 		const wasmBytes = await getWasmBytes();
 		const workerScriptCode = await getWorkerScriptCode();
-		for (let i = 0; i < MAX_WORKERS_TO_SPAWN; i++) {
+		for (let i = 0; i < getMaxWorkersToSpawn(); i++) {
 			const worker = new Worker(workerScriptCode);
 			workers.push(worker);
 
@@ -53,6 +59,7 @@ export const createWorkersManager = (
 					e,
 					() => {
 						workers = workers.filter(Boolean);
+						console.log('initialized', workers.length);
 						resolveWorkersInitializationPromise(workers);
 					},
 					(e: Error) => {
@@ -150,6 +157,15 @@ export const createWorkersManager = (
 		});
 
 		return URL.createObjectURL(blob);
+	};
+
+	const getMaxWorkersToSpawn = (): number => {
+		const browser = Bowser.getParser(window.navigator.userAgent);
+		if (browser.getBrowserName() === 'Firefox') {
+			return MAX_WORKERS_TO_SPAWN_FIREFOX;
+		}
+
+		return MAX_WORKERS_TO_SPAWN;
 	};
 
 	return {

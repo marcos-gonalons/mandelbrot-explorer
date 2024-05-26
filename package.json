@@ -42,6 +42,7 @@
 		"webpack-cli": "^5.1.4"
 	},
 	"dependencies": {
+		"bowser": "^2.11.0",
 		"progressbar.js": "^1.1.1"
 	},
 	"type": "module"

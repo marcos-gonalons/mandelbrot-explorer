@@ -12,8 +12,8 @@ export type Listeners = ReturnType<typeof createListeners>;
 export const createListeners = (
 	getCanvas: () => HTMLCanvasElement,
 	getCtx: () => CanvasRenderingContext2D,
+	getWorkers: () => Worker[],
 	progressBar: Line,
-	workers: Worker[],
 	onFinishRenderCallback: () => void
 ) => {
 	let finishedSegments: CalculateSegmentFinishedData[] = [];
@@ -50,8 +50,8 @@ export const createListeners = (
 	const onInitWASMFinished = (onWorkersInitialized: (workers: Worker[]) => void): void => {
 		totalSuccesses++;
 
-		if (totalErrors + totalSuccesses === workers.length) {
-			onWorkersInitialized(workers);
+		if (totalErrors + totalSuccesses === getWorkers().length) {
+			onWorkersInitialized(getWorkers());
 		}
 	};
 
@@ -61,21 +61,21 @@ export const createListeners = (
 		onFailure: (e: Error) => void
 	): void => {
 		totalErrors++;
-		workers[workerIndex].terminate();
-		workers[workerIndex] = null;
+		getWorkers()[workerIndex].terminate();
+		getWorkers()[workerIndex] = null;
 
-		if (totalErrors === workers.length) {
+		if (totalErrors === getWorkers().length) {
 			onFailure(new Error('Unable to initialize any worker'));
 			return;
 		}
-		if (totalErrors + totalSuccesses === workers.length) {
-			onWorkersInitialized(workers);
+		if (totalErrors + totalSuccesses === getWorkers().length) {
+			onWorkersInitialized(getWorkers());
 		}
 	};
 
 	const onSegmentFinished = (data: CalculateSegmentFinishedData): void => {
 		finishedSegments.push(data);
-		if (finishedSegments.length < workers.length) return;
+		if (finishedSegments.length < getWorkers().length) return;
 
 		if (data.resolution <= 1) {
 			progressBar.animate(1, { duration: 200 }, () => setTimeout(() => progressBar.set(0), 100));
