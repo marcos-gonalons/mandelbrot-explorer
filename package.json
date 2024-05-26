@@ -9,7 +9,7 @@
 		"build-mandelbrot-renderer-prod": "cd mandelbrot_renderer; webpack --mode=production;",
 		"dev": "vite dev",
 		"build": "npm run build-mandelbrot-renderer-prod; npm run build-wasm-golang; vite build",
-		"preview": "vite preview",
+		"preview": "npm run build; vite preview",
 		"check": "svelte-kit sync; svelte-check --tsconfig ./tsconfig.json",
 		"check:watch": "svelte-kit sync; svelte-check --tsconfig ./tsconfig.json --watch",
 		"format": "prettier --write .",

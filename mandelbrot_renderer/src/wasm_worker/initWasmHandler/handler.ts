@@ -1,12 +1,12 @@
 import { InitWASMData } from '../types/mainToWorker';
 import { WorkerToMainMessageType, WorkerToMainPostMessage } from '../types/workerToMain';
 
-export async function handleInitWasm({ workerIndex, wasmURL }: InitWASMData) {
+export async function handleInitWasm({ workerIndex, wasmBytes }: InitWASMData) {
 	try {
 		const go = new Go();
 		let result: WebAssembly.WebAssemblyInstantiatedSource;
 
-		const instantiatePromise = WebAssembly.instantiateStreaming(fetch(wasmURL), go.importObject);
+		const instantiatePromise = WebAssembly.instantiate(wasmBytes, go.importObject);
 
 		// I have to resort to Promise.race for firefox because a normal try catch
 		// surrounding await WebAssembly.instantiate doesn't work on firefox (promise never resolves nor rejects)

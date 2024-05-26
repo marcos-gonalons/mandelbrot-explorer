@@ -11,7 +11,7 @@ export enum MainToWorkerMessageType {
 
 export type InitWASMData = {
 	workerIndex: number;
-	wasmURL: string;
+	wasmBytes: ArrayBuffer;
 };
 
 export type CalculateSegmentData = {

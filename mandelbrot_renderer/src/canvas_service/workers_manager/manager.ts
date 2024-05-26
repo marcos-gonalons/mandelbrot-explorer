@@ -42,7 +42,7 @@ export const createWorkersManager = (
 		resolveWorkersInitializationPromise: (workers: Worker[]) => void,
 		rejectWorkersInitializationPromise: (e: Error) => void
 	): Promise<void> => {
-		const wasmURL = new URL(WASM_FILE_PATH, document.baseURI).toString();
+		const wasmBytes = await getWasmBytes();
 		const workerScriptCode = await getWorkerScriptCode();
 		for (let i = 0; i < MAX_WORKERS_TO_SPAWN; i++) {
 			const worker = new Worker(workerScriptCode);
@@ -64,7 +64,7 @@ export const createWorkersManager = (
 				type: MainToWorkerMessageType.INIT_WASM,
 				data: {
 					workerIndex: i,
-					wasmURL
+					wasmBytes
 				}
 			});
 		}
@@ -134,6 +134,12 @@ export const createWorkersManager = (
 				data
 			});
 		});
+	};
+
+	const getWasmBytes = async (): Promise<ArrayBuffer> => {
+		const response = await fetch(new URL(WASM_FILE_PATH, document.baseURI).toString());
+		const bytes = await response.arrayBuffer();
+		return bytes;
 	};
 
 	const getWorkerScriptCode = async (): Promise<string> => {
