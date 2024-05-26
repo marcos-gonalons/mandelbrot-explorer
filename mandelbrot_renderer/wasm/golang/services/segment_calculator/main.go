@@ -41,6 +41,11 @@ func New(
 	}
 }
 
+func (s *Service) SetMaxIterations(maxIterations int64) *Service {
+	s.maxIterations = maxIterations
+	return s
+}
+
 func (s *Service) CalculateSegmentColors(
 	canvasSize objects.Size,
 	segmentLength int,

@@ -32,6 +32,7 @@ func (s *Service) GetPixelColor(iterations int64) (r, g, b, a byte) {
 }
 
 func (s *Service) prepareColors() {
+	s.colors = nil
 	currentAssignment := 0
 	for i := 0; i < int(s.maxIterations); i++ {
 		if i%(CHANGE_COLOR_EVERY_N_ITERATIONS) == 0 {

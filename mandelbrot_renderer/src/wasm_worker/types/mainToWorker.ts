@@ -6,7 +6,8 @@ export enum MainToWorkerMessageType {
 	TRANSFER_BYTES_TEST,
 	CALCULATE_SEGMENT,
 	ADJUST_OFFSETS,
-	ADJUST_ZOOM
+	ADJUST_ZOOM,
+	SET_MAX_ITERATIONS
 }
 
 export type InitWASMData = {
@@ -32,6 +33,9 @@ export type AdjustZoomData = {
 	mouseCoordinates: number[];
 	canvasSize: Size;
 };
+export type SetMaxIterationsData = {
+	value: number;
+};
 
 export type MainToWorkerMessageData =
 	| {
@@ -52,6 +56,10 @@ export type MainToWorkerMessageData =
 	| {
 			type: MainToWorkerMessageType.CALCULATE_SEGMENT;
 			data: CalculateSegmentData;
+	  }
+	| {
+			type: MainToWorkerMessageType.SET_MAX_ITERATIONS;
+			data: SetMaxIterationsData;
 	  };
 
 export type MainToWorkerPostMessage = (message: MainToWorkerMessageData) => void;

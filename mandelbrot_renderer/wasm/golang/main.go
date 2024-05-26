@@ -12,6 +12,7 @@ import (
 
 var offsetsHandler *offsets.Handler
 var zoomHandler *zoom.Handler
+var colorService *color.Service
 var segmentCalculatorService *segmentcalculator.Service
 var operationMode *operationmode.Service
 
@@ -27,6 +28,7 @@ func main() {
 	initServices()
 
 	js.Global().Get("WASM").Get("functions").Set("setMode", js.FuncOf(SetMode))
+	js.Global().Get("WASM").Get("functions").Set("setMaxIterations", js.FuncOf(SetMaxIterations))
 	js.Global().Get("WASM").Get("functions").Set("calculateSegment", js.FuncOf(CalculateSegment))
 	js.Global().Get("WASM").Get("functions").Set("adjustOffsets", js.FuncOf(AdjustOffsets))
 	js.Global().Get("WASM").Get("functions").Set("adjustZoom", js.FuncOf(AdjustZoom))
@@ -52,11 +54,13 @@ func initServices() {
 		},
 	)
 
+	colorService = color.New()
+
 	segmentCalculatorService = segmentcalculator.New(
 		operationMode,
 		offsetsHandler,
 		zoomHandler,
-		color.New(),
+		colorService,
 		defaultMaxIterations,
 		func(progress float64) {
 			jsCallbacks.Call("progress", progress)
@@ -69,6 +73,13 @@ func initServices() {
 
 func SetMode(this js.Value, arguments []js.Value) interface{} {
 	operationMode.Set(operationmode.Mode(arguments[0].Int()))
+	return nil
+}
+
+func SetMaxIterations(this js.Value, arguments []js.Value) interface{} {
+	maxIterations := arguments[0].Int()
+	segmentCalculatorService.SetMaxIterations(int64(maxIterations))
+	colorService.SetMaxIterations(int64(maxIterations))
 	return nil
 }
 

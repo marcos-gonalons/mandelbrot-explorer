@@ -4,6 +4,7 @@ import { handleTransferBytesTest } from './transferBytesTestHandler/handler';
 import { handleAdjustOffsets } from './adjustOffsetsHandler/handler';
 import { handleAdjustZoom } from './adjustZoomHandler/handler';
 import { MainToWorkerMessageData, MainToWorkerMessageType } from './types/mainToWorker';
+import { handleSetMaxIterations } from './setMaxIterationsHandler/handler';
 
 export const handle = async ({ data: message }: MessageEvent<MainToWorkerMessageData>) => {
 	switch (message.type) {
@@ -22,6 +23,9 @@ export const handle = async ({ data: message }: MessageEvent<MainToWorkerMessage
 		case MainToWorkerMessageType.CALCULATE_SEGMENT:
 			handleCalculateSegment(message.data);
 			break;
+		case MainToWorkerMessageType.SET_MAX_ITERATIONS:
+			handleSetMaxIterations(message.data);
+			break;
 	}
 };
 
@@ -37,6 +41,7 @@ self.WASM = {
 	},
 	functions: {
 		transferBytesTest: placeholder,
+		setMaxIterations: placeholder,
 		adjustOffsets: placeholder,
 		adjustZoom: placeholder,
 		calculateSegment: placeholder

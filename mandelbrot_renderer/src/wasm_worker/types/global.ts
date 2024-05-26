@@ -22,6 +22,7 @@ declare global {
 			};
 			functions: {
 				transferBytesTest: () => void;
+				setMaxIterations: (value: number) => void;
 				adjustOffsets: (speed: number, angleInDegrees: number) => void;
 				adjustZoom: (
 					increase: boolean,

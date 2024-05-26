@@ -44,6 +44,8 @@ export const createListeners = (
 				break;
 			case WorkerToMainMessageType.ADJUST_ZOOM_FINISHED:
 				break;
+			case WorkerToMainMessageType.SET_MAX_ITERATIONS_FINISHED:
+				break;
 		}
 	};
 
