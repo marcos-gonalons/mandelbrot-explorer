@@ -59,7 +59,6 @@ export const createWorkersManager = (
 					e,
 					() => {
 						workers = workers.filter(Boolean);
-						console.log('initialized', workers.length);
 						resolveWorkersInitializationPromise(workers);
 					},
 					(e: Error) => {
