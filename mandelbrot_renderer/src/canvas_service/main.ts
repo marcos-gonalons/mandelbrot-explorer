@@ -8,6 +8,8 @@ import { createKeypressHandler } from './keypressHandler';
 export const init = async (canvas: HTMLCanvasElement, progressBar: Line) => {
 	const ctx = canvas.getContext('2d');
 	let imageData: ImageData;
+	let resizeInterval: ReturnType<typeof setInterval>;
+	let lastResizeAt: number;
 
 	const { workersManager } = initHandlers();
 
@@ -20,7 +22,7 @@ export const init = async (canvas: HTMLCanvasElement, progressBar: Line) => {
 		workersManager.call(WorkerFunction.CALCULATE);
 	} catch (e) {
 		// TODO: Some toast or something else instead of an alert
-		alert('Sorry, an error occurred :(');
+		alert('Sorry, an error occurred :( - Please try with another browser');
 	}
 
 	function initHandlers() {
@@ -59,8 +61,24 @@ export const init = async (canvas: HTMLCanvasElement, progressBar: Line) => {
 
 	function initEventListeners(): void {
 		const onResize = () => {
-			initCanvas();
-			setTimeout(() => workersManager.call(WorkerFunction.CALCULATE), 100);
+			lastResizeAt = new Date().getTime();
+
+			if (resizeInterval) return;
+
+			resizeInterval = setInterval(() => {
+				if (workersManager.isCalculating()) {
+					return;
+				}
+
+				const now = new Date().getTime();
+
+				if (now - lastResizeAt > 350) {
+					clearInterval(resizeInterval);
+					resizeInterval = null;
+					initCanvas();
+					workersManager.call(WorkerFunction.CALCULATE);
+				}
+			}, 50);
 		};
 		addEventListener('resize', onResize);
 	}
