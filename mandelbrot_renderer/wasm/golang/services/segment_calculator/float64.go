@@ -2,9 +2,13 @@ package segmentcalculator
 
 import (
 	"mandelbrot/objects"
-	complexnumbers "mandelbrot/objects/complex_numbers"
 	"math"
 )
+
+type complexNumber64 struct {
+	RealPart      float64
+	ImaginaryPart float64
+}
 
 func (s *Service) getIterationsFloat64(
 	coordinates objects.Coordinates,
@@ -12,17 +16,17 @@ func (s *Service) getIterationsFloat64(
 	zoomLevel float64,
 	offsets objects.Coordinates,
 ) int64 {
-	point := complexnumbers.ComplexNumber{
-		RealPart:      ((float64(coordinates.X)/float64(canvasSize.Width))*zoomLevel)*4 - 2.5 + float64(offsets.X),
-		ImaginaryPart: ((float64(coordinates.Y)/float64(canvasSize.Height))*zoomLevel)*2 - 1 + float64(offsets.Y),
+	point := complexNumber64{
+		RealPart:      ((float64(coordinates.X)/float64(canvasSize.Width))*zoomLevel)*4 - 2.5 + offsets.X,
+		ImaginaryPart: ((float64(coordinates.Y)/float64(canvasSize.Height))*zoomLevel)*2 - 1 + offsets.Y,
 	}
 
-	z := complexnumbers.ComplexNumber{
+	z := complexNumber64{
 		RealPart:      0,
 		ImaginaryPart: 0,
 	}
 	for i := int64(0); i < s.maxIterations; i++ {
-		z = complexnumbers.Add(complexnumbers.Square(z), point)
+		z = addComplex64(squareComplex64(z), point)
 
 		if math.Abs(z.RealPart) > THRESHOLD || math.Abs(z.ImaginaryPart) > THRESHOLD {
 			return i
@@ -30,4 +34,22 @@ func (s *Service) getIterationsFloat64(
 	}
 
 	return 0
+}
+
+func addComplex64(c1, c2 complexNumber64) complexNumber64 {
+	return complexNumber64{
+		RealPart:      c1.RealPart + c2.RealPart,
+		ImaginaryPart: c1.ImaginaryPart + c2.ImaginaryPart,
+	}
+}
+
+func mulComplex64(c1, c2 complexNumber64) complexNumber64 {
+	return complexNumber64{
+		RealPart:      c1.RealPart*c2.RealPart - c1.ImaginaryPart*c2.ImaginaryPart,
+		ImaginaryPart: c1.RealPart*c2.ImaginaryPart + c1.ImaginaryPart*c2.RealPart,
+	}
+}
+
+func squareComplex64(c complexNumber64) complexNumber64 {
+	return mulComplex64(c, c)
 }
