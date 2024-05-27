@@ -1,6 +1,7 @@
 package main
 
 import (
+	"encoding/json"
 	objects "mandelbrot/objects"
 	"mandelbrot/services/color"
 	"mandelbrot/services/offsets"
@@ -107,7 +108,8 @@ func AdjustOffsets(this js.Value, arguments []js.Value) interface{} {
 		arguments[1].Int(),
 	)
 
-	return nil
+	r, _ := json.Marshal(offsetsHandler.GetAsCoordinates())
+	return string(r)
 }
 
 func AdjustZoom(this js.Value, arguments []js.Value) interface{} {

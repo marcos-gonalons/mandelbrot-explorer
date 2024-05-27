@@ -2,7 +2,6 @@ package segmentcalculator
 
 import (
 	"mandelbrot/objects"
-	complexnumbers "mandelbrot/objects/complex_numbers"
 	"mandelbrot/objects/float128"
 	"mandelbrot/services/color"
 	"mandelbrot/services/offsets"
@@ -54,9 +53,11 @@ func (s *Service) CalculateSegmentColors(
 ) *[]byte {
 	pixelData := make([]byte, segmentLength)
 	mainIndex := startsAt / 4
+	zoomLevel := s.zoomHandler.GetZoomLevel()
+	offsets := s.offsetsHandler.GetAsCoordinates()
 
 	for i := 0; i < segmentLength; i += 4 {
-		r, g, b, a := s.getPixelColor(s.getCoordinatesAtIndex(mainIndex, canvasSize.Width), canvasSize)
+		r, g, b, a := s.getPixelColor(s.getCoordinatesAtIndex(mainIndex, canvasSize.Width), canvasSize, zoomLevel, offsets)
 
 		pixelData[i+0] = r
 		pixelData[i+1] = g
@@ -84,83 +85,25 @@ func (s *Service) getCoordinatesAtIndex(index, width int) objects.Coordinates {
 	}
 }
 
-func (s *Service) getPixelColor(coordinates objects.Coordinates, canvasSize objects.Size) (r, g, b, a byte) {
-	iterationsPerformed := s.getIterations(s.CoordinatesToComplexNumber(
-		coordinates,
-		canvasSize,
-		s.offsetsHandler.GetAsCoordinates(),
-	))
+func (s *Service) getPixelColor(
+	coordinates objects.Coordinates,
+	canvasSize objects.Size,
+	zoomLevel interface{},
+	offsets objects.Coordinates,
+) (r, g, b, a byte) {
+	var iterations int64
 
-	if iterationsPerformed == 0 {
+	if s.operationMode.IsFloat64() {
+		iterations = s.getIterationsFloat64(coordinates, canvasSize, zoomLevel.(float64), offsets)
+	}
+
+	if s.operationMode.IsFloat128() {
+		iterations = s.getIterationsFloat128(coordinates, canvasSize, zoomLevel.(float128.Float128), offsets)
+	}
+
+	if iterations == 0 {
 		return 0, 0, 0, math.MaxUint8
 	}
 
-	return s.colorService.GetPixelColor(iterationsPerformed)
-}
-
-func (s *Service) getIterations(c interface{}) int64 {
-	i := int64(0)
-
-	if s.operationMode.IsFloat64() {
-		z := complexnumbers.ComplexNumber{
-			RealPart:      0,
-			ImaginaryPart: 0,
-		}
-		for i = 0; i < s.maxIterations; i++ {
-			z = complexnumbers.Add(complexnumbers.Square(z), c.(complexnumbers.ComplexNumber))
-
-			if math.Abs(z.RealPart) > THRESHOLD || math.Abs(z.ImaginaryPart) > THRESHOLD {
-				return i
-			}
-		}
-	}
-
-	if s.operationMode.IsFloat128() {
-		z := complexnumbers.ComplexNumberFloat128{
-			RealPart:      float128.Zero(),
-			ImaginaryPart: float128.Zero(),
-		}
-		threshold := float128.SetFloat64(THRESHOLD)
-		for i = 0; i < s.maxIterations; i++ {
-			z = complexnumbers.AddFloat128(complexnumbers.SquareFloat128(z), c.(complexnumbers.ComplexNumberFloat128))
-
-			if float128.IsGT(float128.Abs(z.RealPart), threshold) || float128.IsGT(float128.Abs(z.ImaginaryPart), threshold) {
-				return i
-			}
-		}
-	}
-
-	return 0
-}
-
-func (s *Service) CoordinatesToComplexNumber(
-	coordinates objects.Coordinates,
-	size objects.Size,
-	offsets objects.Coordinates,
-) interface{} {
-	if s.operationMode.IsFloat64() {
-		zoomLevel := s.zoomHandler.GetZoomLevel().(float64)
-
-		return complexnumbers.ComplexNumber{
-			RealPart:      ((float64(coordinates.X)/float64(size.Width))*zoomLevel)*4 - 2.5 + float64(offsets.X),
-			ImaginaryPart: ((float64(coordinates.Y)/float64(size.Height))*zoomLevel)*2 - 1 + float64(offsets.Y),
-		}
-	}
-
-	if s.operationMode.IsFloat128() {
-		zoomLevel := s.zoomHandler.GetZoomLevel().(float128.Float128)
-
-		realPart := float128.Mul(float128.Mul(float128.Div(float128.SetFloat64(coordinates.X), float128.SetFloat64(float64(size.Width))), zoomLevel), float128.SetFloat64(4))
-		imaginaryPart := float128.Mul(float128.Mul(float128.Div(float128.SetFloat64(coordinates.Y), float128.SetFloat64(float64(size.Height))), zoomLevel), float128.SetFloat64(2))
-
-		realPart = float128.Add(float128.Sub(realPart, float128.SetFloat64(2.5)), offsets.X_float128)
-		imaginaryPart = float128.Add(float128.Sub(imaginaryPart, float128.SetFloat64(1)), offsets.Y_float128)
-
-		return complexnumbers.ComplexNumberFloat128{
-			RealPart:      realPart,
-			ImaginaryPart: imaginaryPart,
-		}
-	}
-
-	return nil
+	return s.colorService.GetPixelColor(iterations)
 }
