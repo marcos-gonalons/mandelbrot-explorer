@@ -19,13 +19,39 @@ export const createDragHandler = (
 	addEventListener('mouseup', onMouseUp);
 	addEventListener('mousemove', onMouseMove);
 
-	function onMouseDown() {
+	function onMouseDown(event: MouseEvent) {
+		if (!(event.target instanceof HTMLCanvasElement)) {
+			return;
+		}
+
 		isDraggingCanvas = true;
 		getCanvas().style.cursor = 'grabbing';
 		coordinatesAtStartOfDragging = mouseCoordinatesHandler.getCoordinates();
 	}
 
-	function onMouseUp() {
+	function onMouseUp(event: MouseEvent) {
+		if (!isDraggingCanvas || !(event.target instanceof HTMLCanvasElement)) {
+			return;
+		}
+		stopDragging();
+	}
+
+	function onMouseMove(event: MouseEvent): void {
+		if (!isDraggingCanvas || zoomHandler.isScrolling()) {
+			return;
+		}
+
+		if (!(event.target instanceof HTMLCanvasElement)) {
+			stopDragging();
+			return;
+		}
+
+		updateOffsets();
+
+		workersManager.call(WorkerFunction.CALCULATE, 4);
+	}
+
+	function stopDragging() {
 		isDraggingCanvas = false;
 		getCanvas().style.cursor = 'grab';
 		coordinatesAtStartOfDragging = mouseCoordinatesHandler.getCoordinates();
@@ -42,16 +68,6 @@ export const createDragHandler = (
 
 			workersManager.call(WorkerFunction.CALCULATE);
 		}, 50);
-	}
-
-	function onMouseMove(): void {
-		if (!isDraggingCanvas || zoomHandler.isScrolling()) {
-			return;
-		}
-
-		updateOffsets();
-
-		workersManager.call(WorkerFunction.CALCULATE, 4);
 	}
 
 	function updateOffsets(): void {
