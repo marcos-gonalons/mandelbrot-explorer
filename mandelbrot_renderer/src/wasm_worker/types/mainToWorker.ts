@@ -3,7 +3,6 @@ import { Size } from '../../types';
 
 export enum MainToWorkerMessageType {
 	INIT_WASM,
-	TRANSFER_BYTES_TEST,
 	CALCULATE_SEGMENT,
 	ADJUST_OFFSETS,
 	ADJUST_ZOOM,
@@ -38,9 +37,6 @@ export type SetMaxIterationsData = {
 };
 
 export type MainToWorkerMessageData =
-	| {
-			type: MainToWorkerMessageType.TRANSFER_BYTES_TEST;
-	  }
 	| {
 			type: MainToWorkerMessageType.ADJUST_ZOOM;
 			data: AdjustZoomData;

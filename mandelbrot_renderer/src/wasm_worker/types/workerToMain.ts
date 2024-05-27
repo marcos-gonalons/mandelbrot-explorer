@@ -3,7 +3,6 @@ import { Size } from '../../types';
 export enum WorkerToMainMessageType {
 	INIT_WASM_FINISHED,
 	INIT_WASM_ERROR,
-	TRANSFER_BYTES_TEST_FINISHED,
 	CALCULATE_SEGMENT_FINISHED,
 	CALCULATION_PROGRESS,
 	ADJUST_ZOOM_FINISHED,
@@ -30,10 +29,6 @@ export type WorkerToMainMessageData =
 	| {
 			type: WorkerToMainMessageType.CALCULATION_PROGRESS;
 			data: { progress: number };
-	  }
-	| {
-			type: WorkerToMainMessageType.TRANSFER_BYTES_TEST_FINISHED;
-			data: { pixels: Uint8ClampedArray };
 	  }
 	| {
 			type: WorkerToMainMessageType.CALCULATE_SEGMENT_FINISHED;

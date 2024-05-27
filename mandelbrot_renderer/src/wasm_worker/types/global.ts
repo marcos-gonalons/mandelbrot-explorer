@@ -13,7 +13,6 @@ declare global {
 	interface Window {
 		WASM: {
 			sharedVariables: {
-				testArray: Uint8ClampedArray;
 				segmentData: Uint8ClampedArray;
 			};
 			callbacks: {
@@ -21,7 +20,6 @@ declare global {
 				maxFloat64DepthReached: () => void;
 			};
 			functions: {
-				transferBytesTest: () => void;
 				setMaxIterations: (value: number) => void;
 				adjustOffsets: (speed: number, angleInDegrees: number) => void;
 				adjustZoom: (

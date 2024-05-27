@@ -32,8 +32,6 @@ export const createListeners = (
 			case WorkerToMainMessageType.INIT_WASM_ERROR:
 				onInitWASMError(message.data, onWorkersInitialized, onFailure);
 				break;
-			case WorkerToMainMessageType.TRANSFER_BYTES_TEST_FINISHED:
-				break;
 			case WorkerToMainMessageType.CALCULATE_SEGMENT_FINISHED:
 				onSegmentFinished(message.data);
 				break;
