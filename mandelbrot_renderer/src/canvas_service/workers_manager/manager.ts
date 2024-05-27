@@ -13,7 +13,8 @@ import {
 	WASM_FILE_PATH,
 	MAX_WORKERS_TO_SPAWN,
 	MAX_WORKERS_TO_SPAWN_FIREFOX,
-	WORKERS_SCRIPT_PATH
+	WORKERS_SCRIPT_PATH,
+	MAX_WORKERS_TO_SPAWN_MOBILE
 } from './constants';
 import { Size } from '../../types';
 
@@ -175,8 +176,12 @@ export const createWorkersManager = (
 
 	const getMaxWorkersToSpawn = (): number => {
 		const browser = Bowser.getParser(window.navigator.userAgent);
+
 		if (browser.getBrowserName() === 'Firefox') {
 			return MAX_WORKERS_TO_SPAWN_FIREFOX;
+		}
+		if (browser.getPlatform().type === 'mobile') {
+			return MAX_WORKERS_TO_SPAWN_MOBILE;
 		}
 
 		return MAX_WORKERS_TO_SPAWN;
