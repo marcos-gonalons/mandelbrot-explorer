@@ -100,7 +100,7 @@ func (s *Service) getPixelColor(
 	}
 
 	if iterations == 0 {
-		return 0, 0, 0, math.MaxUint8
+		return s.colorService.GetColorAtMaxIterations()
 	}
 
 	return s.colorService.GetPixelColor(iterations)

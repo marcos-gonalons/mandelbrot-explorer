@@ -5,17 +5,19 @@ import (
 )
 
 type Service struct {
-	colors           []objects.RGBColor
-	maxIterations    int64
-	colorAssignments []ColorAssignment
+	colors               []objects.RGBColor
+	maxIterations        int64
+	colorAssignments     []ColorAssignment
+	colorAtMaxIterations objects.RGBColor
 }
 
 const CHANGE_COLOR_EVERY_N_ITERATIONS = 20
 
-func New(maxIterations int64) *Service {
+func New(maxIterations int64, colorAtMaxIterations objects.RGBColor) *Service {
 	service := &Service{
-		maxIterations:    maxIterations,
-		colorAssignments: colorAssignments,
+		maxIterations:        maxIterations,
+		colorAssignments:     colorAssignments,
+		colorAtMaxIterations: colorAtMaxIterations,
 	}
 	service.prepareColors()
 
@@ -32,6 +34,10 @@ func (s *Service) GetPixelColor(iterations int64) (r, g, b, a byte) {
 	color := s.colors[iterations%int64(len(s.colors))]
 
 	return color.R, color.G, color.B, color.A
+}
+
+func (s *Service) GetColorAtMaxIterations() (r, g, b, a byte) {
+	return s.colorAtMaxIterations.R, s.colorAtMaxIterations.G, s.colorAtMaxIterations.B, s.colorAtMaxIterations.A
 }
 
 func (s *Service) prepareColors() {

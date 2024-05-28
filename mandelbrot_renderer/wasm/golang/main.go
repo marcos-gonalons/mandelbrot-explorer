@@ -24,6 +24,7 @@ var defaultMagnitude float64 = 0.1
 var defaultMagnitudeDecimals uint64 = 1
 var defaultXOffset float64 = -0.2
 var defaultYOffset float64 = -0.2
+var defaultColorAtMaxIterations = objects.RGBColor{R: 0, G: 0, B: 0, A: 128}
 
 func main() {
 	initServices()
@@ -55,7 +56,7 @@ func initServices() {
 		},
 	)
 
-	colorService = color.New(defaultMaxIterations)
+	colorService = color.New(defaultMaxIterations, defaultColorAtMaxIterations)
 
 	segmentCalculatorService = segmentcalculator.New(
 		operationMode,
