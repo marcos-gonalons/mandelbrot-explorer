@@ -10,12 +10,15 @@ type Service struct {
 	colorAssignments []ColorAssignment
 }
 
-const CHANGE_COLOR_EVERY_N_ITERATIONS = 400
+const CHANGE_COLOR_EVERY_N_ITERATIONS = 20
 
-func New() *Service {
+func New(maxIterations int64) *Service {
 	service := &Service{
-		colorAssignments: assignments,
+		maxIterations:    maxIterations,
+		colorAssignments: colorAssignments,
 	}
+	service.prepareColors()
+
 	return service
 }
 
@@ -34,7 +37,7 @@ func (s *Service) GetPixelColor(iterations int64) (r, g, b, a byte) {
 func (s *Service) prepareColors() {
 	s.colors = nil
 	currentAssignment := 0
-	for i := 0; i < int(s.maxIterations); i++ {
+	for i := int64(0); i < s.maxIterations; i++ {
 		if i%(CHANGE_COLOR_EVERY_N_ITERATIONS) == 0 {
 			currentAssignment++
 			if currentAssignment == len(s.colorAssignments) {
@@ -42,52 +45,84 @@ func (s *Service) prepareColors() {
 			}
 		}
 
-		r := byte(0)
-		g := byte(0)
-		b := byte(0)
-		a := byte(byte(i%(255)) * 3)
-
-		v := 255 - byte(i%(255))
-		switch s.colorAssignments[currentAssignment] {
-		case RED:
-			r = v
-		case GREEN:
-			g = v
-		case BLUE:
-			b = v
-		case YELLOW:
-			r = v
-			g = v
-		case VIOLET:
-			r = v
-			b = v
-		case TEAL:
-			b = v
-			g = v
-		case WHITE:
-			r = v
-			g = v
-			b = v
-		case SOFT_VIOLET:
-			r = v / 2
-			b = v
-		case PINK:
-			r = v
-			b = v / 2
-		case CHARTREUSE:
-			r = v / 2
-			g = v
-		case ORANGE:
-			r = v
-			g = v / 2
-		case SPRING_GREEN:
-			g = v
-			b = v / 2
-		case SOFT_BLUE:
-			b = v
-			g = v / 2
-		}
+		r, g, b, a := s.getIterationColor(i, int64(currentAssignment))
 
 		s.colors = append(s.colors, objects.RGBColor{R: r, G: g, B: b, A: a})
 	}
+}
+
+func (s *Service) getIterationColor(iteration, currentAssignment int64) (r, g, b, a byte) {
+	r = byte(0)
+	g = byte(0)
+	b = byte(0)
+	a = byte(iteration % (255) * 2)
+
+	max := byte(255)
+	half := byte(127)
+
+	switch s.colorAssignments[currentAssignment] {
+	case RED:
+		r = max
+	case LIME:
+		g = max
+	case BLUE:
+		b = max
+	case YELLOW:
+		r = max
+		g = max
+	case FUCHSIA:
+		r = max
+		b = max
+	case AQUA:
+		b = max
+		g = max
+	case WHITE:
+		r = max
+		g = max
+		b = max
+	case ELECTRIC_INDIGO:
+		r = half
+		b = max
+	case DEEP_PINK:
+		r = max
+		b = half
+	case CHARTREUSE:
+		r = half
+		g = max
+	case DARK_ORANGE:
+		r = max
+		g = half
+	case SPRING_GREEN:
+		g = max
+		b = half
+	case DODGER_BLUE:
+		b = max
+		g = half
+	case LIGHT_SLATE_BLUE:
+		r = half
+		g = half
+		b = max
+	case LIGHT_CORAL:
+		r = max
+		g = half
+		b = half
+	case LIGHT_GREEN:
+		r = half
+		g = max
+		b = half
+	case CANARY:
+		r = max
+		g = max
+		b = half
+	case ELECTRIC_BLUE:
+		r = half
+		g = max
+		b = max
+	case FUCHSIA_PINK:
+		r = max
+		g = half
+		b = max
+	}
+
+	return
 }

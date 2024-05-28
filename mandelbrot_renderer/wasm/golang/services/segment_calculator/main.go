@@ -28,7 +28,6 @@ func New(
 	maxIterations int64,
 	progressCallback func(progress float64),
 ) *Service {
-	colorService.SetMaxIterations(maxIterations)
 	return &Service{
 		operationMode,
 		offsetsHandler,

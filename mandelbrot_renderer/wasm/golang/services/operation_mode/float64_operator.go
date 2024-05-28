@@ -39,3 +39,8 @@ func (s *Float64Operator) LessThan(f1, f2 Float) bool {
 func (s *Float64Operator) LessOrEqualThan(f1, f2 Float) bool {
 	return f1.GetFloat64() <= f2.GetFloat64()
 }
+
+func (s *Float64Operator) Round(f1 Float, decimals uint64) Float {
+	roundDecimals := math.Pow(10, float64(decimals))
+	return NewFloat64(math.Round(f1.GetFloat64()*roundDecimals) / roundDecimals)
+}

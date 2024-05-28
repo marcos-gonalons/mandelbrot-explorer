@@ -3,34 +3,45 @@ package color
 type ColorAssignment uint
 
 const (
-	RED ColorAssignment = iota
-	GREEN
-	BLUE
-	WHITE
-	VIOLET
-	YELLOW
-	TEAL
-	ORANGE
-	SOFT_BLUE
-	PINK
-	SOFT_VIOLET
-	CHARTREUSE
-	SPRING_GREEN
+	RED              ColorAssignment = iota // #FF0000
+	LIME                                    // #00FF00
+	BLUE                                    // #0000FF
+	WHITE                                   // #FFFFFF
+	FUCHSIA                                 // #FF00FF
+	YELLOW                                  // #FFFF00
+	AQUA                                    // #00FFFF
+	DARK_ORANGE                             // #FF8800
+	DODGER_BLUE                             // #0088FF
+	DEEP_PINK                               // #FF0088
+	ELECTRIC_INDIGO                         // #8800FF
+	CHARTREUSE                              // #88FF00
+	SPRING_GREEN                            // #00FF88
+	LIGHT_SLATE_BLUE                        // #8888FF
+	LIGHT_CORAL                             // #FF8888
+	LIGHT_GREEN                             // #88FF88
+	CANARY                                  // #FFFF88
+	ELECTRIC_BLUE                           // #88FFFF
+	FUCHSIA_PINK                            // #FF88FF
 )
 
 // Second color dictactes the main color at default zoom
-var assignments = []ColorAssignment{
+var colorAssignments = []ColorAssignment{
 	CHARTREUSE,
-	SPRING_GREEN,
-	SOFT_BLUE,
+	DODGER_BLUE,
+	LIGHT_SLATE_BLUE,
 	WHITE,
-	SOFT_VIOLET,
-	VIOLET,
+	LIGHT_CORAL,
+	CANARY,
+	LIGHT_GREEN,
+	ELECTRIC_BLUE,
+	ELECTRIC_INDIGO,
+	SPRING_GREEN,
 	BLUE,
-	TEAL,
+	FUCHSIA_PINK,
+	DARK_ORANGE,
+	DEEP_PINK,
+	FUCHSIA,
+	AQUA,
 	RED,
-	GREEN,
-	ORANGE,
-	PINK,
-	YELLOW,
+	LIME,
 }

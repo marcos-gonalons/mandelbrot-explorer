@@ -26,7 +26,7 @@ type Handler struct {
 
 	// > 0 and less than 10. Decimals allowed. Higher number = slower zoom
 	magnitudeIncrement float64
-	magnitudeDecimals  int
+	magnitudeDecimals  uint64
 
 	canvasSize       objects.Size
 	mouseCoordinates objects.Coordinates
@@ -38,7 +38,7 @@ func New(
 	operationMode *operationmode.Service,
 	offsetsHandler *offsets.Handler,
 	zoomLevel, magnitude operationmode.Float,
-	magnitudeDecimals int,
+	magnitudeDecimals uint64,
 	onMaxFloat64DepthReached func(),
 ) *Handler {
 	return &Handler{
@@ -103,9 +103,7 @@ func (z *Handler) increase(strategy Strategy, speed operationmode.Float) {
 
 	adjustment := operator.Mul(z.magnitude, speed)
 
-	z.zoomLevel = operator.Sub(z.zoomLevel, adjustment)
-
-	// z.zoomLevel = z.RoundToMagnitudeDecimals(z.zoomLevel)
+	z.zoomLevel = operator.Round(operator.Sub(z.zoomLevel, adjustment), uint64(z.magnitudeDecimals))
 
 	if operator.LessOrEqualThan(z.zoomLevel, operationmode.NewFloat(0)) {
 		z.zoomLevel = operationmode.Clone(z.previousLevel)
@@ -133,9 +131,7 @@ func (z *Handler) decrease(speed operationmode.Float) {
 
 	adjustment := operator.Mul(z.magnitude, speed)
 
-	z.zoomLevel = operator.Add(z.zoomLevel, adjustment)
-
-	// z.zoomLevel = z.RoundToMagnitudeDecimals(z.zoomLevel)
+	z.zoomLevel = operator.Round(operator.Add(z.zoomLevel, adjustment), uint64(z.magnitudeDecimals))
 
 	if operator.GreaterThan(z.zoomLevel, operationmode.NewFloat(4)) {
 		z.zoomLevel = z.previousLevel
@@ -174,7 +170,6 @@ func (z *Handler) decreaseMagnitude() {
 	z.magnitudeDecimals--
 }
 
-// TODO: add rounding in operators
 func (z *Handler) RoundToMagnitudeDecimals(v float64) float64 {
 	roundDecimals := math.Pow(10, float64(z.magnitudeDecimals))
 	return math.Round(v*roundDecimals) / roundDecimals

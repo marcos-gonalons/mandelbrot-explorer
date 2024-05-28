@@ -41,3 +41,8 @@ func (s *Float128Operator) LessThan(f1, f2 Float) bool {
 func (s *Float128Operator) LessOrEqualThan(f1, f2 Float) bool {
 	return float128.IsLE(f1.GetFloat128(), f2.GetFloat128())
 }
+
+func (s *Float128Operator) Round(f1 Float, decimals uint64) Float {
+	// TODO
+	return f1
+}

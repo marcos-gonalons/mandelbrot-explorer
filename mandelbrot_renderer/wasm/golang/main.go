@@ -21,7 +21,7 @@ var defaultOperationMode = operationmode.FLOAT64
 var defaultMaxIterations int64 = 2000
 var defaultZoom float64 = 1.2
 var defaultMagnitude float64 = 0.1
-var defaultMagnitudeDecimals int = 1
+var defaultMagnitudeDecimals uint64 = 1
 var defaultXOffset float64 = -0.2
 var defaultYOffset float64 = -0.2
 
@@ -55,7 +55,7 @@ func initServices() {
 		},
 	)
 
-	colorService = color.New()
+	colorService = color.New(defaultMaxIterations)
 
 	segmentCalculatorService = segmentcalculator.New(
 		operationMode,

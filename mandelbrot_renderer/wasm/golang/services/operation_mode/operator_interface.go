@@ -10,4 +10,5 @@ type Operator interface {
 	GreaterOrEqualThan(f1, f2 Float) bool
 	LessThan(f1, f2 Float) bool
 	LessOrEqualThan(f1, f2 Float) bool
+	Round(f1 Float, decimals uint64) Float
 }
