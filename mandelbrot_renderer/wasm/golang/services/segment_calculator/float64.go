@@ -17,8 +17,8 @@ func (s *Service) getIterationsFloat64(
 	offsets objects.Coordinates,
 ) int64 {
 	point := complexNumber64{
-		RealPart:      ((float64(coordinates.X)/float64(canvasSize.Width))*zoomLevel)*4 - 2.5 + offsets.X,
-		ImaginaryPart: ((float64(coordinates.Y)/float64(canvasSize.Height))*zoomLevel)*2 - 1 + offsets.Y,
+		RealPart:      ((coordinates.X.GetFloat64()/float64(canvasSize.Width))*zoomLevel)*4 - 2.5 + offsets.X.GetFloat64(),
+		ImaginaryPart: ((coordinates.Y.GetFloat64()/float64(canvasSize.Height))*zoomLevel)*2 - 1 + offsets.Y.GetFloat64(),
 	}
 
 	z := complexNumber64{

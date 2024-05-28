@@ -34,11 +34,11 @@ func (s *Service) coordinatesTocomplexNumber128(
 	zoomLevel float128.Float128,
 	offsets objects.Coordinates,
 ) complexNumber128 {
-	realPart := float128.Mul(float128.Mul(float128.Div(float128.SetFloat64(coordinates.X), float128.SetFloat64(float64(canvasSize.Width))), zoomLevel), float128.SetFloat64(4))
-	imaginaryPart := float128.Mul(float128.Mul(float128.Div(float128.SetFloat64(coordinates.Y), float128.SetFloat64(float64(canvasSize.Height))), zoomLevel), float128.SetFloat64(2))
+	realPart := float128.Mul(float128.Mul(float128.Div(float128.SetFloat64(coordinates.X.GetFloat64()), float128.SetFloat64(float64(canvasSize.Width))), zoomLevel), float128.SetFloat64(4))
+	imaginaryPart := float128.Mul(float128.Mul(float128.Div(float128.SetFloat64(coordinates.Y.GetFloat64()), float128.SetFloat64(float64(canvasSize.Height))), zoomLevel), float128.SetFloat64(2))
 
-	realPart = float128.Add(float128.Sub(realPart, float128.SetFloat64(2.5)), offsets.X_float128)
-	imaginaryPart = float128.Add(float128.Sub(imaginaryPart, float128.SetFloat64(1)), offsets.Y_float128)
+	realPart = float128.Add(float128.Sub(realPart, float128.SetFloat64(2.5)), offsets.X.GetFloat128())
+	imaginaryPart = float128.Add(float128.Sub(imaginaryPart, float128.SetFloat64(1)), offsets.Y.GetFloat128())
 
 	return complexNumber128{
 		RealPart:      realPart,

@@ -2,7 +2,6 @@ package segmentcalculator
 
 import (
 	"mandelbrot/objects"
-	"mandelbrot/objects/float128"
 	"mandelbrot/services/color"
 	"mandelbrot/services/offsets"
 	operationmode "mandelbrot/services/operation_mode"
@@ -52,7 +51,7 @@ func (s *Service) CalculateSegmentColors(
 	resolution float64,
 ) *[]byte {
 	pixelData := make([]byte, segmentLength)
-	mainIndex := startsAt / 4
+	mainIndex := int64(startsAt / 4)
 	zoomLevel := s.zoomHandler.GetZoomLevel()
 	offsets := s.offsetsHandler.GetAsCoordinates()
 
@@ -78,27 +77,27 @@ func (s *Service) CalculateSegmentColors(
 	return &pixelData
 }
 
-func (s *Service) getCoordinatesAtIndex(index, width int) objects.Coordinates {
+func (s *Service) getCoordinatesAtIndex(index, width int64) objects.Coordinates {
 	return objects.Coordinates{
-		X: float64(index%width + 1),
-		Y: math.Floor(float64(index)/float64(width)) + 1,
+		X: operationmode.NewFloat(float64(index%width + 1)),
+		Y: operationmode.NewFloat(math.Floor(float64(index)/float64(width)) + 1),
 	}
 }
 
 func (s *Service) getPixelColor(
 	coordinates objects.Coordinates,
 	canvasSize objects.Size,
-	zoomLevel interface{},
+	zoomLevel operationmode.Float,
 	offsets objects.Coordinates,
 ) (r, g, b, a byte) {
 	var iterations int64
 
 	if s.operationMode.IsFloat64() {
-		iterations = s.getIterationsFloat64(coordinates, canvasSize, zoomLevel.(float64), offsets)
+		iterations = s.getIterationsFloat64(coordinates, canvasSize, zoomLevel.GetFloat64(), offsets)
 	}
 
 	if s.operationMode.IsFloat128() {
-		iterations = s.getIterationsFloat128(coordinates, canvasSize, zoomLevel.(float128.Float128), offsets)
+		iterations = s.getIterationsFloat128(coordinates, canvasSize, zoomLevel.GetFloat128(), offsets)
 	}
 
 	if iterations == 0 {

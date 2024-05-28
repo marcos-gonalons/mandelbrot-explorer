@@ -2,7 +2,6 @@ package zoom
 
 import (
 	"mandelbrot/objects"
-	"mandelbrot/objects/float128"
 	"mandelbrot/services/offsets"
 	operationmode "mandelbrot/services/operation_mode"
 	"math"
@@ -21,13 +20,9 @@ type Handler struct {
 	operationMode  *operationmode.Service
 	offsetsHandler *offsets.Handler
 
-	zoomLevel     float64
-	magnitude     float64
-	previousLevel float64
-
-	zoomLevel_float128     float128.Float128
-	magnitude_float128     float128.Float128
-	previousLevel_float128 float128.Float128
+	zoomLevel     operationmode.Float
+	magnitude     operationmode.Float
+	previousLevel operationmode.Float
 
 	// > 0 and less than 10. Decimals allowed. Higher number = slower zoom
 	magnitudeIncrement float64
@@ -42,7 +37,7 @@ type Handler struct {
 func New(
 	operationMode *operationmode.Service,
 	offsetsHandler *offsets.Handler,
-	zoomLevel, magnitude float64,
+	zoomLevel, magnitude operationmode.Float,
 	magnitudeDecimals int,
 	onMaxFloat64DepthReached func(),
 ) *Handler {
@@ -50,42 +45,41 @@ func New(
 		operationMode:            operationMode,
 		offsetsHandler:           offsetsHandler,
 		zoomLevel:                zoomLevel,
-		zoomLevel_float128:       float128.SetFloat64(zoomLevel),
 		magnitude:                magnitude,
-		magnitude_float128:       float128.SetFloat64(magnitude),
 		magnitudeIncrement:       3,
 		magnitudeDecimals:        magnitudeDecimals,
 		onMaxFloat64DepthReached: onMaxFloat64DepthReached,
 	}
 }
 
-func (z *Handler) SetCanvasSize(size objects.Size) *Handler {
-	z.canvasSize = size
+func (z *Handler) SetCanvasSize(width, height int64) *Handler {
+	z.canvasSize = objects.Size{
+		Width:  width,
+		Height: height,
+	}
 	return z
 }
 
-func (z *Handler) SetMouseCoordinates(coordinates objects.Coordinates) *Handler {
-	z.mouseCoordinates = coordinates
+func (z *Handler) SetMouseCoordinates(x, y operationmode.Float) *Handler {
+	z.mouseCoordinates = objects.Coordinates{
+		X: x,
+		Y: y,
+	}
 	return z
 }
 
-func (z *Handler) GetZoomLevel() interface{} {
-	if z.operationMode.IsFloat64() {
-		return z.zoomLevel
-	}
-	if z.operationMode.IsFloat128() {
-		return z.zoomLevel_float128
-	}
-	return nil
+func (z *Handler) GetZoomLevel() operationmode.Float {
+	return z.zoomLevel
 }
 
-func (z *Handler) Adjust(t bool, speed float64, strategy Strategy) *Handler {
+func (z *Handler) Adjust(t bool, speed operationmode.Float, strategy Strategy) *Handler {
 	if t {
 		z.increase(strategy, speed)
 	} else {
 		z.decrease(speed)
 	}
 
+	// TODO: Change from float 128 to big float
 	if z.operationMode.IsFloat64() && z.magnitudeDecimals >= MAX_FLOAT64_MAGNITUDE_DECIMALS {
 		z.operationMode.Set(operationmode.FLOAT128)
 		z.onMaxFloat64DepthReached()
@@ -94,46 +88,27 @@ func (z *Handler) Adjust(t bool, speed float64, strategy Strategy) *Handler {
 		z.operationMode.Set(operationmode.FLOAT64)
 	}
 
-	z.previousLevel = z.zoomLevel
-	z.previousLevel_float128 = z.zoomLevel_float128
+	z.previousLevel = operationmode.Clone(z.zoomLevel)
 	return z
 }
 
 func (z *Handler) OnChangeOperationMode(newMode operationmode.Mode) {
-	if newMode == operationmode.FLOAT128 {
-		z.zoomLevel_float128 = float128.SetFloat64(z.zoomLevel)
-		z.magnitude_float128 = float128.SetFloat64(z.magnitude)
-		z.previousLevel_float128 = float128.SetFloat64(z.previousLevel)
-	}
-
-	if newMode == operationmode.FLOAT64 {
-		z.zoomLevel = z.zoomLevel_float128.Float64()
-		z.magnitude = z.magnitude_float128.Float64()
-		z.previousLevel = z.previousLevel_float128.Float64()
-	}
+	z.zoomLevel = z.operationMode.ConvertFloat(z.zoomLevel)
+	z.magnitude = z.operationMode.ConvertFloat(z.magnitude)
+	z.previousLevel = z.operationMode.ConvertFloat(z.previousLevel)
 }
 
-func (z *Handler) increase(strategy Strategy, speed float64) {
-	if z.operationMode.IsFloat64() {
-		z.increase_float64(strategy, speed)
-		return
-	}
-	if z.operationMode.IsFloat128() {
-		z.increase_float128(strategy, speed)
-		return
-	}
+func (z *Handler) increase(strategy Strategy, speed operationmode.Float) {
+	operator := z.operationMode.GetOperator()
 
-	panic("invalid operation mode")
-}
+	adjustment := operator.Mul(z.magnitude, speed)
 
-func (z *Handler) increase_float64(strategy Strategy, speed float64) {
-	adjustment := z.magnitude * speed
-	z.zoomLevel -= adjustment
+	z.zoomLevel = operator.Sub(z.zoomLevel, adjustment)
 
-	z.zoomLevel = z.RoundToMagnitudeDecimals(z.zoomLevel)
+	// z.zoomLevel = z.RoundToMagnitudeDecimals(z.zoomLevel)
 
-	if z.zoomLevel <= 0 {
-		z.zoomLevel = z.previousLevel
+	if operator.LessOrEqualThan(z.zoomLevel, operationmode.NewFloat(0)) {
+		z.zoomLevel = operationmode.Clone(z.previousLevel)
 		z.increaseMagnitude()
 		z.increase(strategy, speed)
 		return
@@ -141,7 +116,7 @@ func (z *Handler) increase_float64(strategy Strategy, speed float64) {
 
 	switch strategy {
 	case CENTERED:
-		z.offsetsHandler.IncrementX(adjustment * 2)
+		z.offsetsHandler.IncrementX(operator.Mul(adjustment, operationmode.NewFloat(2)))
 		z.offsetsHandler.IncrementY(adjustment)
 	case CURSOR:
 		// TODO: Rethink. Maybe use angle thing same as the offsets to calculate proper adjustment vector
@@ -153,70 +128,21 @@ func (z *Handler) increase_float64(strategy Strategy, speed float64) {
 	}
 }
 
-func (z *Handler) increase_float128(strategy Strategy, speed float64) {
-	adjustment := float128.Mul(z.magnitude_float128, float128.SetFloat64(speed))
+func (z *Handler) decrease(speed operationmode.Float) {
+	operator := z.operationMode.GetOperator()
 
-	z.zoomLevel_float128 = float128.Sub(z.zoomLevel_float128, adjustment)
+	adjustment := operator.Mul(z.magnitude, speed)
 
-	if float128.IsLE(z.zoomLevel_float128, float128.Zero()) {
-		z.zoomLevel_float128 = z.previousLevel_float128
-		z.increaseMagnitude()
-		z.increase(strategy, speed)
-		return
-	}
+	z.zoomLevel = operator.Add(z.zoomLevel, adjustment)
 
-	switch strategy {
-	case CENTERED:
-		z.offsetsHandler.IncrementX(float128.Mul(adjustment, float128.SetFloat64(2)))
-		z.offsetsHandler.IncrementY(adjustment)
-	case CURSOR:
-		// TODO: Rethink. Maybe use angle thing same as the offsets to calculate proper adjustment vector
-		panic("not implemented")
-	}
+	// z.zoomLevel = z.RoundToMagnitudeDecimals(z.zoomLevel)
 
-	if z.shouldIncreaseMagnitude() {
-		z.increaseMagnitude()
-	}
-}
-
-func (z *Handler) decrease(speed float64) {
-	if z.operationMode.IsFloat64() {
-		z.decrease_float64(speed)
-		return
-	}
-	if z.operationMode.IsFloat128() {
-		z.decrease_float128(speed)
-		return
-	}
-
-	panic("invalid operation mode")
-}
-
-func (z *Handler) decrease_float64(speed float64) {
-	adjustment := z.magnitude * speed
-	z.zoomLevel += adjustment
-
-	z.zoomLevel = z.RoundToMagnitudeDecimals(z.zoomLevel)
-
-	if z.zoomLevel > 4 {
+	if operator.GreaterThan(z.zoomLevel, operationmode.NewFloat(4)) {
 		z.zoomLevel = z.previousLevel
 		return
 	}
 
-	z.offsetsHandler.DecrementX(adjustment * 2)
-	z.offsetsHandler.DecrementY(adjustment)
-
-	if z.shouldDecreaseMagnitude() {
-		z.decreaseMagnitude()
-	}
-}
-
-func (z *Handler) decrease_float128(speed float64) {
-	adjustment := float128.Mul(z.magnitude_float128, float128.SetFloat64(speed))
-
-	z.zoomLevel_float128 = float128.Add(z.zoomLevel_float128, adjustment)
-
-	z.offsetsHandler.DecrementX(float128.Mul(adjustment, float128.SetFloat64(2)))
+	z.offsetsHandler.DecrementX(operator.Mul(adjustment, operationmode.NewFloat(2)))
 	z.offsetsHandler.DecrementY(adjustment)
 
 	if z.shouldDecreaseMagnitude() {
@@ -225,58 +151,30 @@ func (z *Handler) decrease_float128(speed float64) {
 }
 
 func (z *Handler) shouldIncreaseMagnitude() bool {
-	if z.operationMode.IsFloat64() {
-		return z.zoomLevel < z.magnitudeIncrement*z.magnitude &&
-			z.zoomLevel < z.previousLevel
-	}
+	operator := z.operationMode.GetOperator()
 
-	if z.operationMode.IsFloat128() {
-		return float128.IsLT(z.zoomLevel_float128, z.previousLevel_float128) &&
-			float128.IsLT(z.zoomLevel_float128, float128.Mul(float128.SetFloat64(z.magnitudeIncrement), z.magnitude_float128))
-	}
-
-	return false
-
+	return operator.LessThan(z.zoomLevel, z.previousLevel) &&
+		operator.LessThan(z.zoomLevel, operator.Mul(operationmode.NewFloat(z.magnitudeIncrement), z.magnitude))
 }
 
 func (z *Handler) shouldDecreaseMagnitude() bool {
-	if z.operationMode.IsFloat64() {
-		return z.zoomLevel > z.magnitudeIncrement*z.magnitude*10 &&
-			z.zoomLevel > z.previousLevel
-	}
+	operator := z.operationMode.GetOperator()
 
-	if z.operationMode.IsFloat128() {
-		return float128.IsGT(z.zoomLevel_float128, z.previousLevel_float128) &&
-			float128.IsGT(z.zoomLevel_float128, float128.Mul(float128.SetFloat64(z.magnitudeIncrement), float128.Mul(z.magnitude_float128, float128.SetFloat64(10))))
-	}
-
-	return false
+	return operator.GreaterThan(z.zoomLevel, z.previousLevel) &&
+		operator.GreaterThan(z.zoomLevel, operator.Mul(operationmode.NewFloat(z.magnitudeIncrement), operator.Mul(z.magnitude, operationmode.NewFloat(10))))
 }
 
 func (z *Handler) increaseMagnitude() {
-	if z.operationMode.IsFloat64() {
-		z.magnitude = z.magnitude / 10
-	}
-
-	if z.operationMode.IsFloat128() {
-		z.magnitude_float128 = float128.Div(z.magnitude_float128, float128.SetFloat64(10))
-	}
-
+	z.magnitude = z.operationMode.GetOperator().Div(z.magnitude, operationmode.NewFloat(10))
 	z.magnitudeDecimals++
 }
 
 func (z *Handler) decreaseMagnitude() {
-	if z.operationMode.IsFloat64() {
-		z.magnitude = z.magnitude * 10
-	}
-
-	if z.operationMode.IsFloat128() {
-		z.magnitude_float128 = float128.Mul(z.magnitude_float128, float128.SetFloat64(10))
-	}
-
+	z.magnitude = z.operationMode.GetOperator().Mul(z.magnitude, operationmode.NewFloat(10))
 	z.magnitudeDecimals--
 }
 
+// TODO: add rounding in operators
 func (z *Handler) RoundToMagnitudeDecimals(v float64) float64 {
 	roundDecimals := math.Pow(10, float64(z.magnitudeDecimals))
 	return math.Round(v*roundDecimals) / roundDecimals

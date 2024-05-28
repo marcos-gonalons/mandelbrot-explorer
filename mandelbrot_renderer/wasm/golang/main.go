@@ -47,8 +47,8 @@ func initServices() {
 	zoomHandler = zoom.New(
 		operationMode,
 		offsetsHandler,
-		defaultZoom,
-		defaultMagnitude,
+		operationmode.NewFloat(defaultZoom),
+		operationmode.NewFloat(defaultMagnitude),
 		defaultMagnitudeDecimals,
 		func() {
 			jsCallbacks.Call("maxFloat64DepthReached")
@@ -89,8 +89,8 @@ func CalculateSegment(this js.Value, arguments []js.Value) interface{} {
 
 	pixelData := segmentCalculatorService.CalculateSegmentColors(
 		objects.Size{
-			Width:  arguments[0].Int(),
-			Height: arguments[1].Int(),
+			Width:  int64(arguments[0].Int()),
+			Height: int64(arguments[1].Int()),
 		},
 		arguments[2].Int(),
 		arguments[3].Int(),
@@ -104,8 +104,8 @@ func CalculateSegment(this js.Value, arguments []js.Value) interface{} {
 func AdjustOffsets(this js.Value, arguments []js.Value) interface{} {
 	offsetsHandler.Adjust(
 		zoomHandler.GetZoomLevel(),
-		arguments[0].Float(),
-		arguments[1].Int(),
+		operationmode.NewFloat(arguments[0].Float()),
+		operationmode.NewFloat(arguments[1].Float()),
 	)
 
 	r, _ := json.Marshal(offsetsHandler.GetAsCoordinates())
@@ -113,17 +113,11 @@ func AdjustOffsets(this js.Value, arguments []js.Value) interface{} {
 }
 
 func AdjustZoom(this js.Value, arguments []js.Value) interface{} {
-	zoomHandler.SetMouseCoordinates(objects.Coordinates{
-		X: arguments[3].Float(),
-		Y: arguments[4].Float(),
-	})
-	zoomHandler.SetCanvasSize(objects.Size{
-		Width:  arguments[5].Int(),
-		Height: arguments[6].Int(),
-	})
+	zoomHandler.SetMouseCoordinates(operationmode.NewFloat(arguments[3].Float()), operationmode.NewFloat(arguments[4].Float()))
+	zoomHandler.SetCanvasSize(int64(arguments[5].Int()), int64(arguments[6].Int()))
 	zoomHandler.Adjust(
 		arguments[0].Bool(),
-		arguments[1].Float(),
+		operationmode.NewFloat(arguments[1].Float()),
 		zoom.Strategy(arguments[2].Int()),
 	)
 
