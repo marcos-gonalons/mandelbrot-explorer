@@ -29,11 +29,13 @@ var defaultColorAtMaxIterations = objects.RGBColor{R: 0, G: 0, B: 0, A: 128}
 func main() {
 	initServices()
 
-	js.Global().Get("WASM").Get("functions").Set("setMode", js.FuncOf(SetMode))
-	js.Global().Get("WASM").Get("functions").Set("setMaxIterations", js.FuncOf(SetMaxIterations))
-	js.Global().Get("WASM").Get("functions").Set("calculateSegment", js.FuncOf(CalculateSegment))
-	js.Global().Get("WASM").Get("functions").Set("adjustOffsets", js.FuncOf(AdjustOffsets))
-	js.Global().Get("WASM").Get("functions").Set("adjustZoom", js.FuncOf(AdjustZoom))
+	exportedFunctions := js.Global().Get("WASM").Get("functions")
+
+	exportedFunctions.Set("setMode", js.FuncOf(SetMode))
+	exportedFunctions.Set("setMaxIterations", js.FuncOf(SetMaxIterations))
+	exportedFunctions.Set("calculateSegment", js.FuncOf(CalculateSegment))
+	exportedFunctions.Set("adjustOffsets", js.FuncOf(AdjustOffsets))
+	exportedFunctions.Set("adjustZoom", js.FuncOf(AdjustZoom))
 
 	keepAlive()
 }
