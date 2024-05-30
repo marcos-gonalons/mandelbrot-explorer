@@ -6,7 +6,7 @@ module.exports = {
 		'golang-wasm-worker': './src/wasm_worker/main.js'
 	},
 	output: {
-		path: path.resolve(__dirname, '../static/mandelbrot_renderer'),
+		path: path.resolve(__dirname, '../../../static/mandelbrot_renderer'),
 		filename: '[name].js'
 	},
 	resolve: {

@@ -86,6 +86,7 @@ export const init = async (canvas: HTMLCanvasElement, progressBar: Line) => {
 	function initCanvas(): void {
 		canvas.height = window.innerHeight;
 		canvas.width = window.innerWidth;
+
 		imageData = ctx.createImageData(canvas.width, canvas.height);
 
 		ctx.putImageData(imageData, 0, 0);

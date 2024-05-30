@@ -1,4 +1,4 @@
-<script>
+<script lang="ts">
 	import Sidebar from '$lib/components/sidebar/Sidebar.svelte';
 	import Navbar from '$lib/components/navbar/Navbar.svelte';
 

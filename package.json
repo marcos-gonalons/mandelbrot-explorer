@@ -4,9 +4,9 @@
 	"description": "",
 	"scripts": {
 		"update-everything-to-latest-versions": "npx npm-check-updates -u; npm install",
-		"build-wasm-golang": "cd mandelbrot_renderer/wasm/golang; cross-env GOOS=js GOARCH=wasm go build -o \"../../../static/mandelbrot_renderer/main.wasm\";",
-		"build-mandelbrot-renderer": "cd mandelbrot_renderer; webpack --mode=development --devtool=inline-source-map;",
-		"build-mandelbrot-renderer-prod": "cd mandelbrot_renderer; webpack --mode=production;",
+		"build-wasm-golang": "cd src/lib/mandelbrot_renderer/wasm/golang; cross-env GOOS=js GOARCH=wasm go build -o \"../../../../../static/mandelbrot_renderer/main.wasm\";",
+		"build-mandelbrot-renderer": "cd src/lib/mandelbrot_renderer; webpack --mode=development --devtool=inline-source-map;",
+		"build-mandelbrot-renderer-prod": "cd src/lib/mandelbrot_renderer; webpack --mode=production;",
 		"dev": "vite dev",
 		"build": "npm run build-mandelbrot-renderer-prod; npm run build-wasm-golang; vite build",
 		"preview": "npm run build; vite preview",

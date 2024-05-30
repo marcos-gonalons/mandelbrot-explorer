@@ -1,4 +1,4 @@
-<script>
+<script lang="ts">
 	import Hamburger from '../hamburger/Hamburger.svelte';
 
 	export let sidebar = false;

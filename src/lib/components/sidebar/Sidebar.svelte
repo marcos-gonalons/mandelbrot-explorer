@@ -1,4 +1,4 @@
-<script>
+<script lang="ts">
 	export let open = false;
 </script>
 
@@ -7,9 +7,21 @@
 </aside>
 
 <style>
+	@media (min-width: 0px) {
+		aside {
+			right: -250px;
+			width: 250px;
+		}
+	}
+
+	@media (min-width: 1200px) {
+		aside {
+			right: -350px;
+			width: 350px;
+		}
+	}
+
 	aside {
-		right: -250px;
-		width: 250px;
 		transition: right 0.3s ease-in-out;
 	}
 

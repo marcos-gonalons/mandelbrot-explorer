@@ -90,6 +90,7 @@ export const createListeners = (
 	const renderMandelbrot = ({ width, height }: Size) => {
 		const visibleCanvas = getCanvas();
 		const visibleContext = getCtx();
+
 		const imageData = visibleContext.createImageData(width, height);
 
 		finishedSegments.forEach((v) =>
