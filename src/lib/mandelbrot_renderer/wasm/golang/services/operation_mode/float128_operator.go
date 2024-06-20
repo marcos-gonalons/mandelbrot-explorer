@@ -7,23 +7,23 @@ import (
 type Float128Operator struct{}
 
 func (s *Float128Operator) Add(f1, f2 Float) Float {
-	return NewFloat128(float128.Add(f1.GetFloat128(), f2.GetFloat128()))
+	return NewFloat128(float128.Add(f1.GetFloat128(), f2.GetFloat128()), f1.GetDecimalsAmount())
 }
 
 func (s *Float128Operator) Sub(f1, f2 Float) Float {
-	return NewFloat128(float128.Sub(f1.GetFloat128(), f2.GetFloat128()))
+	return NewFloat128(float128.Sub(f1.GetFloat128(), f2.GetFloat128()), f1.GetDecimalsAmount())
 }
 
 func (s *Float128Operator) Mul(f1, f2 Float) Float {
-	return NewFloat128(float128.Mul(f1.GetFloat128(), f2.GetFloat128()))
+	return NewFloat128(float128.Mul(f1.GetFloat128(), f2.GetFloat128()), f1.GetDecimalsAmount())
 }
 
 func (s *Float128Operator) Div(f1, f2 Float) Float {
-	return NewFloat128(float128.Div(f1.GetFloat128(), f2.GetFloat128()))
+	return NewFloat128(float128.Div(f1.GetFloat128(), f2.GetFloat128()), f1.GetDecimalsAmount())
 }
 
 func (s *Float128Operator) Abs(f1 Float) Float {
-	return NewFloat128(float128.Abs(f1.GetFloat128()))
+	return NewFloat128(float128.Abs(f1.GetFloat128()), f1.GetDecimalsAmount())
 }
 
 func (s *Float128Operator) GreaterThan(f1, f2 Float) bool {

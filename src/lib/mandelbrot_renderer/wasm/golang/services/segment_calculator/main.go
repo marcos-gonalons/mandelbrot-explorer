@@ -91,12 +91,13 @@ func (s *Service) getPixelColor(
 ) (r, g, b, a byte) {
 	var iterations int64
 
-	if s.operationMode.IsFloat64() {
+	switch s.operationMode.Get() {
+	case operationmode.FLOAT64:
 		iterations = s.getIterationsFloat64(coordinates, canvasSize, zoomLevel.GetFloat64(), offsets)
-	}
-
-	if s.operationMode.IsFloat128() {
+	case operationmode.FLOAT128:
 		iterations = s.getIterationsFloat128(coordinates, canvasSize, zoomLevel.GetFloat128(), offsets)
+	case operationmode.BIG_FLOAT:
+		iterations = s.getIterationsBigFloat(coordinates, canvasSize, zoomLevel.GetBigFloat(), offsets)
 	}
 
 	if iterations == 0 {

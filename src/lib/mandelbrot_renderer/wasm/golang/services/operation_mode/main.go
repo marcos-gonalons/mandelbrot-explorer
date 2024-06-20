@@ -1,6 +1,8 @@
 package operationmode
 
-import "mandelbrot/objects/float128"
+import (
+	"mandelbrot/objects/float128"
+)
 
 type Mode uint8
 
@@ -30,7 +32,7 @@ func New(mode Mode) *Service {
 		mode:             mode,
 		float64Operator:  &Float64Operator{},
 		float128Operator: &Float128Operator{},
-		// bigFloatOperator: &BigFloatOperator{},
+		bigFloatOperator: &BigFloatOperator{},
 	}
 }
 
@@ -76,13 +78,21 @@ func (s *Service) GetOperator() Operator {
 	}
 }
 
-func (s *Service) ConvertFloat(f Float) Float {
+func (s *Service) ConvertFloat(f *Float) {
 	if s.mode == FLOAT64 {
-		return NewFloat64(f.GetFloat128().Float64())
+		f.SetFloat64(f.GetFloat128().Float64())
+		return
 	}
-	if s.mode == FLOAT128 {
-		return NewFloat128(float128.SetFloat64(f.GetFloat64()))
+	if s.mode == FLOAT128 && s.previousMode == FLOAT64 {
+		f.SetFloat128(float128.SetFloat64(f.GetFloat64()))
+		return
 	}
-
-	return f
+	if s.mode == BIG_FLOAT && s.previousMode == FLOAT128 {
+		f.CreateBigFloatFromENotationString(f.GetFloat128().String())
+		return
+	}
+	if s.mode == FLOAT128 && s.previousMode == BIG_FLOAT {
+		// somehow create float128 from string or idk
+		panic("not implemented")
+	}
 }

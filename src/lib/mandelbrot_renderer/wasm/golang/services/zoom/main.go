@@ -1,13 +1,14 @@
 package zoom
 
 import (
+	"fmt"
 	"mandelbrot/objects"
 	"mandelbrot/services/offsets"
 	operationmode "mandelbrot/services/operation_mode"
-	"math"
 )
 
 const MAX_FLOAT64_MAGNITUDE_DECIMALS = 15
+const MAX_FLOAT128_MAGNITUDE_DECIMALS = 31
 
 type Strategy uint8
 
@@ -79,23 +80,16 @@ func (z *Handler) Adjust(t bool, speed operationmode.Float, strategy Strategy) *
 		z.decrease(speed)
 	}
 
-	// TODO: Change from float 128 to big float
-	if z.operationMode.IsFloat64() && z.magnitudeDecimals >= MAX_FLOAT64_MAGNITUDE_DECIMALS {
-		z.operationMode.Set(operationmode.FLOAT128)
-		z.onMaxFloat64DepthReached()
-	}
-	if z.operationMode.IsFloat128() && z.magnitudeDecimals < MAX_FLOAT64_MAGNITUDE_DECIMALS {
-		z.operationMode.Set(operationmode.FLOAT64)
-	}
+	z.handleOperationModeChange()
 
 	z.previousLevel = operationmode.Clone(z.zoomLevel)
 	return z
 }
 
 func (z *Handler) OnChangeOperationMode(newMode operationmode.Mode) {
-	z.zoomLevel = z.operationMode.ConvertFloat(z.zoomLevel)
-	z.magnitude = z.operationMode.ConvertFloat(z.magnitude)
-	z.previousLevel = z.operationMode.ConvertFloat(z.previousLevel)
+	z.operationMode.ConvertFloat(&z.zoomLevel)
+	z.operationMode.ConvertFloat(&z.magnitude)
+	z.operationMode.ConvertFloat(&z.previousLevel)
 }
 
 func (z *Handler) increase(strategy Strategy, speed operationmode.Float) {
@@ -120,7 +114,6 @@ func (z *Handler) increase(strategy Strategy, speed operationmode.Float) {
 		// TODO: Rethink. Maybe use angle thing same as the offsets to calculate proper adjustment vector
 		panic("not implemented")
 	}
-
 	if z.shouldIncreaseMagnitude() {
 		z.increaseMagnitude()
 	}
@@ -163,14 +156,56 @@ func (z *Handler) shouldDecreaseMagnitude() bool {
 func (z *Handler) increaseMagnitude() {
 	z.magnitude = z.operationMode.GetOperator().Div(z.magnitude, operationmode.NewFloat(10))
 	z.magnitudeDecimals++
+
+	z.onMagnitudeChange(true)
 }
 
 func (z *Handler) decreaseMagnitude() {
 	z.magnitude = z.operationMode.GetOperator().Mul(z.magnitude, operationmode.NewFloat(10))
 	z.magnitudeDecimals--
+
+	z.onMagnitudeChange(false)
 }
 
-func (z *Handler) RoundToMagnitudeDecimals(v float64) float64 {
-	roundDecimals := math.Pow(10, float64(z.magnitudeDecimals))
-	return math.Round(v*roundDecimals) / roundDecimals
+func (z *Handler) handleOperationModeChange() {
+	if z.operationMode.IsFloat64() && z.magnitudeDecimals >= MAX_FLOAT64_MAGNITUDE_DECIMALS {
+		z.operationMode.Set(operationmode.FLOAT128)
+		z.onMaxFloat64DepthReached() // todo: notify also con max depth reached for float128
+		fmt.Println("changed into float128")
+	}
+	if z.operationMode.IsFloat128() && z.magnitudeDecimals < MAX_FLOAT64_MAGNITUDE_DECIMALS {
+		z.operationMode.Set(operationmode.FLOAT64)
+	}
+
+	if z.operationMode.IsFloat128() && z.magnitudeDecimals >= MAX_FLOAT128_MAGNITUDE_DECIMALS {
+		z.operationMode.Set(operationmode.BIG_FLOAT)
+		fmt.Println("changed into big float")
+	}
+	if z.operationMode.IsFloat128() && z.magnitudeDecimals < MAX_FLOAT128_MAGNITUDE_DECIMALS {
+		z.operationMode.Set(operationmode.FLOAT128)
+	}
+}
+
+func (z *Handler) onMagnitudeChange(increased bool) {
+	floats := []*operationmode.Float{
+		&z.zoomLevel,
+		&z.magnitude,
+		&z.previousLevel,
+		z.offsetsHandler.GetX(),
+		z.offsetsHandler.GetY(),
+	}
+
+	for _, f := range floats {
+		if increased {
+			f.IncreaseDecimalsAmount()
+		} else {
+			f.DecreaseDecimalsAmount()
+		}
+	}
+
+	if z.operationMode.IsBigFloat() {
+		for _, v := range floats {
+			v.UpdateBigFloatPrecision()
+		}
+	}
 }

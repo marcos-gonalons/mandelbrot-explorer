@@ -12,11 +12,11 @@ type Handler struct {
 	y operationmode.Float
 }
 
-func New(operationMode *operationmode.Service, x, y float64) *Handler {
+func New(operationMode *operationmode.Service, x, y operationmode.Float) *Handler {
 	return &Handler{
 		operationMode: operationMode,
-		x:             operationmode.NewFloat(x),
-		y:             operationmode.NewFloat(y),
+		x:             x,
+		y:             y,
 	}
 }
 
@@ -74,6 +74,13 @@ func (o *Handler) GetAsCoordinates() objects.Coordinates {
 }
 
 func (o *Handler) OnChangeOperationMode(newMode operationmode.Mode) {
-	o.x = o.operationMode.ConvertFloat(o.x)
-	o.y = o.operationMode.ConvertFloat(o.y)
+	o.operationMode.ConvertFloat(&o.x)
+	o.operationMode.ConvertFloat(&o.y)
+}
+
+func (o *Handler) GetX() *operationmode.Float {
+	return &o.x
+}
+func (o *Handler) GetY() *operationmode.Float {
+	return &o.y
 }

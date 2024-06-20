@@ -45,7 +45,11 @@ func initServices() {
 
 	operationMode = operationmode.New(defaultOperationMode)
 
-	offsetsHandler = offsets.New(operationMode, defaultXOffset, defaultYOffset)
+	offsetsHandler = offsets.New(
+		operationMode,
+		operationmode.NewFloat(defaultXOffset),
+		operationmode.NewFloat(defaultYOffset),
+	)
 
 	zoomHandler = zoom.New(
 		operationMode,
