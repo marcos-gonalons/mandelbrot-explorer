@@ -170,7 +170,7 @@ func (z *Handler) decreaseMagnitude() {
 func (z *Handler) handleOperationModeChange() {
 	if z.operationMode.IsFloat64() && z.magnitudeDecimals >= MAX_FLOAT64_MAGNITUDE_DECIMALS {
 		z.operationMode.Set(operationmode.FLOAT128)
-		z.onMaxFloat64DepthReached() // todo: notify also con max depth reached for float128
+		z.onMaxFloat64DepthReached()
 		fmt.Println("changed into float128")
 	}
 	if z.operationMode.IsFloat128() && z.magnitudeDecimals < MAX_FLOAT64_MAGNITUDE_DECIMALS {
@@ -178,11 +178,7 @@ func (z *Handler) handleOperationModeChange() {
 	}
 
 	if z.operationMode.IsFloat128() && z.magnitudeDecimals >= MAX_FLOAT128_MAGNITUDE_DECIMALS {
-		z.operationMode.Set(operationmode.BIG_FLOAT)
-		fmt.Println("changed into big float")
-	}
-	if z.operationMode.IsFloat128() && z.magnitudeDecimals < MAX_FLOAT128_MAGNITUDE_DECIMALS {
-		z.operationMode.Set(operationmode.FLOAT128)
+		// todo: notify also con max depth reached for float128
 	}
 }
 
