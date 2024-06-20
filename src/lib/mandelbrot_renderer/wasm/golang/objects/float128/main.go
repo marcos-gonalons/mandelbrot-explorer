@@ -9,6 +9,8 @@ import (
 	"errors"
 	"fmt"
 	"math"
+	"strconv"
+	"strings"
 )
 
 // A Float128 represents a double-double floating point number with
@@ -174,6 +176,40 @@ var (
 	errNegative = errors.New("float128: internal '-' sign")
 	errMantissa = errors.New("float128: no mantissa digits")
 )
+
+func FromENotationString(v string) (Float128, error) {
+	splits := strings.Split(strings.Join(strings.Split(v, "."), ""), "e-")
+	decimals := splits[0]
+	amountOfLeadingZeroes, _ := strconv.Atoi(splits[1])
+
+	sign := decimals[0]
+	if sign != '-' && sign != '+' {
+		return Zero(), errors.New("Missign negative or positive sign")
+	}
+
+	zeroes := ""
+	for i := 0; i < amountOfLeadingZeroes; i++ {
+		zeroes = zeroes + "0"
+	}
+	finalString := zeroes + decimals[1:]
+
+	f := Zero()
+	for i := 0; i < len(finalString); i++ {
+		f.Mul(Float128{10.0, 0.0})
+		f.Add(Float128{float64(finalString[i] - '0'), 0.0})
+	}
+
+	t := SetFloat64(10.0)
+	exponent := 0 - int64(len(finalString)-1)
+	pot := PowerI(t, exponent)
+	f.Mul(pot)
+
+	if sign == '-' {
+		f.Neg()
+	}
+
+	return f, nil
+}
 
 func (f *Float128) Scan(s fmt.ScanState, ch rune) (err error) {
 	(*f) = Zero()

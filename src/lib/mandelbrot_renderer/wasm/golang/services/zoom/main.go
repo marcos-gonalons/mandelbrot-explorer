@@ -1,6 +1,7 @@
 package zoom
 
 import (
+	"fmt"
 	"mandelbrot/objects"
 	"mandelbrot/services/offsets"
 	operationmode "mandelbrot/services/operation_mode"
@@ -173,6 +174,11 @@ func (z *Handler) handleOperationModeChange() {
 	if z.operationMode.IsFloat64() && z.magnitudeDecimals >= MAX_FLOAT64_MAGNITUDE_DECIMALS {
 		z.operationMode.Set(operationmode.FLOAT128)
 		z.onMaxFloat64DepthReached()
+
+		fmt.Println("zoom", z.zoomLevel.GetFloat128().String())
+		fmt.Println("magnitude", z.magnitude.GetFloat128().String())
+		fmt.Println("offset X", z.offsetsHandler.GetX().GetFloat128().String())
+		fmt.Println("offset Y", z.offsetsHandler.GetY().GetFloat128().String())
 	}
 	if z.operationMode.IsFloat128() && z.magnitudeDecimals < MAX_FLOAT64_MAGNITUDE_DECIMALS {
 		z.operationMode.Set(operationmode.FLOAT64)

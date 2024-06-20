@@ -1,7 +1,6 @@
 package operationmode
 
 import (
-	"fmt"
 	"mandelbrot/objects/float128"
 	"math"
 	"math/big"
@@ -76,7 +75,6 @@ func (f *Float) GetDecimalsAmount() uint64 {
 }
 
 func (f *Float) CreateBigFloatFromENotationString(v string) {
-	fmt.Println("gonna convert this big ass string", v)
 	splits := strings.Split(strings.Join(strings.Split(v, "."), ""), "e-")
 	if len(splits) == 1 {
 		splits = strings.Split(strings.Join(strings.Split(v, "."), ""), "e+")

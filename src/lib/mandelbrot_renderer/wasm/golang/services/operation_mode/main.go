@@ -92,7 +92,7 @@ func (s *Service) ConvertFloat(f *Float) {
 		return
 	}
 	if s.mode == FLOAT128 && s.previousMode == BIG_FLOAT {
-		// somehow create float128 from string or idk
-		panic("not implemented")
+		// use float128 scan method to initialize from string
+		panic("not implemented yet")
 	}
 }
