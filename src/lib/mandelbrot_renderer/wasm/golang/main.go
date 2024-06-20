@@ -60,6 +60,9 @@ func initServices() {
 		func() {
 			jsCallbacks.Call("maxFloat64DepthReached")
 		},
+		func() {
+			jsCallbacks.Call("maxFloat128DepthReached")
+		},
 	)
 
 	colorService = color.New(defaultMaxIterations, defaultColorAtMaxIterations)

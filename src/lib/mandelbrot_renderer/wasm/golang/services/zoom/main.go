@@ -1,7 +1,6 @@
 package zoom
 
 import (
-	"fmt"
 	"mandelbrot/objects"
 	"mandelbrot/services/offsets"
 	operationmode "mandelbrot/services/operation_mode"
@@ -32,7 +31,8 @@ type Handler struct {
 	canvasSize       objects.Size
 	mouseCoordinates objects.Coordinates
 
-	onMaxFloat64DepthReached func()
+	onMaxFloat64DepthReached  func()
+	onMaxFloat128DepthReached func()
 }
 
 func New(
@@ -41,15 +41,17 @@ func New(
 	zoomLevel, magnitude operationmode.Float,
 	magnitudeDecimals uint64,
 	onMaxFloat64DepthReached func(),
+	onMaxFloat128DepthReached func(),
 ) *Handler {
 	return &Handler{
-		operationMode:            operationMode,
-		offsetsHandler:           offsetsHandler,
-		zoomLevel:                zoomLevel,
-		magnitude:                magnitude,
-		magnitudeIncrement:       3,
-		magnitudeDecimals:        magnitudeDecimals,
-		onMaxFloat64DepthReached: onMaxFloat64DepthReached,
+		operationMode:             operationMode,
+		offsetsHandler:            offsetsHandler,
+		zoomLevel:                 zoomLevel,
+		magnitude:                 magnitude,
+		magnitudeIncrement:        3,
+		magnitudeDecimals:         magnitudeDecimals,
+		onMaxFloat64DepthReached:  onMaxFloat64DepthReached,
+		onMaxFloat128DepthReached: onMaxFloat128DepthReached,
 	}
 }
 
@@ -171,14 +173,12 @@ func (z *Handler) handleOperationModeChange() {
 	if z.operationMode.IsFloat64() && z.magnitudeDecimals >= MAX_FLOAT64_MAGNITUDE_DECIMALS {
 		z.operationMode.Set(operationmode.FLOAT128)
 		z.onMaxFloat64DepthReached()
-		fmt.Println("changed into float128")
 	}
 	if z.operationMode.IsFloat128() && z.magnitudeDecimals < MAX_FLOAT64_MAGNITUDE_DECIMALS {
 		z.operationMode.Set(operationmode.FLOAT64)
 	}
-
 	if z.operationMode.IsFloat128() && z.magnitudeDecimals >= MAX_FLOAT128_MAGNITUDE_DECIMALS {
-		// todo: notify also con max depth reached for float128
+		z.onMaxFloat128DepthReached()
 	}
 }
 

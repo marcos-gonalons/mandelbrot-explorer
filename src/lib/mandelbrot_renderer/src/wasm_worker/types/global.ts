@@ -18,6 +18,7 @@ declare global {
 			callbacks: {
 				progress: (p: number) => void;
 				maxFloat64DepthReached: () => void;
+				maxFloat128DepthReached: () => void;
 			};
 			functions: {
 				setMaxIterations: (value: number) => void;

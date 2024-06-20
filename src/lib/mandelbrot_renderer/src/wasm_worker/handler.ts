@@ -32,7 +32,8 @@ self.WASM = {
 	},
 	callbacks: {
 		progress: placeholder,
-		maxFloat64DepthReached: placeholder
+		maxFloat64DepthReached: placeholder,
+		maxFloat128DepthReached: placeholder
 	},
 	functions: {
 		setMaxIterations: placeholder,
