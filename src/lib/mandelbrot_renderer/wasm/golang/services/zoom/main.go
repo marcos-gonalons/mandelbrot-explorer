@@ -7,6 +7,7 @@ import (
 	"mandelbrot/objects/float128"
 	"mandelbrot/services/offsets"
 	operationmode "mandelbrot/services/operation_mode"
+	"math"
 )
 
 const MAX_FLOAT64_MAGNITUDE_DECIMALS = 15
@@ -104,30 +105,25 @@ func (z *Handler) Set(zoomLevelAsENotation string) error {
 		return errors.New(SET_ZOOM_MAX_DECIMALS_ERROR)
 	}
 
-	decimalsAmount := uint64(amountOfDecimals)
-	desiredZoomLevel := operationmode.NewFloat(0)
+	z.magnitudeDecimals = uint64(amountOfDecimals)
 	if amountOfDecimals >= MAX_FLOAT64_MAGNITUDE_DECIMALS {
-		desiredZoomLevel = operationmode.NewFloat128(zoomLevel, decimalsAmount)
+		z.zoomLevel = operationmode.NewFloat128(zoomLevel, z.magnitudeDecimals)
+		z.previousLevel = operationmode.Clone(z.zoomLevel)
+		z.magnitude = operationmode.NewFloat128(float128.PowerI(float128.SetFloat64(10), -int64(z.magnitudeDecimals)), z.magnitudeDecimals)
+
 		if !z.operationMode.IsFloat128() {
-			z.operationMode.Set(operationmode.FLOAT128, true)
+			z.operationMode.Set(operationmode.FLOAT128, false)
+			z.offsetsHandler.OnChangeOperationMode(operationmode.FLOAT128)
 		}
 	}
 	if amountOfDecimals < MAX_FLOAT64_MAGNITUDE_DECIMALS {
-		desiredZoomLevel = operationmode.NewFloat64(zoomLevel.Float64(), decimalsAmount)
-		if !z.operationMode.IsFloat64() {
-			z.operationMode.Set(operationmode.FLOAT64, true)
-		}
-	}
+		z.zoomLevel = operationmode.NewFloat64(zoomLevel.Float64(), z.magnitudeDecimals)
+		z.previousLevel = operationmode.Clone(z.zoomLevel)
+		z.magnitude = operationmode.NewFloat64(math.Pow(10, -float64(z.magnitudeDecimals)), z.magnitudeDecimals)
 
-	operator := z.operationMode.GetOperator()
-	if operator.GreaterThan(desiredZoomLevel, z.zoomLevel) {
-		for operator.LessThan(z.zoomLevel, desiredZoomLevel) {
-			z.Adjust(false, operationmode.NewFloat(2), CENTERED)
-		}
-	}
-	if operator.LessThan(desiredZoomLevel, z.zoomLevel) {
-		for operator.GreaterThan(z.zoomLevel, desiredZoomLevel) {
-			z.Adjust(true, operationmode.NewFloat(2), CENTERED)
+		if !z.operationMode.IsFloat64() {
+			z.operationMode.Set(operationmode.FLOAT64, false)
+			z.offsetsHandler.OnChangeOperationMode(operationmode.FLOAT64)
 		}
 	}
 
