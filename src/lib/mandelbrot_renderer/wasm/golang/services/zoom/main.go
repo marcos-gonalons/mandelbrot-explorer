@@ -1,14 +1,19 @@
 package zoom
 
 import (
+	"errors"
 	"fmt"
 	"mandelbrot/objects"
+	"mandelbrot/objects/float128"
 	"mandelbrot/services/offsets"
 	operationmode "mandelbrot/services/operation_mode"
 )
 
 const MAX_FLOAT64_MAGNITUDE_DECIMALS = 15
 const MAX_FLOAT128_MAGNITUDE_DECIMALS = 31
+
+const SET_ZOOM_MAX_DECIMALS_ERROR = "SET_ZOOM_MAX_DECIMALS_ERROR"
+const SET_ZOOM_PARSE_STRING_ERROR = "SET_ZOOM_PARSE_STRING_ERROR"
 
 type Strategy uint8
 
@@ -87,6 +92,46 @@ func (z *Handler) Adjust(t bool, speed operationmode.Float, strategy Strategy) *
 
 	z.previousLevel = operationmode.Clone(z.zoomLevel)
 	return z
+}
+
+func (z *Handler) Set(zoomLevelAsENotation string) error {
+	zoomLevel, amountOfDecimals, err := float128.FromENotationString(zoomLevelAsENotation)
+	if err != nil {
+		fmt.Println("Error parsing e notation string -> ", err.Error())
+		return errors.New(SET_ZOOM_PARSE_STRING_ERROR)
+	}
+	if amountOfDecimals > MAX_FLOAT128_MAGNITUDE_DECIMALS {
+		return errors.New(SET_ZOOM_MAX_DECIMALS_ERROR)
+	}
+
+	decimalsAmount := uint64(amountOfDecimals)
+	desiredZoomLevel := operationmode.NewFloat(0)
+	if amountOfDecimals >= MAX_FLOAT64_MAGNITUDE_DECIMALS {
+		desiredZoomLevel = operationmode.NewFloat128(zoomLevel, decimalsAmount)
+		if !z.operationMode.IsFloat128() {
+			z.operationMode.Set(operationmode.FLOAT128, true)
+		}
+	}
+	if amountOfDecimals < MAX_FLOAT64_MAGNITUDE_DECIMALS {
+		desiredZoomLevel = operationmode.NewFloat64(zoomLevel.Float64(), decimalsAmount)
+		if !z.operationMode.IsFloat64() {
+			z.operationMode.Set(operationmode.FLOAT64, true)
+		}
+	}
+
+	operator := z.operationMode.GetOperator()
+	if operator.GreaterThan(desiredZoomLevel, z.zoomLevel) {
+		for operator.LessThan(z.zoomLevel, desiredZoomLevel) {
+			z.Adjust(false, operationmode.NewFloat(2), CENTERED)
+		}
+	}
+	if operator.LessThan(desiredZoomLevel, z.zoomLevel) {
+		for operator.GreaterThan(z.zoomLevel, desiredZoomLevel) {
+			z.Adjust(true, operationmode.NewFloat(2), CENTERED)
+		}
+	}
+
+	return nil
 }
 
 func (z *Handler) OnChangeOperationMode(newMode operationmode.Mode) {
@@ -172,16 +217,11 @@ func (z *Handler) decreaseMagnitude() {
 
 func (z *Handler) handleOperationModeChange() {
 	if z.operationMode.IsFloat64() && z.magnitudeDecimals >= MAX_FLOAT64_MAGNITUDE_DECIMALS {
-		z.operationMode.Set(operationmode.FLOAT128)
+		z.operationMode.Set(operationmode.FLOAT128, true)
 		z.onMaxFloat64DepthReached()
-
-		fmt.Println("zoom", z.zoomLevel.GetFloat128().String())
-		fmt.Println("magnitude", z.magnitude.GetFloat128().String())
-		fmt.Println("offset X", z.offsetsHandler.GetX().GetFloat128().String())
-		fmt.Println("offset Y", z.offsetsHandler.GetY().GetFloat128().String())
 	}
 	if z.operationMode.IsFloat128() && z.magnitudeDecimals < MAX_FLOAT64_MAGNITUDE_DECIMALS {
-		z.operationMode.Set(operationmode.FLOAT64)
+		z.operationMode.Set(operationmode.FLOAT64, true)
 	}
 	if z.operationMode.IsFloat128() && z.magnitudeDecimals >= MAX_FLOAT128_MAGNITUDE_DECIMALS {
 		z.onMaxFloat128DepthReached()

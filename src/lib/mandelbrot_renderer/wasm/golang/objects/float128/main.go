@@ -177,21 +177,27 @@ var (
 	errMantissa = errors.New("float128: no mantissa digits")
 )
 
-func FromENotationString(v string) (Float128, error) {
+func FromENotationString(v string) (Float128, int, error) {
 	splits := strings.Split(strings.Join(strings.Split(v, "."), ""), "e-")
+	if len(splits) != 2 {
+		return Zero(), 0, errors.New("invalid e notation string")
+	}
+
 	decimals := splits[0]
 	amountOfLeadingZeroes, _ := strconv.Atoi(splits[1])
 
 	sign := decimals[0]
 	if sign != '-' && sign != '+' {
-		return Zero(), errors.New("Missign negative or positive sign")
+		return Zero(), 0, errors.New("missign negative or positive sign")
 	}
+	decimalsWithoutSign := decimals[1:]
 
 	zeroes := ""
 	for i := 0; i < amountOfLeadingZeroes; i++ {
 		zeroes = zeroes + "0"
 	}
-	finalString := zeroes + decimals[1:]
+	finalString := zeroes + decimalsWithoutSign
+	amountOfDecimals := len(finalString)
 
 	f := Zero()
 	for i := 0; i < len(finalString); i++ {
@@ -199,16 +205,13 @@ func FromENotationString(v string) (Float128, error) {
 		f.Add(Float128{float64(finalString[i] - '0'), 0.0})
 	}
 
-	t := SetFloat64(10.0)
-	exponent := 0 - int64(len(finalString)-1)
-	pot := PowerI(t, exponent)
-	f.Mul(pot)
+	f.Mul(PowerI(SetFloat64(10.0), 0-int64(amountOfDecimals-1)))
 
 	if sign == '-' {
 		f.Neg()
 	}
 
-	return f, nil
+	return f, amountOfDecimals, nil
 }
 
 func (f *Float128) Scan(s fmt.ScanState, ch rune) (err error) {

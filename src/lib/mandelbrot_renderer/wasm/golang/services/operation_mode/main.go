@@ -40,12 +40,14 @@ func (s *Service) AddListener(listener listener) {
 	s.listeners = append(s.listeners, listener)
 }
 
-func (s *Service) Set(mode Mode) {
+func (s *Service) Set(mode Mode, callListeners bool) {
 	s.previousMode = s.mode
 	s.mode = mode
 
-	for _, listener := range s.listeners {
-		listener.OnChangeOperationMode(mode)
+	if callListeners {
+		for _, listener := range s.listeners {
+			listener.OnChangeOperationMode(mode)
+		}
 	}
 }
 

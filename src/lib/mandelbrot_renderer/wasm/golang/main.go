@@ -1,7 +1,6 @@
 package main
 
 import (
-	"encoding/json"
 	objects "mandelbrot/objects"
 	"mandelbrot/services/color"
 	"mandelbrot/services/offsets"
@@ -36,6 +35,7 @@ func main() {
 	exportedFunctions.Set("calculateSegment", js.FuncOf(CalculateSegment))
 	exportedFunctions.Set("adjustOffsets", js.FuncOf(AdjustOffsets))
 	exportedFunctions.Set("adjustZoom", js.FuncOf(AdjustZoom))
+	exportedFunctions.Set("setZoom", js.FuncOf(SetZoom))
 
 	keepAlive()
 }
@@ -83,7 +83,7 @@ func initServices() {
 }
 
 func SetMode(this js.Value, arguments []js.Value) interface{} {
-	operationMode.Set(operationmode.Mode(arguments[0].Int()))
+	operationMode.Set(operationmode.Mode(arguments[0].Int()), true)
 	return nil
 }
 
@@ -118,7 +118,8 @@ func AdjustOffsets(this js.Value, arguments []js.Value) interface{} {
 		operationmode.NewFloat(arguments[1].Float()),
 	)
 
-	r, _ := json.Marshal(offsetsHandler.GetAsCoordinates())
+	coordinates := offsetsHandler.GetAsCoordinates()
+	r, _ := coordinates.MarshalJSON()
 	return string(r)
 }
 
@@ -131,6 +132,14 @@ func AdjustZoom(this js.Value, arguments []js.Value) interface{} {
 		zoom.Strategy(arguments[2].Int()),
 	)
 
+	return nil
+}
+
+func SetZoom(this js.Value, arguments []js.Value) interface{} {
+	err := zoomHandler.Set(arguments[0].String())
+	if err != nil {
+		return err.Error()
+	}
 	return nil
 }
 

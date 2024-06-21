@@ -4,6 +4,7 @@ import { handleAdjustOffsets } from './adjustOffsetsHandler/handler';
 import { handleAdjustZoom } from './adjustZoomHandler/handler';
 import { MainToWorkerMessageData, MainToWorkerMessageType } from './types/mainToWorker';
 import { handleSetMaxIterations } from './setMaxIterationsHandler/handler';
+import { handleSetZoom } from './setZoomHandler/handler';
 
 export const handle = async ({ data: message }: MessageEvent<MainToWorkerMessageData>) => {
 	switch (message.type) {
@@ -16,6 +17,9 @@ export const handle = async ({ data: message }: MessageEvent<MainToWorkerMessage
 		case MainToWorkerMessageType.ADJUST_ZOOM:
 			handleAdjustZoom(message.data);
 			break;
+		case MainToWorkerMessageType.SET_ZOOM:
+			handleSetZoom(message.data);
+			break;
 		case MainToWorkerMessageType.CALCULATE_SEGMENT:
 			handleCalculateSegment(message.data);
 			break;
@@ -25,7 +29,7 @@ export const handle = async ({ data: message }: MessageEvent<MainToWorkerMessage
 	}
 };
 
-const placeholder = (...args: any) => console.error('WASM not loaded');
+const placeholder = (...args: any): any => console.error('WASM not loaded');
 self.WASM = {
 	sharedVariables: {
 		segmentData: new Uint8ClampedArray()
@@ -39,6 +43,7 @@ self.WASM = {
 		setMaxIterations: placeholder,
 		adjustOffsets: placeholder,
 		adjustZoom: placeholder,
+		setZoom: placeholder,
 		calculateSegment: placeholder
 	}
 };

@@ -6,6 +6,7 @@ export enum WorkerToMainMessageType {
 	CALCULATE_SEGMENT_FINISHED,
 	CALCULATION_PROGRESS,
 	ADJUST_ZOOM_FINISHED,
+	SET_ZOOM_FINISHED,
 	ADJUST_OFFSETS_FINISHED,
 	SET_MAX_ITERATIONS_FINISHED
 }
@@ -18,12 +19,21 @@ export type CalculateSegmentFinishedData = {
 	canvasSize: Size;
 	resolution: number;
 };
+export type AdjustOffsetsFinishedData = {
+	offsets: {
+		x: string;
+		y: string;
+	};
+};
+export type SetZoomFinishedData = {
+	error: string | null;
+};
+
 export type WorkerToMainMessageData =
 	| {
 			type:
 				| WorkerToMainMessageType.INIT_WASM_FINISHED
 				| WorkerToMainMessageType.ADJUST_ZOOM_FINISHED
-				| WorkerToMainMessageType.ADJUST_OFFSETS_FINISHED
 				| WorkerToMainMessageType.SET_MAX_ITERATIONS_FINISHED;
 	  }
 	| {
@@ -37,6 +47,14 @@ export type WorkerToMainMessageData =
 	| {
 			type: WorkerToMainMessageType.INIT_WASM_ERROR;
 			data: InitWASMErrorData;
+	  }
+	| {
+			type: WorkerToMainMessageType.ADJUST_OFFSETS_FINISHED;
+			data: AdjustOffsetsFinishedData;
+	  }
+	| {
+			type: WorkerToMainMessageType.SET_ZOOM_FINISHED;
+			data: SetZoomFinishedData;
 	  };
 
 export type WorkerToMainPostMessage = (message: WorkerToMainMessageData) => void;

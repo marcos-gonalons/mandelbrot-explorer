@@ -19,6 +19,11 @@ export const init = async (canvas: HTMLCanvasElement, progressBar: Line) => {
 
 	try {
 		await workersManager.init();
+
+		////////////////////////////////////////////////
+		(window as any).workersManager = workersManager;
+		////////////////////////////////////////////////
+
 		workersManager.call(WorkerFunction.CALCULATE);
 	} catch (e) {
 		// TODO: Some toast or something else instead of an alert

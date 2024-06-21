@@ -22,7 +22,7 @@ declare global {
 			};
 			functions: {
 				setMaxIterations: (value: number) => void;
-				adjustOffsets: (speed: number, angleInDegrees: number) => void;
+				adjustOffsets: (speed: number, angleInDegrees: number) => string;
 				adjustZoom: (
 					increase: boolean,
 					speed: number,
@@ -32,6 +32,7 @@ declare global {
 					canvasWidth: number,
 					canvasHeight: number
 				) => void;
+				setZoom: (zoomLevelAsENotation: string) => string | null;
 				calculateSegment: (
 					canvasWidth: number,
 					canvasHeight: number,

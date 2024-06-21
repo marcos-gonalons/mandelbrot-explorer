@@ -6,6 +6,7 @@ export enum MainToWorkerMessageType {
 	CALCULATE_SEGMENT,
 	ADJUST_OFFSETS,
 	ADJUST_ZOOM,
+	SET_ZOOM,
 	SET_MAX_ITERATIONS
 }
 
@@ -32,6 +33,9 @@ export type AdjustZoomData = {
 	mouseCoordinates: number[];
 	canvasSize: Size;
 };
+export type SetZoomData = {
+	zoomLevelAsENotation: string;
+};
 export type SetMaxIterationsData = {
 	value: number;
 };
@@ -40,6 +44,10 @@ export type MainToWorkerMessageData =
 	| {
 			type: MainToWorkerMessageType.ADJUST_ZOOM;
 			data: AdjustZoomData;
+	  }
+	| {
+			type: MainToWorkerMessageType.SET_ZOOM;
+			data: SetZoomData;
 	  }
 	| {
 			type: MainToWorkerMessageType.ADJUST_OFFSETS;
