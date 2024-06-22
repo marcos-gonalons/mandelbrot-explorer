@@ -33,7 +33,7 @@
 		"svelte-check": "^3.8.1",
 		"ts-loader": "^9.5.1",
 		"tslib": "^2.6.3",
-		"typescript": "^5.4.5",
+		"typescript": "^5.5.2",
 		"vite": "^5.3.1",
 		"webpack": "^5.92.1",
 		"webpack-cli": "^5.1.4"

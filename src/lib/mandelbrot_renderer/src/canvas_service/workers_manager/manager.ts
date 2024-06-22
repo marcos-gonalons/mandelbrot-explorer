@@ -29,9 +29,7 @@ export const createWorkersManager = (
 	progressBar: Line
 ) => {
 	let workers: Worker[] = [];
-
 	let isExecutingFunctionMap = initIsExecutingFunctionMap();
-
 	let listeners: Listeners = createListeners(
 		getCanvas,
 		getCtx,
