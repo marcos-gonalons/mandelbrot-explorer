@@ -1,6 +1,8 @@
 package main
 
 import (
+	"encoding/json"
+	"fmt"
 	objects "mandelbrot/objects"
 	"mandelbrot/services/color"
 	"mandelbrot/services/offsets"
@@ -30,7 +32,6 @@ func main() {
 
 	exportedFunctions := js.Global().Get("WASM").Get("functions")
 
-	exportedFunctions.Set("setMode", js.FuncOf(SetMode))
 	exportedFunctions.Set("setMaxIterations", js.FuncOf(SetMaxIterations))
 	exportedFunctions.Set("calculateSegment", js.FuncOf(CalculateSegment))
 	exportedFunctions.Set("adjustOffsets", js.FuncOf(AdjustOffsets))
@@ -38,6 +39,8 @@ func main() {
 	exportedFunctions.Set("adjustZoom", js.FuncOf(AdjustZoom))
 	exportedFunctions.Set("setZoom", js.FuncOf(SetZoom))
 	exportedFunctions.Set("setColorAtMaxIterations", js.FuncOf(SetColorAtMaxIterations))
+	exportedFunctions.Set("getState", js.FuncOf(GetState))
+	exportedFunctions.Set("setState", js.FuncOf(SetState))
 
 	keepAlive()
 }
@@ -82,11 +85,6 @@ func initServices() {
 
 	operationMode.AddListener(offsetsHandler)
 	operationMode.AddListener(zoomHandler)
-}
-
-func SetMode(this js.Value, arguments []js.Value) interface{} {
-	operationMode.Set(operationmode.Mode(arguments[0].Int()), true)
-	return nil
 }
 
 func SetMaxIterations(this js.Value, arguments []js.Value) interface{} {
@@ -142,7 +140,7 @@ func AdjustZoom(this js.Value, arguments []js.Value) interface{} {
 		zoom.Strategy(arguments[2].Int()),
 	)
 
-	return nil
+	return zoomHandler.GetZoomLevelAsENotation()
 }
 
 func SetZoom(this js.Value, arguments []js.Value) interface{} {
@@ -160,6 +158,41 @@ func SetColorAtMaxIterations(this js.Value, arguments []js.Value) interface{} {
 		B: uint8(arguments[2].Int()),
 		A: uint8(arguments[3].Int()),
 	})
+	return nil
+}
+
+func GetState(this js.Value, arguments []js.Value) interface{} {
+	state := State{
+		OperationMode:        operationMode.Get(),
+		MaxIterations:        colorService.GetMaxIterations(),
+		ZoomAsENotation:      zoomHandler.GetZoomLevelAsENotation(),
+		MagnitudeAsENotation: zoomHandler.GetMagnitudeAsENotation(),
+		MagnitudeDecimals:    zoomHandler.GetMagnitudeDecimals(),
+		OffsetsAsENotation:   offsetsHandler.GetAsENotationStrings(),
+		ColorAtMaxIterations: colorService.GetColorAtMaxIterationsObject(),
+	}
+
+	r, _ := json.Marshal(state)
+	return string(r)
+}
+
+func SetState(this js.Value, arguments []js.Value) interface{} {
+	state := &State{}
+
+	err := json.Unmarshal([]byte(arguments[0].String()), state)
+
+	fmt.Printf("Settings this state %#v\n", state)
+
+	colorService.SetMaxIterations(state.MaxIterations)
+	zoomHandler.Set(state.ZoomAsENotation)
+	offsetsHandler.Set(state.OffsetsAsENotation.X, state.OffsetsAsENotation.Y)
+	colorService.SetColorAtMaxIterations(state.ColorAtMaxIterations)
+	operationMode.Set(state.OperationMode, false)
+
+	if err != nil {
+		return "error setting the state " + err.Error()
+	}
+
 	return nil
 }
 

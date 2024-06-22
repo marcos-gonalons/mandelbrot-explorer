@@ -29,10 +29,18 @@ func (s *Service) SetColorAtMaxIterations(colorAtMaxIterations objects.RGBColor)
 	return s
 }
 
+func (s *Service) GetColorAtMaxIterationsObject() objects.RGBColor {
+	return s.colorAtMaxIterations
+}
+
 func (s *Service) SetMaxIterations(maxIterations int64) *Service {
 	s.maxIterations = maxIterations
 	s.prepareColors()
 	return s
+}
+
+func (s *Service) GetMaxIterations() int64 {
+	return s.maxIterations
 }
 
 func (s *Service) GetPixelColor(iterations int64) (r, g, b, a byte) {

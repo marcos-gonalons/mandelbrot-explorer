@@ -44,8 +44,8 @@ export const createWorkersManager = (
 	};
 
 	const startAllWorkers = async (
-		resolveWorkersInitializationPromise: (workers: Worker[]) => void,
-		rejectWorkersInitializationPromise: (e: Error) => void
+		onAllWorkersInitialized: (workers: Worker[]) => void,
+		onInitializationError: (e: Error) => void
 	): Promise<void> => {
 		const wasmBytes = await getWasmBytes();
 		const workerScriptCode = await getWorkerScriptCode();
@@ -58,10 +58,10 @@ export const createWorkersManager = (
 					e,
 					() => {
 						workers = workers.filter(Boolean);
-						resolveWorkersInitializationPromise(workers);
+						onAllWorkersInitialized(workers);
 					},
 					(e: Error) => {
-						rejectWorkersInitializationPromise(e);
+						onInitializationError(e);
 					}
 				);
 
@@ -155,6 +155,18 @@ export const createWorkersManager = (
 		);
 	};
 
+	const terminate = () => {
+		// 1. call 1 worker and get state (zoom, offsets, max iterations, colors, operationmode)
+		// 2. In listeners, listen to get state finished
+		// terminate all workers
+		// initialize all workers by calling init
+
+		// at the end, call setState with the same state from getState BUT with less maxIterations
+
+		workers.forEach((w) => w.terminate());
+		progressBar.set(0);
+	};
+
 	const invokeWorkers = (messages: MainToWorkerMessageData[]) => {
 		if (isCalculating()) return;
 
@@ -215,7 +227,8 @@ export const createWorkersManager = (
 		adjustOffsets,
 		setOffsets,
 		setMaxIterations,
-		setColorAtMaxIterations
+		setColorAtMaxIterations,
+		terminate
 	};
 };
 

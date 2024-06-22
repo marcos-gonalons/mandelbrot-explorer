@@ -96,6 +96,23 @@ func (o *Handler) GetAsCoordinates() objects.Coordinates {
 	return objects.Coordinates{X: o.x, Y: o.y}
 }
 
+func (o *Handler) GetAsENotationStrings() objects.CoordinatesAsENotationString {
+	if o.operationMode.IsFloat64() {
+		return objects.CoordinatesAsENotationString{
+			X: float128.SetFloat64(o.x.GetFloat64()).String(),
+			Y: float128.SetFloat64(o.y.GetFloat64()).String(),
+		}
+	}
+	if o.operationMode.IsFloat128() {
+		return objects.CoordinatesAsENotationString{
+			X: o.x.GetFloat128().String(),
+			Y: o.y.GetFloat128().String(),
+		}
+	}
+
+	return objects.CoordinatesAsENotationString{}
+}
+
 func (o *Handler) OnChangeOperationMode(newMode operationmode.Mode) {
 	o.operationMode.ConvertFloat(&o.x)
 	o.operationMode.ConvertFloat(&o.y)

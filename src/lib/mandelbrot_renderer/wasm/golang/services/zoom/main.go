@@ -78,6 +78,32 @@ func (z *Handler) GetZoomLevel() operationmode.Float {
 	return z.zoomLevel
 }
 
+func (z *Handler) GetZoomLevelAsENotation() string {
+	if z.operationMode.IsFloat64() {
+		return float128.SetFloat64(z.zoomLevel.GetFloat64()).String()
+	}
+	if z.operationMode.IsFloat128() {
+		return z.zoomLevel.GetFloat128().String()
+	}
+
+	return ""
+}
+
+func (z *Handler) GetMagnitudeAsENotation() string {
+	if z.operationMode.IsFloat64() {
+		return float128.SetFloat64(z.magnitude.GetFloat64()).String()
+	}
+	if z.operationMode.IsFloat128() {
+		return z.magnitude.GetFloat128().String()
+	}
+
+	return ""
+}
+
+func (z *Handler) GetMagnitudeDecimals() uint64 {
+	return z.magnitudeDecimals
+}
+
 func (z *Handler) Adjust(t bool, speed operationmode.Float, strategy Strategy) *Handler {
 	if t {
 		z.increase(strategy, speed)
