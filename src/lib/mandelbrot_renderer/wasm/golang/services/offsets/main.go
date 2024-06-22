@@ -82,12 +82,12 @@ func (o *Handler) Set(xAsENotation, yAsENotation string) error {
 	// if float64 and decimals > float64max then display error, same for f128
 	if o.operationMode.IsFloat64() {
 		o.x = operationmode.NewFloat(X.Float64())
-		o.x = operationmode.NewFloat(Y.Float64())
+		o.y = operationmode.NewFloat(Y.Float64())
 	}
 
 	if o.operationMode.IsFloat128() {
 		o.x = operationmode.NewFloat128(X, uint64(amountOfXDecimals))
-		o.x = operationmode.NewFloat128(Y, uint64(amountOfYDecimals))
+		o.y = operationmode.NewFloat128(Y, uint64(amountOfYDecimals))
 	}
 
 	return nil
