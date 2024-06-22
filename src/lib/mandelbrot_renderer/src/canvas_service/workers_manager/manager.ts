@@ -1,5 +1,5 @@
 import * as Bowser from 'bowser';
-import Line = require('progressbar.js/line');
+import { Size } from '../../types';
 import {
 	AdjustOffsetsData,
 	AdjustZoomData,
@@ -11,15 +11,15 @@ import {
 	SetOffsetsData,
 	SetZoomData
 } from '../../wasm_worker/types/mainToWorker';
-import { Listeners, createListeners } from './listeners';
 import {
-	WASM_FILE_PATH,
 	MAX_WORKERS_TO_SPAWN,
 	MAX_WORKERS_TO_SPAWN_FIREFOX,
-	WORKERS_SCRIPT_PATH,
-	MAX_WORKERS_TO_SPAWN_MOBILE
+	MAX_WORKERS_TO_SPAWN_MOBILE,
+	WASM_FILE_PATH,
+	WORKERS_SCRIPT_PATH
 } from './constants';
-import { Size } from '../../types';
+import { Listeners, createListeners } from './listeners';
+import Line = require('progressbar.js/line');
 
 export type WorkersManager = ReturnType<typeof createWorkersManager>;
 export const createWorkersManager = (
@@ -192,14 +192,22 @@ export const createWorkersManager = (
 		return MAX_WORKERS_TO_SPAWN;
 	};
 
-	const isCalculating = () =>
-		Array.from(isExecutingFunctionMap.entries()).filter(
-			(v) => v[0] === MainToWorkerMessageType.CALCULATE_SEGMENT && v[1]
-		).length > 0;
+	const isExecutingFunction = (workerFunction: MainToWorkerMessageType): boolean =>
+		Boolean(
+			Array.from(isExecutingFunctionMap.entries()).find((v) => v[0] === workerFunction && v[1])
+		);
+
+	const isCalculating = (): boolean =>
+		isExecutingFunction(MainToWorkerMessageType.CALCULATE_SEGMENT);
+
+	const isExecutingAnyFunction = (): boolean =>
+		Boolean(Array.from(isExecutingFunctionMap.values()).find((isExecuting) => isExecuting));
 
 	return {
 		init,
 		isCalculating,
+		isExecutingFunction,
+		isExecutingAnyFunction,
 		parallelizeCalculation,
 		adjustZoom,
 		setZoom,
@@ -210,8 +218,8 @@ export const createWorkersManager = (
 	};
 };
 
-function initIsExecutingFunctionMap(): Map<MainToWorkerMessageData['type'], boolean> {
-	const isExecutingFunctionMap = new Map<MainToWorkerMessageData['type'], boolean>();
+function initIsExecutingFunctionMap(): Map<MainToWorkerMessageType, boolean> {
+	const isExecutingFunctionMap = new Map<MainToWorkerMessageType, boolean>();
 
 	isExecutingFunctionMap.set(MainToWorkerMessageType.INIT_WASM, false);
 	isExecutingFunctionMap.set(MainToWorkerMessageType.CALCULATE_SEGMENT, false);

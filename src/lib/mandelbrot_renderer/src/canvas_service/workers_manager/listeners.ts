@@ -1,16 +1,13 @@
 import Line = require('progressbar.js/line');
 
-import {
-	WorkerToMainMessageData,
-	WorkerToMainMessageType,
-	InitWASMErrorData,
-	CalculateSegmentFinishedData
-} from '../../wasm_worker/types/workerToMain';
 import { Size } from '../../types';
+import { MainToWorkerMessageType } from '../../wasm_worker/types/mainToWorker';
 import {
-	MainToWorkerMessageData,
-	MainToWorkerMessageType
-} from '../../wasm_worker/types/mainToWorker';
+	CalculateSegmentFinishedData,
+	InitWASMErrorData,
+	WorkerToMainMessageData,
+	WorkerToMainMessageType
+} from '../../wasm_worker/types/workerToMain';
 
 export type Listeners = ReturnType<typeof createListeners>;
 export const createListeners = (
@@ -18,11 +15,12 @@ export const createListeners = (
 	getCtx: () => CanvasRenderingContext2D,
 	getWorkers: () => Worker[],
 	progressBar: Line,
-	onFinishFunctionExecutionCallback: (type: MainToWorkerMessageData['type']) => void
+	onFinishFunctionExecutionCallback: (type: MainToWorkerMessageType) => void
 ) => {
 	let finishedSegments: CalculateSegmentFinishedData[] = [];
 	let totalSuccesses: number = 0;
 	let totalErrors: number = 0;
+	let finishedByTypeMap = initFinishedByTypeMap();
 
 	const onNewWorkerMessageReceived = (
 		{ data: message }: MessageEvent<WorkerToMainMessageData>,
@@ -31,36 +29,37 @@ export const createListeners = (
 	): void => {
 		switch (message.type) {
 			case WorkerToMainMessageType.INIT_WASM_FINISHED:
+				handleFinishExecutionCallback(MainToWorkerMessageType.INIT_WASM);
 				onInitWASMFinished(onWorkersInitialized);
-				onFinishFunctionExecutionCallback(MainToWorkerMessageType.INIT_WASM);
 				break;
 			case WorkerToMainMessageType.INIT_WASM_ERROR:
+				handleFinishExecutionCallback(MainToWorkerMessageType.INIT_WASM);
 				onInitWASMError(message.data, onWorkersInitialized, onFailure);
-				onFinishFunctionExecutionCallback(MainToWorkerMessageType.INIT_WASM);
 				break;
 			case WorkerToMainMessageType.CALCULATE_SEGMENT_FINISHED:
+				handleFinishExecutionCallback(MainToWorkerMessageType.CALCULATE_SEGMENT);
 				onSegmentFinished(message.data);
 				break;
 			case WorkerToMainMessageType.CALCULATION_PROGRESS:
 				progressBar.animate(message.data.progress, { duration: 100 });
 				break;
 			case WorkerToMainMessageType.ADJUST_OFFSETS_FINISHED:
-				onFinishFunctionExecutionCallback(MainToWorkerMessageType.ADJUST_OFFSETS);
+				handleFinishExecutionCallback(MainToWorkerMessageType.ADJUST_OFFSETS);
 				break;
 			case WorkerToMainMessageType.SET_OFFSETS_FINISHED:
-				onFinishFunctionExecutionCallback(MainToWorkerMessageType.SET_OFFSETS);
+				handleFinishExecutionCallback(MainToWorkerMessageType.SET_OFFSETS);
 				break;
 			case WorkerToMainMessageType.ADJUST_ZOOM_FINISHED:
-				onFinishFunctionExecutionCallback(MainToWorkerMessageType.ADJUST_ZOOM);
+				handleFinishExecutionCallback(MainToWorkerMessageType.ADJUST_ZOOM);
 				break;
 			case WorkerToMainMessageType.SET_ZOOM_FINISHED:
-				onFinishFunctionExecutionCallback(MainToWorkerMessageType.SET_ZOOM);
+				handleFinishExecutionCallback(MainToWorkerMessageType.SET_ZOOM);
 				break;
 			case WorkerToMainMessageType.SET_MAX_ITERATIONS_FINISHED:
-				onFinishFunctionExecutionCallback(MainToWorkerMessageType.SET_MAX_ITERATIONS);
+				handleFinishExecutionCallback(MainToWorkerMessageType.SET_MAX_ITERATIONS);
 				break;
 			case WorkerToMainMessageType.SET_COLOR_AT_MAX_ITERATIONS_FINISHED:
-				onFinishFunctionExecutionCallback(MainToWorkerMessageType.SET_COLOR_AT_MAX_ITERATIONS);
+				handleFinishExecutionCallback(MainToWorkerMessageType.SET_COLOR_AT_MAX_ITERATIONS);
 				break;
 		}
 	};
@@ -100,7 +99,6 @@ export const createListeners = (
 		}
 
 		renderMandelbrot(data.canvasSize);
-		onFinishFunctionExecutionCallback(MainToWorkerMessageType.CALCULATE_SEGMENT);
 		finishedSegments = [];
 	};
 
@@ -141,5 +139,30 @@ export const createListeners = (
 		invisibleCanvasImage.remove();
 	};
 
+	const handleFinishExecutionCallback = (type: MainToWorkerMessageType) => {
+		let finishedAmount = finishedByTypeMap.get(type);
+		finishedAmount++;
+		finishedByTypeMap.set(type, finishedAmount);
+		if (finishedAmount === getWorkers().length) {
+			onFinishFunctionExecutionCallback(type);
+			finishedByTypeMap.set(type, 0);
+		}
+	};
+
 	return { onNewWorkerMessageReceived };
 };
+
+function initFinishedByTypeMap(): Map<MainToWorkerMessageType, number> {
+	const finishedByType = new Map<MainToWorkerMessageType, number>();
+
+	finishedByType.set(MainToWorkerMessageType.INIT_WASM, 0);
+	finishedByType.set(MainToWorkerMessageType.CALCULATE_SEGMENT, 0);
+	finishedByType.set(MainToWorkerMessageType.ADJUST_OFFSETS, 0);
+	finishedByType.set(MainToWorkerMessageType.SET_OFFSETS, 0);
+	finishedByType.set(MainToWorkerMessageType.ADJUST_ZOOM, 0);
+	finishedByType.set(MainToWorkerMessageType.SET_ZOOM, 0);
+	finishedByType.set(MainToWorkerMessageType.SET_MAX_ITERATIONS, 0);
+	finishedByType.set(MainToWorkerMessageType.SET_COLOR_AT_MAX_ITERATIONS, 0);
+
+	return finishedByType;
+}
