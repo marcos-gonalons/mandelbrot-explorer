@@ -7,6 +7,7 @@ import {
 	MainToWorkerMessageType,
 	MainToWorkerPostMessage,
 	SetMaxIterationsData,
+	SetOffsetsData,
 	SetZoomData
 } from '../../wasm_worker/types/mainToWorker';
 import { Listeners, createListeners } from './listeners';
@@ -22,6 +23,7 @@ import { Size } from '../../types';
 export enum WorkerFunction {
 	CALCULATE,
 	ADJUST_OFFSETS,
+	SET_OFFSETS,
 	ADJUST_ZOOM,
 	SET_ZOOM,
 	SET_MAX_ITERATIONS
@@ -85,6 +87,7 @@ export const createWorkersManager = (
 	function call(functionName: WorkerFunction.ADJUST_ZOOM, data: AdjustZoomData): void;
 	function call(functionName: WorkerFunction.SET_ZOOM, data: SetZoomData): void;
 	function call(functionName: WorkerFunction.ADJUST_OFFSETS, data: AdjustOffsetsData): void;
+	function call(functionName: WorkerFunction.SET_OFFSETS, data: SetOffsetsData): void;
 	function call(functionName: WorkerFunction.SET_MAX_ITERATIONS, data: SetMaxIterationsData): void;
 	function call(functionName: WorkerFunction, ...args: any): void {
 		if (workers.length === 0 || isCalculating) return;
@@ -101,6 +104,9 @@ export const createWorkersManager = (
 				break;
 			case WorkerFunction.ADJUST_OFFSETS:
 				adjustOffsets(args[0]);
+				break;
+			case WorkerFunction.SET_OFFSETS:
+				setOffsets(args[0]);
 				break;
 			case WorkerFunction.SET_MAX_ITERATIONS:
 				setMaxIterations(args[0]);
@@ -159,6 +165,15 @@ export const createWorkersManager = (
 		workers.forEach((worker) => {
 			(worker.postMessage as MainToWorkerPostMessage)({
 				type: MainToWorkerMessageType.ADJUST_OFFSETS,
+				data
+			});
+		});
+	};
+
+	const setOffsets = (data: SetOffsetsData) => {
+		workers.forEach((worker) => {
+			(worker.postMessage as MainToWorkerPostMessage)({
+				type: MainToWorkerMessageType.SET_OFFSETS,
 				data
 			});
 		});

@@ -23,6 +23,7 @@ declare global {
 			functions: {
 				setMaxIterations: (value: number) => void;
 				adjustOffsets: (speed: number, angleInDegrees: number) => string;
+				setOffsets: (xAsENotation: string, yAsENotation: string) => string;
 				adjustZoom: (
 					increase: boolean,
 					speed: number,

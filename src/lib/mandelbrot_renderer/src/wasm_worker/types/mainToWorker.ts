@@ -5,6 +5,7 @@ export enum MainToWorkerMessageType {
 	INIT_WASM,
 	CALCULATE_SEGMENT,
 	ADJUST_OFFSETS,
+	SET_OFFSETS,
 	ADJUST_ZOOM,
 	SET_ZOOM,
 	SET_MAX_ITERATIONS
@@ -25,6 +26,10 @@ export type CalculateSegmentData = {
 export type AdjustOffsetsData = {
 	speed: number;
 	angleInDegrees: number;
+};
+export type SetOffsetsData = {
+	xAsENotation: string;
+	yAsENotation: string;
 };
 export type AdjustZoomData = {
 	type: boolean;
@@ -52,6 +57,10 @@ export type MainToWorkerMessageData =
 	| {
 			type: MainToWorkerMessageType.ADJUST_OFFSETS;
 			data: AdjustOffsetsData;
+	  }
+	| {
+			type: MainToWorkerMessageType.SET_OFFSETS;
+			data: SetOffsetsData;
 	  }
 	| {
 			type: MainToWorkerMessageType.INIT_WASM;

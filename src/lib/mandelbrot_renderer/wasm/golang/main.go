@@ -34,6 +34,7 @@ func main() {
 	exportedFunctions.Set("setMaxIterations", js.FuncOf(SetMaxIterations))
 	exportedFunctions.Set("calculateSegment", js.FuncOf(CalculateSegment))
 	exportedFunctions.Set("adjustOffsets", js.FuncOf(AdjustOffsets))
+	exportedFunctions.Set("setOffsets", js.FuncOf(SetOffsets))
 	exportedFunctions.Set("adjustZoom", js.FuncOf(AdjustZoom))
 	exportedFunctions.Set("setZoom", js.FuncOf(SetZoom))
 
@@ -121,6 +122,14 @@ func AdjustOffsets(this js.Value, arguments []js.Value) interface{} {
 	coordinates := offsetsHandler.GetAsCoordinates()
 	r, _ := coordinates.MarshalJSON()
 	return string(r)
+}
+
+func SetOffsets(this js.Value, arguments []js.Value) interface{} {
+	err := offsetsHandler.Set(arguments[0].String(), arguments[1].String())
+	if err != nil {
+		return err.Error()
+	}
+	return nil
 }
 
 func AdjustZoom(this js.Value, arguments []js.Value) interface{} {

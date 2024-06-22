@@ -2,7 +2,6 @@ package zoom
 
 import (
 	"errors"
-	"fmt"
 	"mandelbrot/objects"
 	"mandelbrot/objects/float128"
 	"mandelbrot/services/offsets"
@@ -12,9 +11,6 @@ import (
 
 const MAX_FLOAT64_MAGNITUDE_DECIMALS = 15
 const MAX_FLOAT128_MAGNITUDE_DECIMALS = 31
-
-const SET_ZOOM_MAX_DECIMALS_ERROR = "SET_ZOOM_MAX_DECIMALS_ERROR"
-const SET_ZOOM_PARSE_STRING_ERROR = "SET_ZOOM_PARSE_STRING_ERROR"
 
 type Strategy uint8
 
@@ -98,11 +94,12 @@ func (z *Handler) Adjust(t bool, speed operationmode.Float, strategy Strategy) *
 func (z *Handler) Set(zoomLevelAsENotation string) error {
 	zoomLevel, amountOfDecimals, err := float128.FromENotationString(zoomLevelAsENotation)
 	if err != nil {
-		fmt.Println("Error parsing e notation string -> ", err.Error())
-		return errors.New(SET_ZOOM_PARSE_STRING_ERROR)
+		return errors.New("parse error")
 	}
+
+	// TODO: Check max decimals on JS side and remove this IF
 	if amountOfDecimals > MAX_FLOAT128_MAGNITUDE_DECIMALS {
-		return errors.New(SET_ZOOM_MAX_DECIMALS_ERROR)
+		return errors.New("remove me")
 	}
 
 	z.magnitudeDecimals = uint64(amountOfDecimals)

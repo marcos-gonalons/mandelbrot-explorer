@@ -1,7 +1,9 @@
 package offsets
 
 import (
+	"errors"
 	"mandelbrot/objects"
+	"mandelbrot/objects/float128"
 	operationmode "mandelbrot/services/operation_mode"
 )
 
@@ -69,6 +71,27 @@ func (o *Handler) DecrementY(decrement operationmode.Float) *Handler {
 	return o
 }
 
+func (o *Handler) Set(xAsENotation, yAsENotation string) error {
+	X, amountOfXDecimals, errX := float128.FromENotationString(xAsENotation)
+	Y, amountOfYDecimals, errY := float128.FromENotationString(yAsENotation)
+	if errX != nil || errY != nil {
+		return errors.New("parse error")
+	}
+
+	// TODO: In JS detect operation mode and do a check of the decimals amount
+	// if float64 and decimals > float64max then display error, same for f128
+	if o.operationMode.IsFloat64() {
+		o.x = operationmode.NewFloat(X.Float64())
+		o.x = operationmode.NewFloat(Y.Float64())
+	}
+
+	if o.operationMode.IsFloat128() {
+		o.x = operationmode.NewFloat128(X, uint64(amountOfXDecimals))
+		o.x = operationmode.NewFloat128(Y, uint64(amountOfYDecimals))
+	}
+
+	return nil
+}
 func (o *Handler) GetAsCoordinates() objects.Coordinates {
 	return objects.Coordinates{X: o.x, Y: o.y}
 }

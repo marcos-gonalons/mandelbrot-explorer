@@ -5,6 +5,7 @@ import { handleAdjustZoom } from './adjustZoomHandler/handler';
 import { MainToWorkerMessageData, MainToWorkerMessageType } from './types/mainToWorker';
 import { handleSetMaxIterations } from './setMaxIterationsHandler/handler';
 import { handleSetZoom } from './setZoomHandler/handler';
+import { handleSetOffsets } from './setOffsetsHandler/handler';
 
 export const handle = async ({ data: message }: MessageEvent<MainToWorkerMessageData>) => {
 	switch (message.type) {
@@ -13,6 +14,9 @@ export const handle = async ({ data: message }: MessageEvent<MainToWorkerMessage
 			break;
 		case MainToWorkerMessageType.ADJUST_OFFSETS:
 			handleAdjustOffsets(message.data);
+			break;
+		case MainToWorkerMessageType.SET_OFFSETS:
+			handleSetOffsets(message.data);
 			break;
 		case MainToWorkerMessageType.ADJUST_ZOOM:
 			handleAdjustZoom(message.data);
@@ -42,6 +46,7 @@ self.WASM = {
 	functions: {
 		setMaxIterations: placeholder,
 		adjustOffsets: placeholder,
+		setOffsets: placeholder,
 		adjustZoom: placeholder,
 		setZoom: placeholder,
 		calculateSegment: placeholder
