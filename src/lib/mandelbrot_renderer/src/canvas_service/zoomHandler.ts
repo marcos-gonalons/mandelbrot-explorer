@@ -1,7 +1,7 @@
 import { AdjustZoomData } from '../wasm_worker/types/mainToWorker';
 import { KeypressHandler } from './keypressHandler';
 import { MouseCoordinatesHandler } from './mouseCoordinatesHandler';
-import { WorkerFunction, WorkersManager } from './workers_manager/manager';
+import { WorkersManager } from './workers_manager/manager';
 
 export type ZoomHandler = ReturnType<typeof createZoomHandler>;
 export enum ZoomingStrategy {
@@ -34,9 +34,9 @@ export const createZoomHandler = (
 			mouseCoordinates,
 			canvasSize: { width: imageData.width, height: imageData.height }
 		};
-		workersManager.call(WorkerFunction.ADJUST_ZOOM, data);
+		workersManager.adjustZoom(data);
 
-		workersManager.call(WorkerFunction.CALCULATE, 4);
+		workersManager.parallelizeCalculation(4);
 
 		if (scrollingInterval) return;
 
@@ -50,7 +50,7 @@ export const createZoomHandler = (
 			if (now - lastScrollAt > 350) {
 				clearInterval(scrollingInterval);
 				scrollingInterval = null;
-				workersManager.call(WorkerFunction.CALCULATE);
+				workersManager.parallelizeCalculation();
 			}
 		}, 50);
 	}

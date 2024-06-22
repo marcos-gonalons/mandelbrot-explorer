@@ -1,7 +1,7 @@
 import { AdjustOffsetsData } from '../wasm_worker/types/mainToWorker';
 import { KeypressHandler } from './keypressHandler';
 import { MouseCoordinatesHandler } from './mouseCoordinatesHandler';
-import { WorkerFunction, WorkersManager } from './workers_manager/manager';
+import { WorkersManager } from './workers_manager/manager';
 import { ZoomHandler } from './zoomHandler';
 
 export const createDragHandler = (
@@ -48,7 +48,7 @@ export const createDragHandler = (
 
 		updateOffsets();
 
-		workersManager.call(WorkerFunction.CALCULATE, 4);
+		workersManager.parallelizeCalculation(4);
 	}
 
 	function stopDragging() {
@@ -66,7 +66,7 @@ export const createDragHandler = (
 			clearInterval(draggingInterval);
 			draggingInterval = null;
 
-			workersManager.call(WorkerFunction.CALCULATE);
+			workersManager.parallelizeCalculation();
 		}, 50);
 	}
 
@@ -91,7 +91,7 @@ export const createDragHandler = (
 			)
 		};
 
-		workersManager.call(WorkerFunction.ADJUST_OFFSETS, data);
+		workersManager.adjustOffsets(data);
 	}
 
 	const getDistanceBetweenCoordinates = (c1: number[], c2: number[]): number => {

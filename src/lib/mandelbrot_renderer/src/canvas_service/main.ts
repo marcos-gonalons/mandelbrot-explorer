@@ -1,7 +1,7 @@
 import Line = require('progressbar.js/line');
 import { createDragHandler } from './dragHandler';
 import { createMouseCoordinatesHandler } from './mouseCoordinatesHandler';
-import { WorkerFunction, createWorkersManager } from './workers_manager/manager';
+import { createWorkersManager } from './workers_manager/manager';
 import { createZoomHandler } from './zoomHandler';
 import { createKeypressHandler } from './keypressHandler';
 
@@ -24,7 +24,7 @@ export const init = async (canvas: HTMLCanvasElement, progressBar: Line) => {
 		(window as any).workersManager = workersManager;
 		////////////////////////////////////////////////
 
-		workersManager.call(WorkerFunction.CALCULATE);
+		workersManager.parallelizeCalculation();
 	} catch (e) {
 		// TODO: Some toast or something else instead of an alert
 		alert('Sorry, an error occurred :( - Please try with another browser');
@@ -81,7 +81,7 @@ export const init = async (canvas: HTMLCanvasElement, progressBar: Line) => {
 					clearInterval(resizeInterval);
 					resizeInterval = null;
 					initCanvas();
-					workersManager.call(WorkerFunction.CALCULATE);
+					workersManager.parallelizeCalculation();
 				}
 			}, 50);
 		};

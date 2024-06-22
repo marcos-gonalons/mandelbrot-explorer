@@ -6,31 +6,21 @@ import { MainToWorkerMessageData, MainToWorkerMessageType } from './types/mainTo
 import { handleSetMaxIterations } from './setMaxIterationsHandler/handler';
 import { handleSetZoom } from './setZoomHandler/handler';
 import { handleSetOffsets } from './setOffsetsHandler/handler';
+import { handleSetColorAtMaxIterations } from './setColorAtMaxIterationsHandler/handler';
+
+const typeMap = new Map();
+
+typeMap.set(MainToWorkerMessageType.INIT_WASM, handleInitWasm);
+typeMap.set(MainToWorkerMessageType.ADJUST_OFFSETS, handleAdjustOffsets);
+typeMap.set(MainToWorkerMessageType.SET_OFFSETS, handleSetOffsets);
+typeMap.set(MainToWorkerMessageType.ADJUST_ZOOM, handleAdjustZoom);
+typeMap.set(MainToWorkerMessageType.SET_ZOOM, handleSetZoom);
+typeMap.set(MainToWorkerMessageType.CALCULATE_SEGMENT, handleCalculateSegment);
+typeMap.set(MainToWorkerMessageType.SET_MAX_ITERATIONS, handleSetMaxIterations);
+typeMap.set(MainToWorkerMessageType.SET_COLOR_AT_MAX_ITERATIONS, handleSetColorAtMaxIterations);
 
 export const handle = async ({ data: message }: MessageEvent<MainToWorkerMessageData>) => {
-	switch (message.type) {
-		case MainToWorkerMessageType.INIT_WASM:
-			handleInitWasm(message.data);
-			break;
-		case MainToWorkerMessageType.ADJUST_OFFSETS:
-			handleAdjustOffsets(message.data);
-			break;
-		case MainToWorkerMessageType.SET_OFFSETS:
-			handleSetOffsets(message.data);
-			break;
-		case MainToWorkerMessageType.ADJUST_ZOOM:
-			handleAdjustZoom(message.data);
-			break;
-		case MainToWorkerMessageType.SET_ZOOM:
-			handleSetZoom(message.data);
-			break;
-		case MainToWorkerMessageType.CALCULATE_SEGMENT:
-			handleCalculateSegment(message.data);
-			break;
-		case MainToWorkerMessageType.SET_MAX_ITERATIONS:
-			handleSetMaxIterations(message.data);
-			break;
-	}
+	typeMap.get(message.type)(message.data);
 };
 
 const placeholder = (...args: any): any => console.error('WASM not loaded');
@@ -45,6 +35,7 @@ self.WASM = {
 	},
 	functions: {
 		setMaxIterations: placeholder,
+		setColorAtMaxIterations: placeholder,
 		adjustOffsets: placeholder,
 		setOffsets: placeholder,
 		adjustZoom: placeholder,

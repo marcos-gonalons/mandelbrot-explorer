@@ -24,6 +24,11 @@ func New(maxIterations int64, colorAtMaxIterations objects.RGBColor) *Service {
 	return service
 }
 
+func (s *Service) SetColorAtMaxIterations(colorAtMaxIterations objects.RGBColor) *Service {
+	s.colorAtMaxIterations = colorAtMaxIterations
+	return s
+}
+
 func (s *Service) SetMaxIterations(maxIterations int64) *Service {
 	s.maxIterations = maxIterations
 	s.prepareColors()

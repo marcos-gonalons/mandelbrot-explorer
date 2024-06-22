@@ -7,6 +7,10 @@ import {
 	CalculateSegmentFinishedData
 } from '../../wasm_worker/types/workerToMain';
 import { Size } from '../../types';
+import {
+	MainToWorkerMessageData,
+	MainToWorkerMessageType
+} from '../../wasm_worker/types/mainToWorker';
 
 export type Listeners = ReturnType<typeof createListeners>;
 export const createListeners = (
@@ -14,7 +18,7 @@ export const createListeners = (
 	getCtx: () => CanvasRenderingContext2D,
 	getWorkers: () => Worker[],
 	progressBar: Line,
-	onFinishRenderCallback: () => void
+	onFinishFunctionExecutionCallback: (type: MainToWorkerMessageData['type']) => void
 ) => {
 	let finishedSegments: CalculateSegmentFinishedData[] = [];
 	let totalSuccesses: number = 0;
@@ -28,9 +32,11 @@ export const createListeners = (
 		switch (message.type) {
 			case WorkerToMainMessageType.INIT_WASM_FINISHED:
 				onInitWASMFinished(onWorkersInitialized);
+				onFinishFunctionExecutionCallback(MainToWorkerMessageType.INIT_WASM);
 				break;
 			case WorkerToMainMessageType.INIT_WASM_ERROR:
 				onInitWASMError(message.data, onWorkersInitialized, onFailure);
+				onFinishFunctionExecutionCallback(MainToWorkerMessageType.INIT_WASM);
 				break;
 			case WorkerToMainMessageType.CALCULATE_SEGMENT_FINISHED:
 				onSegmentFinished(message.data);
@@ -39,10 +45,22 @@ export const createListeners = (
 				progressBar.animate(message.data.progress, { duration: 100 });
 				break;
 			case WorkerToMainMessageType.ADJUST_OFFSETS_FINISHED:
+				onFinishFunctionExecutionCallback(MainToWorkerMessageType.ADJUST_OFFSETS);
+				break;
+			case WorkerToMainMessageType.SET_OFFSETS_FINISHED:
+				onFinishFunctionExecutionCallback(MainToWorkerMessageType.SET_OFFSETS);
 				break;
 			case WorkerToMainMessageType.ADJUST_ZOOM_FINISHED:
+				onFinishFunctionExecutionCallback(MainToWorkerMessageType.ADJUST_ZOOM);
+				break;
+			case WorkerToMainMessageType.SET_ZOOM_FINISHED:
+				onFinishFunctionExecutionCallback(MainToWorkerMessageType.SET_ZOOM);
 				break;
 			case WorkerToMainMessageType.SET_MAX_ITERATIONS_FINISHED:
+				onFinishFunctionExecutionCallback(MainToWorkerMessageType.SET_MAX_ITERATIONS);
+				break;
+			case WorkerToMainMessageType.SET_COLOR_AT_MAX_ITERATIONS_FINISHED:
+				onFinishFunctionExecutionCallback(MainToWorkerMessageType.SET_COLOR_AT_MAX_ITERATIONS);
 				break;
 		}
 	};
@@ -82,9 +100,8 @@ export const createListeners = (
 		}
 
 		renderMandelbrot(data.canvasSize);
-
+		onFinishFunctionExecutionCallback(MainToWorkerMessageType.CALCULATE_SEGMENT);
 		finishedSegments = [];
-		onFinishRenderCallback();
 	};
 
 	const renderMandelbrot = ({ width, height }: Size) => {

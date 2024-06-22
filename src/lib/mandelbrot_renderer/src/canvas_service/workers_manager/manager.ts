@@ -3,9 +3,10 @@ import Line = require('progressbar.js/line');
 import {
 	AdjustOffsetsData,
 	AdjustZoomData,
-	CalculateSegmentData,
+	MainToWorkerMessageData,
 	MainToWorkerMessageType,
 	MainToWorkerPostMessage,
+	SetColorAtMaxIterationsData,
 	SetMaxIterationsData,
 	SetOffsetsData,
 	SetZoomData
@@ -20,15 +21,6 @@ import {
 } from './constants';
 import { Size } from '../../types';
 
-export enum WorkerFunction {
-	CALCULATE,
-	ADJUST_OFFSETS,
-	SET_OFFSETS,
-	ADJUST_ZOOM,
-	SET_ZOOM,
-	SET_MAX_ITERATIONS
-}
-
 export type WorkersManager = ReturnType<typeof createWorkersManager>;
 export const createWorkersManager = (
 	getImageData: () => ImageData,
@@ -36,15 +28,16 @@ export const createWorkersManager = (
 	getCtx: () => CanvasRenderingContext2D,
 	progressBar: Line
 ) => {
-	let isCalculating: boolean = false;
 	let workers: Worker[] = [];
+
+	let isExecutingFunctionMap = initIsExecutingFunctionMap();
 
 	let listeners: Listeners = createListeners(
 		getCanvas,
 		getCtx,
 		() => workers,
 		progressBar,
-		() => (isCalculating = false)
+		(type) => isExecutingFunctionMap.set(type, false)
 	);
 
 	const init = async (): Promise<Worker[]> => {
@@ -83,41 +76,8 @@ export const createWorkersManager = (
 		}
 	};
 
-	function call(functionName: WorkerFunction.CALCULATE, resolution?: number): void;
-	function call(functionName: WorkerFunction.ADJUST_ZOOM, data: AdjustZoomData): void;
-	function call(functionName: WorkerFunction.SET_ZOOM, data: SetZoomData): void;
-	function call(functionName: WorkerFunction.ADJUST_OFFSETS, data: AdjustOffsetsData): void;
-	function call(functionName: WorkerFunction.SET_OFFSETS, data: SetOffsetsData): void;
-	function call(functionName: WorkerFunction.SET_MAX_ITERATIONS, data: SetMaxIterationsData): void;
-	function call(functionName: WorkerFunction, ...args: any): void {
-		if (workers.length === 0 || isCalculating) return;
-
-		switch (functionName) {
-			case WorkerFunction.CALCULATE:
-				parallelizeCalculation(args[0]);
-				break;
-			case WorkerFunction.ADJUST_ZOOM:
-				adjustZoom(args[0]);
-				break;
-			case WorkerFunction.SET_ZOOM:
-				setZoom(args[0]);
-				break;
-			case WorkerFunction.ADJUST_OFFSETS:
-				adjustOffsets(args[0]);
-				break;
-			case WorkerFunction.SET_OFFSETS:
-				setOffsets(args[0]);
-				break;
-			case WorkerFunction.SET_MAX_ITERATIONS:
-				setMaxIterations(args[0]);
-				break;
-		}
-	}
-
 	/** @param resolution - The higher the number the worse the resolution */
 	const parallelizeCalculation = (resolution: number = 1) => {
-		isCalculating = true;
-
 		const canvasSize: Size = {
 			width: Math.floor(getImageData().width / resolution),
 			height: Math.floor(getImageData().height / resolution)
@@ -126,11 +86,9 @@ export const createWorkersManager = (
 		const segmentLength = Math.floor(size / workers.length);
 		const lastSegmentLength = segmentLength + (size % workers.length);
 
+		const messages: MainToWorkerMessageData[] = [];
 		workers.forEach((worker, index) => {
-			const message: {
-				type: MainToWorkerMessageType.CALCULATE_SEGMENT;
-				data: CalculateSegmentData;
-			} = {
+			messages.push({
 				type: MainToWorkerMessageType.CALCULATE_SEGMENT,
 				data: {
 					resolution,
@@ -138,53 +96,72 @@ export const createWorkersManager = (
 					startsAt: 4 * index * segmentLength,
 					segmentLength: (index === workers.length - 1 ? lastSegmentLength : segmentLength) * 4
 				}
-			};
-			(worker.postMessage as MainToWorkerPostMessage)(message);
+			});
 		});
+
+		invokeWorkers(messages);
 	};
 
 	const adjustZoom = (data: AdjustZoomData) => {
-		workers.forEach((worker) => {
-			(worker.postMessage as MainToWorkerPostMessage)({
+		invokeWorkers(
+			Array<MainToWorkerMessageData>(workers.length).fill({
 				type: MainToWorkerMessageType.ADJUST_ZOOM,
 				data
-			});
-		});
+			})
+		);
 	};
 
 	const setZoom = (data: SetZoomData) => {
-		workers.forEach((worker) => {
-			(worker.postMessage as MainToWorkerPostMessage)({
+		invokeWorkers(
+			Array<MainToWorkerMessageData>(workers.length).fill({
 				type: MainToWorkerMessageType.SET_ZOOM,
 				data
-			});
-		});
+			})
+		);
 	};
 
 	const adjustOffsets = (data: AdjustOffsetsData) => {
-		workers.forEach((worker) => {
-			(worker.postMessage as MainToWorkerPostMessage)({
+		invokeWorkers(
+			Array<MainToWorkerMessageData>(workers.length).fill({
 				type: MainToWorkerMessageType.ADJUST_OFFSETS,
 				data
-			});
-		});
+			})
+		);
 	};
 
 	const setOffsets = (data: SetOffsetsData) => {
-		workers.forEach((worker) => {
-			(worker.postMessage as MainToWorkerPostMessage)({
+		invokeWorkers(
+			Array<MainToWorkerMessageData>(workers.length).fill({
 				type: MainToWorkerMessageType.SET_OFFSETS,
 				data
-			});
-		});
+			})
+		);
 	};
 
 	const setMaxIterations = (data: SetMaxIterationsData) => {
-		workers.forEach((worker) => {
-			(worker.postMessage as MainToWorkerPostMessage)({
+		invokeWorkers(
+			Array<MainToWorkerMessageData>(workers.length).fill({
 				type: MainToWorkerMessageType.SET_MAX_ITERATIONS,
 				data
-			});
+			})
+		);
+	};
+
+	const setColorAtMaxIterations = (data: SetColorAtMaxIterationsData) => {
+		invokeWorkers(
+			Array<MainToWorkerMessageData>(workers.length).fill({
+				type: MainToWorkerMessageType.SET_COLOR_AT_MAX_ITERATIONS,
+				data
+			})
+		);
+	};
+
+	const invokeWorkers = (messages: MainToWorkerMessageData[]) => {
+		if (isCalculating()) return;
+
+		workers.forEach((worker: Worker, index: number) => {
+			isExecutingFunctionMap.set(messages[index].type, true);
+			worker.postMessage(messages[index]);
 		});
 	};
 
@@ -217,9 +194,35 @@ export const createWorkersManager = (
 		return MAX_WORKERS_TO_SPAWN;
 	};
 
+	const isCalculating = () =>
+		Array.from(isExecutingFunctionMap.entries()).filter(
+			(v) => v[0] === MainToWorkerMessageType.CALCULATE_SEGMENT && v[1]
+		).length > 0;
+
 	return {
 		init,
-		call,
-		isCalculating: () => isCalculating
+		isCalculating,
+		parallelizeCalculation,
+		adjustZoom,
+		setZoom,
+		adjustOffsets,
+		setOffsets,
+		setMaxIterations,
+		setColorAtMaxIterations
 	};
 };
+
+function initIsExecutingFunctionMap(): Map<MainToWorkerMessageData['type'], boolean> {
+	const isExecutingFunctionMap = new Map<MainToWorkerMessageData['type'], boolean>();
+
+	isExecutingFunctionMap.set(MainToWorkerMessageType.INIT_WASM, false);
+	isExecutingFunctionMap.set(MainToWorkerMessageType.CALCULATE_SEGMENT, false);
+	isExecutingFunctionMap.set(MainToWorkerMessageType.ADJUST_OFFSETS, false);
+	isExecutingFunctionMap.set(MainToWorkerMessageType.SET_OFFSETS, false);
+	isExecutingFunctionMap.set(MainToWorkerMessageType.ADJUST_ZOOM, false);
+	isExecutingFunctionMap.set(MainToWorkerMessageType.SET_ZOOM, false);
+	isExecutingFunctionMap.set(MainToWorkerMessageType.SET_MAX_ITERATIONS, false);
+	isExecutingFunctionMap.set(MainToWorkerMessageType.SET_COLOR_AT_MAX_ITERATIONS, false);
+
+	return isExecutingFunctionMap;
+}

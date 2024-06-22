@@ -9,7 +9,8 @@ export enum WorkerToMainMessageType {
 	SET_ZOOM_FINISHED,
 	ADJUST_OFFSETS_FINISHED,
 	SET_OFFSETS_FINISHED,
-	SET_MAX_ITERATIONS_FINISHED
+	SET_MAX_ITERATIONS_FINISHED,
+	SET_COLOR_AT_MAX_ITERATIONS_FINISHED
 }
 export type InitWASMErrorData = {
 	workerIndex: number;
@@ -36,7 +37,8 @@ export type WorkerToMainMessageData =
 			type:
 				| WorkerToMainMessageType.INIT_WASM_FINISHED
 				| WorkerToMainMessageType.ADJUST_ZOOM_FINISHED
-				| WorkerToMainMessageType.SET_MAX_ITERATIONS_FINISHED;
+				| WorkerToMainMessageType.SET_MAX_ITERATIONS_FINISHED
+				| WorkerToMainMessageType.SET_COLOR_AT_MAX_ITERATIONS_FINISHED;
 	  }
 	| {
 			type: WorkerToMainMessageType.CALCULATION_PROGRESS;

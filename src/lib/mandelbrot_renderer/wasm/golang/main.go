@@ -37,6 +37,7 @@ func main() {
 	exportedFunctions.Set("setOffsets", js.FuncOf(SetOffsets))
 	exportedFunctions.Set("adjustZoom", js.FuncOf(AdjustZoom))
 	exportedFunctions.Set("setZoom", js.FuncOf(SetZoom))
+	exportedFunctions.Set("setColorAtMaxIterations", js.FuncOf(SetColorAtMaxIterations))
 
 	keepAlive()
 }
@@ -149,6 +150,16 @@ func SetZoom(this js.Value, arguments []js.Value) interface{} {
 	if err != nil {
 		return err.Error()
 	}
+	return nil
+}
+
+func SetColorAtMaxIterations(this js.Value, arguments []js.Value) interface{} {
+	colorService.SetColorAtMaxIterations(objects.RGBColor{
+		R: uint8(arguments[0].Int()),
+		G: uint8(arguments[1].Int()),
+		B: uint8(arguments[2].Int()),
+		A: uint8(arguments[3].Int()),
+	})
 	return nil
 }
 
