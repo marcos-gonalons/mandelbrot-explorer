@@ -1,9 +1,9 @@
 import Line = require('progressbar.js/line');
 import { createDragHandler } from './dragHandler';
+import { createKeypressHandler } from './keypressHandler';
 import { createMouseCoordinatesHandler } from './mouseCoordinatesHandler';
 import { createWorkersManager } from './workers_manager/manager';
 import { createZoomHandler } from './zoomHandler';
-import { createKeypressHandler } from './keypressHandler';
 
 export const init = async (canvas: HTMLCanvasElement, progressBar: Line) => {
 	const ctx = canvas.getContext('2d');

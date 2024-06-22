@@ -11,6 +11,7 @@ import {
 	SetOffsetsData,
 	SetZoomData
 } from '../../wasm_worker/types/mainToWorker';
+import { NORMAL_RESOLUTION } from '../constants';
 import {
 	MAX_WORKERS_TO_SPAWN,
 	MAX_WORKERS_TO_SPAWN_FIREFOX,
@@ -75,7 +76,7 @@ export const createWorkersManager = (
 	};
 
 	/** @param resolution - The higher the number the worse the resolution */
-	const parallelizeCalculation = (resolution: number = 1) => {
+	const parallelizeCalculation = (resolution: number = NORMAL_RESOLUTION) => {
 		const canvasSize: Size = {
 			width: Math.floor(getImageData().width / resolution),
 			height: Math.floor(getImageData().height / resolution)

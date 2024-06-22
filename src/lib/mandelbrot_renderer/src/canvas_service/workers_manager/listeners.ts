@@ -99,6 +99,7 @@ export const createListeners = (
 		}
 
 		renderMandelbrot(data.canvasSize);
+
 		finishedSegments = [];
 	};
 
@@ -142,11 +143,14 @@ export const createListeners = (
 	const handleFinishExecutionCallback = (type: MainToWorkerMessageType) => {
 		let finishedAmount = finishedByTypeMap.get(type);
 		finishedAmount++;
-		finishedByTypeMap.set(type, finishedAmount);
-		if (finishedAmount === getWorkers().length) {
-			onFinishFunctionExecutionCallback(type);
-			finishedByTypeMap.set(type, 0);
+
+		if (finishedAmount !== getWorkers().length) {
+			finishedByTypeMap.set(type, finishedAmount);
+			return;
 		}
+
+		onFinishFunctionExecutionCallback(type);
+		finishedByTypeMap.set(type, 0);
 	};
 
 	return { onNewWorkerMessageReceived };

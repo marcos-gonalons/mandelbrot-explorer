@@ -26,6 +26,7 @@ export async function handleInitWasm({ workerIndex, wasmBytes }: InitWASMData) {
 			type: WorkerToMainMessageType.INIT_WASM_FINISHED
 		});
 	} catch (err) {
+		console.log(err);
 		(self.postMessage as WorkerToMainPostMessage)({
 			type: WorkerToMainMessageType.INIT_WASM_ERROR,
 			data: { workerIndex }

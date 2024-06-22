@@ -1,12 +1,12 @@
-import { handleCalculateSegment } from './calculateSegmentHandler/handler';
-import { handleInitWasm } from './initWasmHandler/handler';
 import { handleAdjustOffsets } from './adjustOffsetsHandler/handler';
 import { handleAdjustZoom } from './adjustZoomHandler/handler';
-import { MainToWorkerMessageData, MainToWorkerMessageType } from './types/mainToWorker';
-import { handleSetMaxIterations } from './setMaxIterationsHandler/handler';
-import { handleSetZoom } from './setZoomHandler/handler';
-import { handleSetOffsets } from './setOffsetsHandler/handler';
+import { handleCalculateSegment } from './calculateSegmentHandler/handler';
+import { handleInitWasm } from './initWasmHandler/handler';
 import { handleSetColorAtMaxIterations } from './setColorAtMaxIterationsHandler/handler';
+import { handleSetMaxIterations } from './setMaxIterationsHandler/handler';
+import { handleSetOffsets } from './setOffsetsHandler/handler';
+import { handleSetZoom } from './setZoomHandler/handler';
+import { MainToWorkerMessageData, MainToWorkerMessageType } from './types/mainToWorker';
 
 const typeMap = new Map();
 

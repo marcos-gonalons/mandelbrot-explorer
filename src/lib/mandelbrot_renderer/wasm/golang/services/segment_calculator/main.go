@@ -14,8 +14,8 @@ type Service struct {
 	offsetsHandler   *offsets.Handler
 	zoomHandler      *zoom.Handler
 	colorService     *color.Service
-	progressCallback func(progress float64)
 	maxIterations    int64
+	progressCallback func(progress float64)
 }
 
 const THRESHOLD = 3
@@ -33,8 +33,8 @@ func New(
 		offsetsHandler,
 		zoomHandler,
 		colorService,
-		progressCallback,
 		maxIterations,
+		progressCallback,
 	}
 }
 
@@ -64,7 +64,7 @@ func (s *Service) CalculateSegmentColors(
 
 		mainIndex++
 
-		if i%10000 == 0 && resolution <= 1 {
+		if resolution <= 1 && i%10000 == 0 {
 			s.progressCallback(float64(i) / float64(segmentLength))
 		}
 	}
