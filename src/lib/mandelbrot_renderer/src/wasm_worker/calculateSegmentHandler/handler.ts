@@ -1,7 +1,7 @@
-import { CalculateSegmentData } from '../types/mainToWorker';
+import { CalculateSegmentMessage } from '../types/mainToWorker';
 import { WorkerToMainMessageType, WorkerToMainPostMessage } from '../types/workerToMain';
 
-export function handleCalculateSegment(data: CalculateSegmentData) {
+export function handleCalculateSegment(data: CalculateSegmentMessage['data']) {
 	self.WASM.sharedVariables.segmentData = new Uint8ClampedArray(data.segmentLength);
 
 	self.WASM.callbacks.progress = (progress: number) => {

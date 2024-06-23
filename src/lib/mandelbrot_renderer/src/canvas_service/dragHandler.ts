@@ -1,4 +1,4 @@
-import { AdjustOffsetsData } from '../wasm_worker/types/mainToWorker';
+import { AdjustOffsetsMessage } from '../wasm_worker/types/mainToWorker';
 import { LOW_RESOLUTION } from './constants';
 import { KeypressHandler } from './keypressHandler';
 import { MouseCoordinatesHandler } from './mouseCoordinatesHandler';
@@ -84,7 +84,7 @@ export const createDragHandler = (
 			speed *= 5;
 		}
 
-		const data: AdjustOffsetsData = {
+		const data: AdjustOffsetsMessage['data'] = {
 			speed,
 			angleInDegrees: getAngleBetweenCoordinatesInDegrees(
 				coordinatesAtStartOfDragging,

@@ -1,7 +1,7 @@
-import { AdjustZoomData } from '../types/mainToWorker';
+import { AdjustZoomMessage } from '../types/mainToWorker';
 import { WorkerToMainMessageType, WorkerToMainPostMessage } from '../types/workerToMain';
 
-export function handleAdjustZoom(data: AdjustZoomData) {
+export function handleAdjustZoom(data: AdjustZoomMessage['data']) {
 	self.WASM.callbacks.maxFloat64DepthReached = () => {
 		// todo: display a toast or something saying that from now on, the rendering will be a lot slower.
 		console.log('Max float64 depth reached');

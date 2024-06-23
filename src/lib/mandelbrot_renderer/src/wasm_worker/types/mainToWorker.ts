@@ -24,93 +24,71 @@ export const MAIN_TO_WORKER_MESSAGE_TYPES: MainToWorkerMessageType[] = [
 	MainToWorkerMessageType.SET_STATE
 ];
 
-export type InitWASMData = {
-	workerIndex: number;
-	wasmBytes: ArrayBuffer;
+export type AdjustZoomMessage = {
+	type: MainToWorkerMessageType.ADJUST_ZOOM;
+	data: {
+		type: boolean;
+		strategy: ZoomingStrategy;
+		speed: number;
+		mouseCoordinates: number[];
+		canvasSize: Size;
+	};
 };
-
-export type CalculateSegmentData = {
-	canvasSize: Size;
-	segmentLength: number;
-	startsAt: number;
-	resolution: number;
+export type SetZoomMessage = {
+	type: MainToWorkerMessageType.SET_ZOOM;
+	data: { zoomLevelAsENotation: string };
 };
-
-export type AdjustOffsetsData = {
-	speed: number;
-	angleInDegrees: number;
+export type AdjustOffsetsMessage = {
+	type: MainToWorkerMessageType.ADJUST_OFFSETS;
+	data: { speed: number; angleInDegrees: number };
 };
-export type SetOffsetsData = {
-	xAsENotation: string;
-	yAsENotation: string;
+export type SetOffsetsMessage = {
+	type: MainToWorkerMessageType.SET_OFFSETS;
+	data: { xAsENotation: string; yAsENotation: string };
 };
-export type AdjustZoomData = {
-	type: boolean;
-	strategy: ZoomingStrategy;
-	speed: number;
-	mouseCoordinates: number[];
-	canvasSize: Size;
+export type InitWASMMessage = {
+	type: MainToWorkerMessageType.INIT_WASM;
+	data: { workerIndex: number; wasmBytes: ArrayBuffer };
 };
-export type SetZoomData = {
-	zoomLevelAsENotation: string;
+export type CalculateSegmentMessage = {
+	type: MainToWorkerMessageType.CALCULATE_SEGMENT;
+	data: { canvasSize: Size; segmentLength: number; startsAt: number; resolution: number };
 };
-export type SetMaxIterationsData = {
-	value: number;
+export type SetMaxIterationsMessage = {
+	type: MainToWorkerMessageType.SET_MAX_ITERATIONS;
+	data: { value: number };
 };
-export type SetColorAtMaxIterationsData = {
-	color: RGBColor;
+export type SetColorAtMaxIterationsMessage = {
+	type: MainToWorkerMessageType.SET_COLOR_AT_MAX_ITERATIONS;
+	data: { color: RGBColor };
 };
-export type SetStateData = {
-	state: {
-		operationMode: number; // todo: operationmode enum
-		maxIterations: number;
-		zoomAsENotation: string;
-		magnitudeAsENotation: string;
-		magnitudeDecimals: string;
-		offsetsAsENotation: {
-			x: string;
-			y: string;
+export type SetStateMessage = {
+	type: MainToWorkerMessageType.SET_STATE;
+	data: {
+		state: {
+			operationMode: number; // todo: operationmode enum
+			maxIterations: number;
+			zoomAsENotation: string;
+			magnitudeAsENotation: string;
+			magnitudeDecimals: string;
+			offsetsAsENotation: {
+				x: string;
+				y: string;
+			};
+			colorAtMaxIterations: RGBColor;
 		};
-		colorAtMaxIterations: RGBColor;
 	};
 };
 
 export type MainToWorkerMessageData =
-	| {
-			type: MainToWorkerMessageType.ADJUST_ZOOM;
-			data: AdjustZoomData;
-	  }
-	| {
-			type: MainToWorkerMessageType.SET_ZOOM;
-			data: SetZoomData;
-	  }
-	| {
-			type: MainToWorkerMessageType.ADJUST_OFFSETS;
-			data: AdjustOffsetsData;
-	  }
-	| {
-			type: MainToWorkerMessageType.SET_OFFSETS;
-			data: SetOffsetsData;
-	  }
-	| {
-			type: MainToWorkerMessageType.INIT_WASM;
-			data: InitWASMData;
-	  }
-	| {
-			type: MainToWorkerMessageType.CALCULATE_SEGMENT;
-			data: CalculateSegmentData;
-	  }
-	| {
-			type: MainToWorkerMessageType.SET_MAX_ITERATIONS;
-			data: SetMaxIterationsData;
-	  }
-	| {
-			type: MainToWorkerMessageType.SET_COLOR_AT_MAX_ITERATIONS;
-			data: SetColorAtMaxIterationsData;
-	  }
-	| {
-			type: MainToWorkerMessageType.SET_STATE;
-			data: SetStateData;
-	  };
+	| AdjustZoomMessage
+	| SetZoomMessage
+	| AdjustOffsetsMessage
+	| SetOffsetsMessage
+	| InitWASMMessage
+	| CalculateSegmentMessage
+	| SetMaxIterationsMessage
+	| SetColorAtMaxIterationsMessage
+	| SetStateMessage;
 
 export type MainToWorkerPostMessage = (message: MainToWorkerMessageData) => void;

@@ -1,4 +1,4 @@
-import { AdjustZoomData } from '../wasm_worker/types/mainToWorker';
+import { AdjustZoomMessage } from '../wasm_worker/types/mainToWorker';
 import { LOW_RESOLUTION } from './constants';
 import { KeypressHandler } from './keypressHandler';
 import { MouseCoordinatesHandler } from './mouseCoordinatesHandler';
@@ -28,7 +28,7 @@ export const createZoomHandler = (
 		const mouseCoordinates = mouseCoordinatesHandler.getCoordinates();
 
 		const imageData = getImageData();
-		const data: AdjustZoomData = {
+		const data: AdjustZoomMessage['data'] = {
 			type: event.deltaY < 0,
 			speed: getZoomSpeed(),
 			strategy: ZoomingStrategy.CENTERED,

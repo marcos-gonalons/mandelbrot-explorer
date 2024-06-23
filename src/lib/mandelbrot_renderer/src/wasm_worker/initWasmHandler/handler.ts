@@ -1,7 +1,7 @@
-import { InitWASMData } from '../types/mainToWorker';
+import { InitWASMMessage } from '../types/mainToWorker';
 import { WorkerToMainMessageType, WorkerToMainPostMessage } from '../types/workerToMain';
 
-export async function handleInitWasm({ workerIndex, wasmBytes }: InitWASMData) {
+export async function handleInitWasm({ workerIndex, wasmBytes }: InitWASMMessage['data']) {
 	try {
 		const go = new Go();
 		let result: WebAssembly.WebAssemblyInstantiatedSource;

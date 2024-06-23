@@ -1,17 +1,17 @@
 import * as Bowser from 'bowser';
 import { Size } from '../../types';
 import {
-	AdjustOffsetsData,
-	AdjustZoomData,
+	AdjustOffsetsMessage,
+	AdjustZoomMessage,
 	MAIN_TO_WORKER_MESSAGE_TYPES,
 	MainToWorkerMessageData,
 	MainToWorkerMessageType,
 	MainToWorkerPostMessage,
-	SetColorAtMaxIterationsData,
-	SetMaxIterationsData,
-	SetOffsetsData,
-	SetStateData,
-	SetZoomData
+	SetColorAtMaxIterationsMessage,
+	SetMaxIterationsMessage,
+	SetOffsetsMessage,
+	SetStateMessage,
+	SetZoomMessage
 } from '../../wasm_worker/types/mainToWorker';
 import { NORMAL_RESOLUTION } from '../constants';
 import {
@@ -107,7 +107,7 @@ export const createWorkersManager = (
 		invokeWorkers(messages);
 	};
 
-	const adjustZoom = (data: AdjustZoomData) => {
+	const adjustZoom = (data: AdjustZoomMessage['data']) => {
 		invokeWorkers(
 			Array<MainToWorkerMessageData>(workers.length).fill({
 				type: MainToWorkerMessageType.ADJUST_ZOOM,
@@ -116,7 +116,7 @@ export const createWorkersManager = (
 		);
 	};
 
-	const setZoom = (data: SetZoomData) => {
+	const setZoom = (data: SetZoomMessage['data']) => {
 		invokeWorkers(
 			Array<MainToWorkerMessageData>(workers.length).fill({
 				type: MainToWorkerMessageType.SET_ZOOM,
@@ -125,7 +125,7 @@ export const createWorkersManager = (
 		);
 	};
 
-	const adjustOffsets = (data: AdjustOffsetsData) => {
+	const adjustOffsets = (data: AdjustOffsetsMessage['data']) => {
 		invokeWorkers(
 			Array<MainToWorkerMessageData>(workers.length).fill({
 				type: MainToWorkerMessageType.ADJUST_OFFSETS,
@@ -134,7 +134,7 @@ export const createWorkersManager = (
 		);
 	};
 
-	const setOffsets = (data: SetOffsetsData) => {
+	const setOffsets = (data: SetOffsetsMessage['data']) => {
 		invokeWorkers(
 			Array<MainToWorkerMessageData>(workers.length).fill({
 				type: MainToWorkerMessageType.SET_OFFSETS,
@@ -143,7 +143,7 @@ export const createWorkersManager = (
 		);
 	};
 
-	const setMaxIterations = (data: SetMaxIterationsData) => {
+	const setMaxIterations = (data: SetMaxIterationsMessage['data']) => {
 		invokeWorkers(
 			Array<MainToWorkerMessageData>(workers.length).fill({
 				type: MainToWorkerMessageType.SET_MAX_ITERATIONS,
@@ -152,7 +152,7 @@ export const createWorkersManager = (
 		);
 	};
 
-	const setColorAtMaxIterations = (data: SetColorAtMaxIterationsData) => {
+	const setColorAtMaxIterations = (data: SetColorAtMaxIterationsMessage['data']) => {
 		invokeWorkers(
 			Array<MainToWorkerMessageData>(workers.length).fill({
 				type: MainToWorkerMessageType.SET_COLOR_AT_MAX_ITERATIONS,
@@ -161,7 +161,7 @@ export const createWorkersManager = (
 		);
 	};
 
-	const setState = (data: SetStateData) => {
+	const setState = (data: SetStateMessage['data']) => {
 		invokeWorkers(
 			Array<MainToWorkerMessageData>(workers.length).fill({
 				type: MainToWorkerMessageType.SET_STATE,

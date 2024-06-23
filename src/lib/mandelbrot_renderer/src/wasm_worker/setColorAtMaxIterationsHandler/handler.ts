@@ -1,9 +1,9 @@
-import { SetColorAtMaxIterationsData } from '../types/mainToWorker';
+import { SetColorAtMaxIterationsMessage } from '../types/mainToWorker';
 import { WorkerToMainMessageType, WorkerToMainPostMessage } from '../types/workerToMain';
 
 export function handleSetColorAtMaxIterations({
 	color: { R, G, B, A }
-}: SetColorAtMaxIterationsData) {
+}: SetColorAtMaxIterationsMessage['data']) {
 	self.WASM.functions.setColorAtMaxIterations(R, G, B, A);
 
 	(self.postMessage as WorkerToMainPostMessage)({
