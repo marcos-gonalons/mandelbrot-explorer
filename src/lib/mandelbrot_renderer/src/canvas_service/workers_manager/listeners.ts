@@ -6,8 +6,8 @@ import {
 	MainToWorkerMessageType
 } from '../../wasm_worker/types/mainToWorker';
 import {
-	CalculateSegmentFinishedData,
-	InitWASMErrorData,
+	CalculateSegmentFinishedMessage,
+	InitWASMErrorMessage,
 	WorkerToMainMessageData,
 	WorkerToMainMessageType,
 	getMessageTypeMap
@@ -21,7 +21,7 @@ export const createListeners = (
 	progressBar: Line,
 	onFinishFunctionExecutionCallback: (type: MainToWorkerMessageType) => void
 ) => {
-	let finishedSegments: CalculateSegmentFinishedData[] = [];
+	let finishedSegments: CalculateSegmentFinishedMessage['data'][] = [];
 	let totalSuccesses: number = 0;
 	let totalErrors: number = 0;
 
@@ -60,7 +60,7 @@ export const createListeners = (
 	};
 
 	const onInitWASMError = (
-		{ workerIndex }: InitWASMErrorData,
+		{ workerIndex }: InitWASMErrorMessage['data'],
 		onWorkersInitialized: (workers: Worker[]) => void,
 		onFailure: (e: Error) => void
 	): void => {
@@ -77,7 +77,7 @@ export const createListeners = (
 		}
 	};
 
-	const onSegmentFinished = (data: CalculateSegmentFinishedData): void => {
+	const onSegmentFinished = (data: CalculateSegmentFinishedMessage['data']): void => {
 		finishedSegments.push(data);
 		if (finishedSegments.length < getWorkers().length) return;
 

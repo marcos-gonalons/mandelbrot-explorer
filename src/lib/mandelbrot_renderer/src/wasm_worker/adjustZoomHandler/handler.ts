@@ -11,7 +11,7 @@ export function handleAdjustZoom(data: AdjustZoomMessage['data']) {
 		console.log('Max float128 depth reached');
 	};
 
-	self.WASM.functions.adjustZoom(
+	const zoomAsENotation = self.WASM.functions.adjustZoom(
 		data.type,
 		data.speed,
 		data.strategy,
@@ -22,6 +22,7 @@ export function handleAdjustZoom(data: AdjustZoomMessage['data']) {
 	);
 
 	(self.postMessage as WorkerToMainPostMessage)({
-		type: WorkerToMainMessageType.ADJUST_ZOOM_FINISHED
+		type: WorkerToMainMessageType.ADJUST_ZOOM_FINISHED,
+		data: { zoomAsENotation }
 	});
 }

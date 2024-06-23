@@ -50,62 +50,69 @@ export function getMessageTypeMap(): Map<WorkerToMainMessageType, MainToWorkerMe
 	return messageTypeMap;
 }
 
-export type InitWASMErrorData = {
-	workerIndex: number;
+export type InitWASMFinishedMessage = {
+	type: WorkerToMainMessageType.INIT_WASM_FINISHED;
 };
-export type CalculateSegmentFinishedData = {
-	segment: Uint8ClampedArray;
-	startsAt: number;
-	canvasSize: Size;
-	resolution: number;
+export type InitWASMErrorMessage = {
+	type: WorkerToMainMessageType.INIT_WASM_ERROR;
+	data: { workerIndex: number };
 };
-export type AdjustOffsetsFinishedData = {
-	offsets: {
-		x: string;
-		y: string;
+export type SetMaxIterationsMessage = {
+	type: WorkerToMainMessageType.SET_MAX_ITERATIONS_FINISHED;
+};
+export type SetColorAtMaxIterationsMessage = {
+	type: WorkerToMainMessageType.SET_COLOR_AT_MAX_ITERATIONS_FINISHED;
+};
+export type CalculationProgressMessage = {
+	type: WorkerToMainMessageType.CALCULATION_PROGRESS;
+	data: { progress: number };
+};
+export type CalculateSegmentFinishedMessage = {
+	type: WorkerToMainMessageType.CALCULATE_SEGMENT_FINISHED;
+	data: {
+		segment: Uint8ClampedArray;
+		startsAt: number;
+		canvasSize: Size;
+		resolution: number;
 	};
 };
-export type SetZoomFinishedData = {
-	error: string | null;
+export type AdjustOffsetsFinisheMessage = {
+	type: WorkerToMainMessageType.ADJUST_OFFSETS_FINISHED;
+	data: {
+		offsets: {
+			x: string;
+			y: string;
+		};
+	};
 };
-export type SetOffsetsFinishedData = SetZoomFinishedData;
-export type SetStateFinishedData = SetZoomFinishedData;
+export type SetOffsetsFinishedMessage = {
+	type: WorkerToMainMessageType.SET_OFFSETS_FINISHED;
+	data: { error: string | null };
+};
+export type AdjustZoomFinishedMessage = {
+	type: WorkerToMainMessageType.ADJUST_ZOOM_FINISHED;
+	data: { zoomAsENotation: string };
+};
+export type SetZoomFinishedMessage = {
+	type: WorkerToMainMessageType.SET_ZOOM_FINISHED;
+	data: { error: string | null };
+};
+export type SetStateFinishedMessage = {
+	type: WorkerToMainMessageType.SET_STATE_FINISHED;
+	data: { error: string | null };
+};
 
 export type WorkerToMainMessageData =
-	| {
-			type:
-				| WorkerToMainMessageType.INIT_WASM_FINISHED
-				| WorkerToMainMessageType.ADJUST_ZOOM_FINISHED
-				| WorkerToMainMessageType.SET_MAX_ITERATIONS_FINISHED
-				| WorkerToMainMessageType.SET_COLOR_AT_MAX_ITERATIONS_FINISHED;
-	  }
-	| {
-			type: WorkerToMainMessageType.CALCULATION_PROGRESS;
-			data: { progress: number };
-	  }
-	| {
-			type: WorkerToMainMessageType.CALCULATE_SEGMENT_FINISHED;
-			data: CalculateSegmentFinishedData;
-	  }
-	| {
-			type: WorkerToMainMessageType.INIT_WASM_ERROR;
-			data: InitWASMErrorData;
-	  }
-	| {
-			type: WorkerToMainMessageType.ADJUST_OFFSETS_FINISHED;
-			data: AdjustOffsetsFinishedData;
-	  }
-	| {
-			type: WorkerToMainMessageType.SET_OFFSETS_FINISHED;
-			data: SetOffsetsFinishedData;
-	  }
-	| {
-			type: WorkerToMainMessageType.SET_ZOOM_FINISHED;
-			data: SetZoomFinishedData;
-	  }
-	| {
-			type: WorkerToMainMessageType.SET_STATE_FINISHED;
-			data: SetStateFinishedData;
-	  };
+	| InitWASMFinishedMessage
+	| InitWASMErrorMessage
+	| SetMaxIterationsMessage
+	| SetColorAtMaxIterationsMessage
+	| CalculationProgressMessage
+	| CalculateSegmentFinishedMessage
+	| AdjustOffsetsFinisheMessage
+	| SetOffsetsFinishedMessage
+	| AdjustZoomFinishedMessage
+	| SetZoomFinishedMessage
+	| SetStateFinishedMessage;
 
 export type WorkerToMainPostMessage = (message: WorkerToMainMessageData) => void;

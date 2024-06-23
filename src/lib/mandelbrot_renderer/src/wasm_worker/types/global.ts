@@ -33,7 +33,7 @@ declare global {
 					yMouseCoordinate: number,
 					canvasWidth: number,
 					canvasHeight: number
-				) => void;
+				) => string;
 				setZoom: (zoomLevelAsENotation: string) => string | null;
 				calculateSegment: (
 					canvasWidth: number,
