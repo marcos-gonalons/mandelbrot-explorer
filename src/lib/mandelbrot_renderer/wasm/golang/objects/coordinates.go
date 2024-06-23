@@ -13,7 +13,3 @@ type CoordinatesAsENotationString struct {
 	X string
 	Y string
 }
-
-func (c *Coordinates) MarshalJSON() ([]byte, error) {
-	panic("not implemented yet")
-}

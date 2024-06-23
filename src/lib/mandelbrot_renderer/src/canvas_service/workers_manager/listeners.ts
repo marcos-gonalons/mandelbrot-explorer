@@ -61,6 +61,9 @@ export const createListeners = (
 			case WorkerToMainMessageType.SET_COLOR_AT_MAX_ITERATIONS_FINISHED:
 				handleFinishExecutionCallback(MainToWorkerMessageType.SET_COLOR_AT_MAX_ITERATIONS);
 				break;
+			case WorkerToMainMessageType.SET_STATE_FINISHED:
+				handleFinishExecutionCallback(MainToWorkerMessageType.SET_STATE);
+				break;
 		}
 	};
 
@@ -167,6 +170,7 @@ function initFinishedByTypeMap(): Map<MainToWorkerMessageType, number> {
 	finishedByType.set(MainToWorkerMessageType.SET_ZOOM, 0);
 	finishedByType.set(MainToWorkerMessageType.SET_MAX_ITERATIONS, 0);
 	finishedByType.set(MainToWorkerMessageType.SET_COLOR_AT_MAX_ITERATIONS, 0);
+	finishedByType.set(MainToWorkerMessageType.SET_STATE, 0);
 
 	return finishedByType;
 }

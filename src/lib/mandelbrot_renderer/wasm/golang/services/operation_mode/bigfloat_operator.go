@@ -1,7 +1,6 @@
 package operationmode
 
 import (
-	"fmt"
 	"math/big"
 )
 
@@ -22,7 +21,6 @@ func (s *BigFloatOperator) Sub(f1, f2 Float) Float {
 }
 
 func (s *BigFloatOperator) Mul(f1, f2 Float) Float {
-	fmt.Println("using big float operator!")
 	v := new(big.Float).Set(f1.GetBigFloat())
 	v.Mul(f1.GetBigFloat(), f2.GetBigFloat())
 

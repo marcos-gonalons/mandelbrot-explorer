@@ -42,6 +42,7 @@ declare global {
 					startsAt: number,
 					resolution: number
 				) => void;
+				setState: (stateAsJSONString: string) => string | null;
 			};
 		};
 	}

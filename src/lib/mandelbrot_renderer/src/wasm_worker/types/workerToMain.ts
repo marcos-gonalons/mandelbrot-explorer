@@ -10,7 +10,8 @@ export enum WorkerToMainMessageType {
 	ADJUST_OFFSETS_FINISHED,
 	SET_OFFSETS_FINISHED,
 	SET_MAX_ITERATIONS_FINISHED,
-	SET_COLOR_AT_MAX_ITERATIONS_FINISHED
+	SET_COLOR_AT_MAX_ITERATIONS_FINISHED,
+	SET_STATE_FINISHED
 }
 export type InitWASMErrorData = {
 	workerIndex: number;
@@ -31,6 +32,7 @@ export type SetZoomFinishedData = {
 	error: string | null;
 };
 export type SetOffsetsFinishedData = SetZoomFinishedData;
+export type SetStateFinishedData = SetZoomFinishedData;
 
 export type WorkerToMainMessageData =
 	| {
@@ -63,6 +65,10 @@ export type WorkerToMainMessageData =
 	| {
 			type: WorkerToMainMessageType.SET_ZOOM_FINISHED;
 			data: SetZoomFinishedData;
+	  }
+	| {
+			type: WorkerToMainMessageType.SET_STATE_FINISHED;
+			data: SetStateFinishedData;
 	  };
 
 export type WorkerToMainPostMessage = (message: WorkerToMainMessageData) => void;

@@ -9,6 +9,7 @@ import {
 	SetColorAtMaxIterationsData,
 	SetMaxIterationsData,
 	SetOffsetsData,
+	SetStateData,
 	SetZoomData
 } from '../../wasm_worker/types/mainToWorker';
 import { NORMAL_RESOLUTION } from '../constants';
@@ -155,6 +156,15 @@ export const createWorkersManager = (
 		);
 	};
 
+	const setState = (data: SetStateData) => {
+		invokeWorkers(
+			Array<MainToWorkerMessageData>(workers.length).fill({
+				type: MainToWorkerMessageType.SET_STATE,
+				data
+			})
+		);
+	};
+
 	const terminate = () => {
 		// 1. call 1 worker and get state (zoom, offsets, max iterations, colors, operationmode)
 		// 2. In listeners, listen to get state finished
@@ -228,6 +238,7 @@ export const createWorkersManager = (
 		setOffsets,
 		setMaxIterations,
 		setColorAtMaxIterations,
+		setState,
 		terminate
 	};
 };
@@ -243,6 +254,7 @@ function initIsExecutingFunctionMap(): Map<MainToWorkerMessageType, boolean> {
 	isExecutingFunctionMap.set(MainToWorkerMessageType.SET_ZOOM, false);
 	isExecutingFunctionMap.set(MainToWorkerMessageType.SET_MAX_ITERATIONS, false);
 	isExecutingFunctionMap.set(MainToWorkerMessageType.SET_COLOR_AT_MAX_ITERATIONS, false);
+	isExecutingFunctionMap.set(MainToWorkerMessageType.SET_STATE, false);
 
 	return isExecutingFunctionMap;
 }

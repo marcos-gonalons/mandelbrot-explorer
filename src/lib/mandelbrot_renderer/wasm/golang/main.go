@@ -119,7 +119,11 @@ func AdjustOffsets(this js.Value, arguments []js.Value) interface{} {
 	)
 
 	coordinates := offsetsHandler.GetAsCoordinates()
-	r, _ := coordinates.MarshalJSON()
+
+	r, _ := json.Marshal(objects.CoordinatesAsENotationString{
+		X: operationMode.GetAsENotationString(&coordinates.X),
+		Y: operationMode.GetAsENotationString(&coordinates.Y),
+	})
 	return string(r)
 }
 
@@ -184,6 +188,7 @@ func SetState(this js.Value, arguments []js.Value) interface{} {
 	fmt.Printf("Settings this state %#v\n", state)
 
 	colorService.SetMaxIterations(state.MaxIterations)
+	segmentCalculatorService.SetMaxIterations(state.MaxIterations)
 	zoomHandler.Set(state.ZoomAsENotation)
 	offsetsHandler.Set(state.OffsetsAsENotation.X, state.OffsetsAsENotation.Y)
 	colorService.SetColorAtMaxIterations(state.ColorAtMaxIterations)

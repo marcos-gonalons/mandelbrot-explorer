@@ -9,7 +9,8 @@ export enum MainToWorkerMessageType {
 	ADJUST_ZOOM,
 	SET_ZOOM,
 	SET_MAX_ITERATIONS,
-	SET_COLOR_AT_MAX_ITERATIONS
+	SET_COLOR_AT_MAX_ITERATIONS,
+	SET_STATE
 }
 
 export type InitWASMData = {
@@ -48,6 +49,20 @@ export type SetMaxIterationsData = {
 export type SetColorAtMaxIterationsData = {
 	color: RGBColor;
 };
+export type SetStateData = {
+	state: {
+		operationMode: number; // todo: operationmode enum
+		maxIterations: number;
+		zoomAsENotation: string;
+		magnitudeAsENotation: string;
+		magnitudeDecimals: string;
+		offsetsAsENotation: {
+			x: string;
+			y: string;
+		};
+		colorAtMaxIterations: RGBColor;
+	};
+};
 
 export type MainToWorkerMessageData =
 	| {
@@ -81,6 +96,10 @@ export type MainToWorkerMessageData =
 	| {
 			type: MainToWorkerMessageType.SET_COLOR_AT_MAX_ITERATIONS;
 			data: SetColorAtMaxIterationsData;
+	  }
+	| {
+			type: MainToWorkerMessageType.SET_STATE;
+			data: SetStateData;
 	  };
 
 export type MainToWorkerPostMessage = (message: MainToWorkerMessageData) => void;
