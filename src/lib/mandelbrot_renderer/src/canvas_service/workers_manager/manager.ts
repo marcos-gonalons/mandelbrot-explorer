@@ -3,6 +3,7 @@ import { Size } from '../../types';
 import {
 	AdjustOffsetsData,
 	AdjustZoomData,
+	MAIN_TO_WORKER_MESSAGE_TYPES,
 	MainToWorkerMessageData,
 	MainToWorkerMessageType,
 	MainToWorkerPostMessage,
@@ -24,6 +25,7 @@ import { Listeners, createListeners } from './listeners';
 import Line = require('progressbar.js/line');
 
 export type WorkersManager = ReturnType<typeof createWorkersManager>;
+
 export const createWorkersManager = (
 	getImageData: () => ImageData,
 	getCanvas: () => HTMLCanvasElement,
@@ -31,7 +33,10 @@ export const createWorkersManager = (
 	progressBar: Line
 ) => {
 	let workers: Worker[] = [];
-	let isExecutingFunctionMap = initIsExecutingFunctionMap();
+
+	const isExecutingFunctionMap = new Map<MainToWorkerMessageType, boolean>();
+	MAIN_TO_WORKER_MESSAGE_TYPES.forEach((t) => isExecutingFunctionMap.set(t, false));
+
 	let listeners: Listeners = createListeners(
 		getCanvas,
 		getCtx,
@@ -242,19 +247,3 @@ export const createWorkersManager = (
 		terminate
 	};
 };
-
-function initIsExecutingFunctionMap(): Map<MainToWorkerMessageType, boolean> {
-	const isExecutingFunctionMap = new Map<MainToWorkerMessageType, boolean>();
-
-	isExecutingFunctionMap.set(MainToWorkerMessageType.INIT_WASM, false);
-	isExecutingFunctionMap.set(MainToWorkerMessageType.CALCULATE_SEGMENT, false);
-	isExecutingFunctionMap.set(MainToWorkerMessageType.ADJUST_OFFSETS, false);
-	isExecutingFunctionMap.set(MainToWorkerMessageType.SET_OFFSETS, false);
-	isExecutingFunctionMap.set(MainToWorkerMessageType.ADJUST_ZOOM, false);
-	isExecutingFunctionMap.set(MainToWorkerMessageType.SET_ZOOM, false);
-	isExecutingFunctionMap.set(MainToWorkerMessageType.SET_MAX_ITERATIONS, false);
-	isExecutingFunctionMap.set(MainToWorkerMessageType.SET_COLOR_AT_MAX_ITERATIONS, false);
-	isExecutingFunctionMap.set(MainToWorkerMessageType.SET_STATE, false);
-
-	return isExecutingFunctionMap;
-}

@@ -2,7 +2,6 @@ package main
 
 import (
 	"encoding/json"
-	"fmt"
 	objects "mandelbrot/objects"
 	"mandelbrot/services/color"
 	"mandelbrot/services/offsets"
@@ -184,8 +183,6 @@ func SetState(this js.Value, arguments []js.Value) interface{} {
 	state := &State{}
 
 	err := json.Unmarshal([]byte(arguments[0].String()), state)
-
-	fmt.Printf("Settings this state %#v\n", state)
 
 	colorService.SetMaxIterations(state.MaxIterations)
 	segmentCalculatorService.SetMaxIterations(state.MaxIterations)

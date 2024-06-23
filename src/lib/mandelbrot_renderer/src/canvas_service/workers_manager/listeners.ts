@@ -1,12 +1,16 @@
 import Line = require('progressbar.js/line');
 
 import { Size } from '../../types';
-import { MainToWorkerMessageType } from '../../wasm_worker/types/mainToWorker';
+import {
+	MAIN_TO_WORKER_MESSAGE_TYPES,
+	MainToWorkerMessageType
+} from '../../wasm_worker/types/mainToWorker';
 import {
 	CalculateSegmentFinishedData,
 	InitWASMErrorData,
 	WorkerToMainMessageData,
-	WorkerToMainMessageType
+	WorkerToMainMessageType,
+	getMessageTypeMap
 } from '../../wasm_worker/types/workerToMain';
 
 export type Listeners = ReturnType<typeof createListeners>;
@@ -20,49 +24,29 @@ export const createListeners = (
 	let finishedSegments: CalculateSegmentFinishedData[] = [];
 	let totalSuccesses: number = 0;
 	let totalErrors: number = 0;
-	let finishedByTypeMap = initFinishedByTypeMap();
+
+	const finishedByTypeMap = new Map<MainToWorkerMessageType, number>();
+	MAIN_TO_WORKER_MESSAGE_TYPES.forEach((t) => finishedByTypeMap.set(t, 0));
 
 	const onNewWorkerMessageReceived = (
 		{ data: message }: MessageEvent<WorkerToMainMessageData>,
 		onWorkersInitialized: (workers: Worker[]) => void,
 		onFailure: (e: Error) => void
 	): void => {
+		handleFinishExecutionCallback(getMessageTypeMap().get(message.type));
+
 		switch (message.type) {
 			case WorkerToMainMessageType.INIT_WASM_FINISHED:
-				handleFinishExecutionCallback(MainToWorkerMessageType.INIT_WASM);
 				onInitWASMFinished(onWorkersInitialized);
 				break;
 			case WorkerToMainMessageType.INIT_WASM_ERROR:
-				handleFinishExecutionCallback(MainToWorkerMessageType.INIT_WASM);
 				onInitWASMError(message.data, onWorkersInitialized, onFailure);
 				break;
 			case WorkerToMainMessageType.CALCULATE_SEGMENT_FINISHED:
-				handleFinishExecutionCallback(MainToWorkerMessageType.CALCULATE_SEGMENT);
 				onSegmentFinished(message.data);
 				break;
 			case WorkerToMainMessageType.CALCULATION_PROGRESS:
 				progressBar.animate(message.data.progress, { duration: 100 });
-				break;
-			case WorkerToMainMessageType.ADJUST_OFFSETS_FINISHED:
-				handleFinishExecutionCallback(MainToWorkerMessageType.ADJUST_OFFSETS);
-				break;
-			case WorkerToMainMessageType.SET_OFFSETS_FINISHED:
-				handleFinishExecutionCallback(MainToWorkerMessageType.SET_OFFSETS);
-				break;
-			case WorkerToMainMessageType.ADJUST_ZOOM_FINISHED:
-				handleFinishExecutionCallback(MainToWorkerMessageType.ADJUST_ZOOM);
-				break;
-			case WorkerToMainMessageType.SET_ZOOM_FINISHED:
-				handleFinishExecutionCallback(MainToWorkerMessageType.SET_ZOOM);
-				break;
-			case WorkerToMainMessageType.SET_MAX_ITERATIONS_FINISHED:
-				handleFinishExecutionCallback(MainToWorkerMessageType.SET_MAX_ITERATIONS);
-				break;
-			case WorkerToMainMessageType.SET_COLOR_AT_MAX_ITERATIONS_FINISHED:
-				handleFinishExecutionCallback(MainToWorkerMessageType.SET_COLOR_AT_MAX_ITERATIONS);
-				break;
-			case WorkerToMainMessageType.SET_STATE_FINISHED:
-				handleFinishExecutionCallback(MainToWorkerMessageType.SET_STATE);
 				break;
 		}
 	};
@@ -158,19 +142,3 @@ export const createListeners = (
 
 	return { onNewWorkerMessageReceived };
 };
-
-function initFinishedByTypeMap(): Map<MainToWorkerMessageType, number> {
-	const finishedByType = new Map<MainToWorkerMessageType, number>();
-
-	finishedByType.set(MainToWorkerMessageType.INIT_WASM, 0);
-	finishedByType.set(MainToWorkerMessageType.CALCULATE_SEGMENT, 0);
-	finishedByType.set(MainToWorkerMessageType.ADJUST_OFFSETS, 0);
-	finishedByType.set(MainToWorkerMessageType.SET_OFFSETS, 0);
-	finishedByType.set(MainToWorkerMessageType.ADJUST_ZOOM, 0);
-	finishedByType.set(MainToWorkerMessageType.SET_ZOOM, 0);
-	finishedByType.set(MainToWorkerMessageType.SET_MAX_ITERATIONS, 0);
-	finishedByType.set(MainToWorkerMessageType.SET_COLOR_AT_MAX_ITERATIONS, 0);
-	finishedByType.set(MainToWorkerMessageType.SET_STATE, 0);
-
-	return finishedByType;
-}

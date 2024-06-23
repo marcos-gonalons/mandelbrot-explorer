@@ -68,7 +68,7 @@ export const createDragHandler = (
 			draggingInterval = null;
 
 			workersManager.parallelizeCalculation();
-		}, 10);
+		}, 50);
 	}
 
 	function updateOffsets(): void {

@@ -12,6 +12,17 @@ export enum MainToWorkerMessageType {
 	SET_COLOR_AT_MAX_ITERATIONS,
 	SET_STATE
 }
+export const MAIN_TO_WORKER_MESSAGE_TYPES: MainToWorkerMessageType[] = [
+	MainToWorkerMessageType.INIT_WASM,
+	MainToWorkerMessageType.CALCULATE_SEGMENT,
+	MainToWorkerMessageType.ADJUST_OFFSETS,
+	MainToWorkerMessageType.SET_OFFSETS,
+	MainToWorkerMessageType.ADJUST_ZOOM,
+	MainToWorkerMessageType.SET_ZOOM,
+	MainToWorkerMessageType.SET_MAX_ITERATIONS,
+	MainToWorkerMessageType.SET_COLOR_AT_MAX_ITERATIONS,
+	MainToWorkerMessageType.SET_STATE
+];
 
 export type InitWASMData = {
 	workerIndex: number;
