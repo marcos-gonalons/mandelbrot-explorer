@@ -1,6 +1,7 @@
 package operationmode
 
 import (
+	"errors"
 	"mandelbrot/objects/float128"
 )
 
@@ -97,4 +98,33 @@ func (s *Service) ConvertFloat(f *Float) {
 		// use float128 scan method to initialize from string
 		panic("not implemented yet")
 	}
+}
+
+func (s *Service) GetAsENotationString(f *Float) string {
+	if s.IsFloat64() {
+		return float128.SetFloat64(f.GetFloat64()).String()
+	}
+
+	if s.IsFloat128() {
+		return f.GetFloat128().String()
+	}
+
+	panic("operation mode not set or unsupported")
+}
+
+func (s *Service) NewFloatFromENotationString(v string) (Float, error) {
+	f128Value, amountOfDecimals, err := float128.FromENotationString(v)
+	if err != nil {
+		return NewFloat(0), errors.New("parse error")
+	}
+
+	if s.IsFloat64() {
+		return NewFloat(f128Value.Float64()), nil
+	}
+
+	if s.IsFloat128() {
+		return NewFloat128(f128Value, uint64(amountOfDecimals)), nil
+	}
+
+	panic("operation mode not set or unsupported")
 }

@@ -1,9 +1,7 @@
 package offsets
 
 import (
-	"errors"
 	"mandelbrot/objects"
-	"mandelbrot/objects/float128"
 	operationmode "mandelbrot/services/operation_mode"
 )
 
@@ -72,24 +70,17 @@ func (o *Handler) DecrementY(decrement operationmode.Float) *Handler {
 }
 
 func (o *Handler) Set(xAsENotation, yAsENotation string) error {
-	X, amountOfXDecimals, errX := float128.FromENotationString(xAsENotation)
-	Y, amountOfYDecimals, errY := float128.FromENotationString(yAsENotation)
-	if errX != nil || errY != nil {
-		return errors.New("parse error")
+	x, err := o.operationMode.NewFloatFromENotationString(xAsENotation)
+	if err != nil {
+		return err
+	}
+	y, err := o.operationMode.NewFloatFromENotationString(yAsENotation)
+	if err != nil {
+		return err
 	}
 
-	// TODO: In JS detect operation mode and do a check of the decimals amount
-	// if float64 and decimals > float64max then display error, same for f128
-	if o.operationMode.IsFloat64() {
-		o.x = operationmode.NewFloat(X.Float64())
-		o.y = operationmode.NewFloat(Y.Float64())
-	}
-
-	if o.operationMode.IsFloat128() {
-		o.x = operationmode.NewFloat128(X, uint64(amountOfXDecimals))
-		o.y = operationmode.NewFloat128(Y, uint64(amountOfYDecimals))
-	}
-
+	o.x = x
+	o.y = y
 	return nil
 }
 func (o *Handler) GetAsCoordinates() objects.Coordinates {
@@ -97,20 +88,10 @@ func (o *Handler) GetAsCoordinates() objects.Coordinates {
 }
 
 func (o *Handler) GetAsENotationStrings() objects.CoordinatesAsENotationString {
-	if o.operationMode.IsFloat64() {
-		return objects.CoordinatesAsENotationString{
-			X: float128.SetFloat64(o.x.GetFloat64()).String(),
-			Y: float128.SetFloat64(o.y.GetFloat64()).String(),
-		}
+	return objects.CoordinatesAsENotationString{
+		X: o.operationMode.GetAsENotationString(&o.x),
+		Y: o.operationMode.GetAsENotationString(&o.y),
 	}
-	if o.operationMode.IsFloat128() {
-		return objects.CoordinatesAsENotationString{
-			X: o.x.GetFloat128().String(),
-			Y: o.y.GetFloat128().String(),
-		}
-	}
-
-	return objects.CoordinatesAsENotationString{}
 }
 
 func (o *Handler) OnChangeOperationMode(newMode operationmode.Mode) {

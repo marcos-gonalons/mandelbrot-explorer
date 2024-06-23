@@ -79,25 +79,11 @@ func (z *Handler) GetZoomLevel() operationmode.Float {
 }
 
 func (z *Handler) GetZoomLevelAsENotation() string {
-	if z.operationMode.IsFloat64() {
-		return float128.SetFloat64(z.zoomLevel.GetFloat64()).String()
-	}
-	if z.operationMode.IsFloat128() {
-		return z.zoomLevel.GetFloat128().String()
-	}
-
-	return ""
+	return z.operationMode.GetAsENotationString(&z.zoomLevel)
 }
 
 func (z *Handler) GetMagnitudeAsENotation() string {
-	if z.operationMode.IsFloat64() {
-		return float128.SetFloat64(z.magnitude.GetFloat64()).String()
-	}
-	if z.operationMode.IsFloat128() {
-		return z.magnitude.GetFloat128().String()
-	}
-
-	return ""
+	return z.operationMode.GetAsENotationString(&z.magnitude)
 }
 
 func (z *Handler) GetMagnitudeDecimals() uint64 {
@@ -118,20 +104,21 @@ func (z *Handler) Adjust(t bool, speed operationmode.Float, strategy Strategy) *
 }
 
 func (z *Handler) Set(zoomLevelAsENotation string) error {
-	zoomLevel, amountOfDecimals, err := float128.FromENotationString(zoomLevelAsENotation)
+	zoomLevel, err := z.operationMode.NewFloatFromENotationString(zoomLevelAsENotation)
 	if err != nil {
-		return errors.New("parse error")
+		return err
 	}
 
+	z.zoomLevel = zoomLevel
+	z.previousLevel = operationmode.Clone(z.zoomLevel)
+
 	// TODO: Check max decimals on JS side and remove this IF
-	if amountOfDecimals > MAX_FLOAT128_MAGNITUDE_DECIMALS {
+	if zoomLevel.GetDecimalsAmount() > MAX_FLOAT128_MAGNITUDE_DECIMALS {
 		return errors.New("remove me")
 	}
 
-	z.magnitudeDecimals = uint64(amountOfDecimals)
-	if amountOfDecimals >= MAX_FLOAT64_MAGNITUDE_DECIMALS {
-		z.zoomLevel = operationmode.NewFloat128(zoomLevel, z.magnitudeDecimals)
-		z.previousLevel = operationmode.Clone(z.zoomLevel)
+	z.magnitudeDecimals = zoomLevel.GetDecimalsAmount()
+	if z.magnitudeDecimals >= MAX_FLOAT64_MAGNITUDE_DECIMALS {
 		z.magnitude = operationmode.NewFloat128(float128.PowerI(float128.SetFloat64(10), -int64(z.magnitudeDecimals)), z.magnitudeDecimals)
 
 		if !z.operationMode.IsFloat128() {
@@ -139,9 +126,7 @@ func (z *Handler) Set(zoomLevelAsENotation string) error {
 			z.offsetsHandler.OnChangeOperationMode(operationmode.FLOAT128)
 		}
 	}
-	if amountOfDecimals < MAX_FLOAT64_MAGNITUDE_DECIMALS {
-		z.zoomLevel = operationmode.NewFloat64(zoomLevel.Float64(), z.magnitudeDecimals)
-		z.previousLevel = operationmode.Clone(z.zoomLevel)
+	if z.magnitudeDecimals < MAX_FLOAT64_MAGNITUDE_DECIMALS {
 		z.magnitude = operationmode.NewFloat64(math.Pow(10, -float64(z.magnitudeDecimals)), z.magnitudeDecimals)
 
 		if !z.operationMode.IsFloat64() {
