@@ -96,8 +96,6 @@ func (s *Service) getPixelColor(
 		iterations = s.getIterationsFloat64(coordinates, canvasSize, zoomLevel.GetFloat64(), offsets)
 	case operationmode.FLOAT128:
 		iterations = s.getIterationsFloat128(coordinates, canvasSize, zoomLevel.GetFloat128(), offsets)
-	case operationmode.BIG_FLOAT:
-		iterations = s.getIterationsBigFloat(coordinates, canvasSize, zoomLevel.GetBigFloat(), offsets)
 	}
 
 	if iterations == 0 {

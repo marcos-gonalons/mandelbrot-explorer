@@ -248,10 +248,4 @@ func (z *Handler) onMagnitudeChange(increased bool) {
 			f.DecreaseDecimalsAmount()
 		}
 	}
-
-	if z.operationMode.IsBigFloat() {
-		for _, v := range floats {
-			v.UpdateBigFloatPrecision()
-		}
-	}
 }
