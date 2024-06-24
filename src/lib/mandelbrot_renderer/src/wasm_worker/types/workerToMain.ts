@@ -12,7 +12,9 @@ export enum WorkerToMainMessageType {
 	SET_OFFSETS_FINISHED,
 	SET_MAX_ITERATIONS_FINISHED,
 	SET_COLOR_AT_MAX_ITERATIONS_FINISHED,
-	SET_STATE_FINISHED
+	SET_STATE_FINISHED,
+	MAX_FLOAT64_DEPTH_REACHED,
+	MAX_FLOAT128_DEPTH_REACHED
 }
 
 export function getMessageTypeMap(): Map<WorkerToMainMessageType, MainToWorkerMessageType> {
@@ -101,8 +103,14 @@ export type SetStateFinishedMessage = {
 	type: WorkerToMainMessageType.SET_STATE_FINISHED;
 	data: { error: string | null };
 };
+export type MaxFloat64DepthReachedMessage = {
+	type: WorkerToMainMessageType.MAX_FLOAT64_DEPTH_REACHED;
+};
+export type MaxFloat128DepthReachedMessage = {
+	type: WorkerToMainMessageType.MAX_FLOAT128_DEPTH_REACHED;
+};
 
-export type WorkerToMainMessageData =
+export type WorkerToMainMessage =
 	| InitWASMFinishedMessage
 	| InitWASMErrorMessage
 	| SetMaxIterationsMessage
@@ -113,6 +121,8 @@ export type WorkerToMainMessageData =
 	| SetOffsetsFinishedMessage
 	| AdjustZoomFinishedMessage
 	| SetZoomFinishedMessage
-	| SetStateFinishedMessage;
+	| SetStateFinishedMessage
+	| MaxFloat64DepthReachedMessage
+	| MaxFloat128DepthReachedMessage;
 
-export type WorkerToMainPostMessage = (message: WorkerToMainMessageData) => void;
+export type WorkerToMainPostMessage = (message: WorkerToMainMessage) => void;

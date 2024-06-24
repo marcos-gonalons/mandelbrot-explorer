@@ -4,7 +4,7 @@ import {
 	AdjustOffsetsMessage,
 	AdjustZoomMessage,
 	MAIN_TO_WORKER_MESSAGE_TYPES,
-	MainToWorkerMessageData,
+	MainToWorkerMessage,
 	MainToWorkerMessageType,
 	MainToWorkerPostMessage,
 	SetColorAtMaxIterationsMessage,
@@ -21,7 +21,7 @@ import {
 	WASM_FILE_PATH,
 	WORKERS_SCRIPT_PATH
 } from './constants';
-import { Listeners, createListeners } from './listeners';
+import { Listeners, createListeners } from './listeners/main';
 import Line = require('progressbar.js/line');
 
 export type WorkersManager = ReturnType<typeof createWorkersManager>;
@@ -91,7 +91,7 @@ export const createWorkersManager = (
 		const segmentLength = Math.floor(size / workers.length);
 		const lastSegmentLength = segmentLength + (size % workers.length);
 
-		const messages: MainToWorkerMessageData[] = [];
+		const messages: MainToWorkerMessage[] = [];
 		workers.forEach((worker, index) => {
 			messages.push({
 				type: MainToWorkerMessageType.CALCULATE_SEGMENT,
@@ -109,7 +109,7 @@ export const createWorkersManager = (
 
 	const adjustZoom = (data: AdjustZoomMessage['data']) => {
 		invokeWorkers(
-			Array<MainToWorkerMessageData>(workers.length).fill({
+			Array<MainToWorkerMessage>(workers.length).fill({
 				type: MainToWorkerMessageType.ADJUST_ZOOM,
 				data
 			})
@@ -118,7 +118,7 @@ export const createWorkersManager = (
 
 	const setZoom = (data: SetZoomMessage['data']) => {
 		invokeWorkers(
-			Array<MainToWorkerMessageData>(workers.length).fill({
+			Array<MainToWorkerMessage>(workers.length).fill({
 				type: MainToWorkerMessageType.SET_ZOOM,
 				data
 			})
@@ -127,7 +127,7 @@ export const createWorkersManager = (
 
 	const adjustOffsets = (data: AdjustOffsetsMessage['data']) => {
 		invokeWorkers(
-			Array<MainToWorkerMessageData>(workers.length).fill({
+			Array<MainToWorkerMessage>(workers.length).fill({
 				type: MainToWorkerMessageType.ADJUST_OFFSETS,
 				data
 			})
@@ -136,7 +136,7 @@ export const createWorkersManager = (
 
 	const setOffsets = (data: SetOffsetsMessage['data']) => {
 		invokeWorkers(
-			Array<MainToWorkerMessageData>(workers.length).fill({
+			Array<MainToWorkerMessage>(workers.length).fill({
 				type: MainToWorkerMessageType.SET_OFFSETS,
 				data
 			})
@@ -145,7 +145,7 @@ export const createWorkersManager = (
 
 	const setMaxIterations = (data: SetMaxIterationsMessage['data']) => {
 		invokeWorkers(
-			Array<MainToWorkerMessageData>(workers.length).fill({
+			Array<MainToWorkerMessage>(workers.length).fill({
 				type: MainToWorkerMessageType.SET_MAX_ITERATIONS,
 				data
 			})
@@ -154,7 +154,7 @@ export const createWorkersManager = (
 
 	const setColorAtMaxIterations = (data: SetColorAtMaxIterationsMessage['data']) => {
 		invokeWorkers(
-			Array<MainToWorkerMessageData>(workers.length).fill({
+			Array<MainToWorkerMessage>(workers.length).fill({
 				type: MainToWorkerMessageType.SET_COLOR_AT_MAX_ITERATIONS,
 				data
 			})
@@ -163,7 +163,7 @@ export const createWorkersManager = (
 
 	const setState = (data: SetStateMessage['data']) => {
 		invokeWorkers(
-			Array<MainToWorkerMessageData>(workers.length).fill({
+			Array<MainToWorkerMessage>(workers.length).fill({
 				type: MainToWorkerMessageType.SET_STATE,
 				data
 			})
@@ -182,7 +182,7 @@ export const createWorkersManager = (
 		progressBar.set(0);
 	};
 
-	const invokeWorkers = (messages: MainToWorkerMessageData[]) => {
+	const invokeWorkers = (messages: MainToWorkerMessage[]) => {
 		if (isCalculating()) return;
 
 		workers.forEach((worker: Worker, index: number) => {

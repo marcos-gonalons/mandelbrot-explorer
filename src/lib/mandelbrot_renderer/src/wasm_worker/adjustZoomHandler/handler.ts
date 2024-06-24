@@ -2,13 +2,17 @@ import { AdjustZoomMessage } from '../types/mainToWorker';
 import { WorkerToMainMessageType, WorkerToMainPostMessage } from '../types/workerToMain';
 
 export function handleAdjustZoom(data: AdjustZoomMessage['data']) {
+	const postMessage = self.postMessage as WorkerToMainPostMessage;
+
 	self.WASM.callbacks.maxFloat64DepthReached = () => {
-		// todo: display a toast or something saying that from now on, the rendering will be a lot slower.
-		console.log('Max float64 depth reached');
+		postMessage({
+			type: WorkerToMainMessageType.MAX_FLOAT64_DEPTH_REACHED
+		});
 	};
 	self.WASM.callbacks.maxFloat128DepthReached = () => {
-		// todo: display a toast or something saying that it's not possible to go any deeper.
-		console.log('Max float128 depth reached');
+		postMessage({
+			type: WorkerToMainMessageType.MAX_FLOAT128_DEPTH_REACHED
+		});
 	};
 
 	const zoomAsENotation = self.WASM.functions.adjustZoom(
@@ -21,7 +25,7 @@ export function handleAdjustZoom(data: AdjustZoomMessage['data']) {
 		data.canvasSize.height
 	);
 
-	(self.postMessage as WorkerToMainPostMessage)({
+	postMessage({
 		type: WorkerToMainMessageType.ADJUST_ZOOM_FINISHED,
 		data: { zoomAsENotation }
 	});

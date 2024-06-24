@@ -80,7 +80,7 @@ export type SetStateMessage = {
 	};
 };
 
-export type MainToWorkerMessageData =
+export type MainToWorkerMessage =
 	| AdjustZoomMessage
 	| SetZoomMessage
 	| AdjustOffsetsMessage
@@ -91,4 +91,4 @@ export type MainToWorkerMessageData =
 	| SetColorAtMaxIterationsMessage
 	| SetStateMessage;
 
-export type MainToWorkerPostMessage = (message: MainToWorkerMessageData) => void;
+export type MainToWorkerPostMessage = (message: MainToWorkerMessage) => void;

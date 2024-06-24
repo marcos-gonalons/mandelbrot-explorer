@@ -7,7 +7,7 @@ import { handleSetMaxIterations } from './setMaxIterationsHandler/handler';
 import { handleSetOffsets } from './setOffsetsHandler/handler';
 import { handleSetState } from './setStateHandler/handler';
 import { handleSetZoom } from './setZoomHandler/handler';
-import { MainToWorkerMessageData, MainToWorkerMessageType } from './types/mainToWorker';
+import { MainToWorkerMessage, MainToWorkerMessageType } from './types/mainToWorker';
 
 const typeMap = new Map();
 
@@ -21,7 +21,7 @@ typeMap.set(MainToWorkerMessageType.SET_MAX_ITERATIONS, handleSetMaxIterations);
 typeMap.set(MainToWorkerMessageType.SET_COLOR_AT_MAX_ITERATIONS, handleSetColorAtMaxIterations);
 typeMap.set(MainToWorkerMessageType.SET_STATE, handleSetState);
 
-export const handle = async ({ data: message }: MessageEvent<MainToWorkerMessageData>) => {
+export const handle = async ({ data: message }: MessageEvent<MainToWorkerMessage>) => {
 	typeMap.get(message.type)(message.data);
 };
 
