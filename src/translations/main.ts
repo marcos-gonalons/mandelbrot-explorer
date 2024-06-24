@@ -20,7 +20,7 @@ export function getTranslation(key: string): string {
 
 	const translation = get(key.split('.'), languageTranslations as TranslationsJSON);
 	if (typeof translation === 'string') {
-		return translation as string;
+		return translation;
 	}
 
 	return key;
