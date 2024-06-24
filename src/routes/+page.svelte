@@ -1,6 +1,6 @@
 <script lang="ts">
-	import Sidebar from '$lib/components/sidebar/Sidebar.svelte';
 	import Navbar from '$lib/components/navbar/Navbar.svelte';
+	import Sidebar from '$lib/components/sidebar/Sidebar.svelte';
 
 	let open = false;
 </script>

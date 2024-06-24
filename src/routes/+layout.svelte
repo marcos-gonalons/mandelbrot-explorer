@@ -1,4 +1,6 @@
 <script lang="ts">
+	import 'toastify-js/src/toastify.css';
+
 	import { dev } from '$app/environment';
 	import { inject } from '@vercel/analytics';
 	import './styles.css';
