@@ -21,7 +21,8 @@
 	}
 
 	svg line {
-		stroke: currentColor;
+		stroke: black;
+		filter: drop-shadow(0px 0px 1px white);
 		stroke-width: 3;
 		transition: transform 0.3s ease-in-out;
 	}

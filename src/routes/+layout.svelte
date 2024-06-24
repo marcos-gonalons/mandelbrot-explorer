@@ -23,6 +23,6 @@
 		display: flex;
 		flex-direction: column;
 		min-height: 100vh;
-		background: #000000;
+		background-image: url('bg8.jpg');
 	}
 </style>

@@ -5,7 +5,11 @@ import { createMouseCoordinatesHandler } from './mouseCoordinatesHandler';
 import { createWorkersManager } from './workers_manager/manager';
 import { createZoomHandler } from './zoomHandler';
 
-export const init = async (canvas: HTMLCanvasElement, progressBar: Line) => {
+export const init = async (
+	canvasContainer: HTMLDivElement,
+	canvas: HTMLCanvasElement,
+	progressBar: Line
+) => {
 	const ctx = canvas.getContext('2d');
 	let imageData: ImageData;
 	let resizeInterval: ReturnType<typeof setInterval>;
@@ -89,8 +93,8 @@ export const init = async (canvas: HTMLCanvasElement, progressBar: Line) => {
 	}
 
 	function initCanvas(): void {
-		canvas.height = window.innerHeight;
-		canvas.width = window.innerWidth;
+		canvas.height = canvasContainer.clientHeight;
+		canvas.width = canvasContainer.clientWidth;
 
 		imageData = ctx.createImageData(canvas.width, canvas.height);
 

@@ -112,9 +112,20 @@ button:focus:not(:focus-visible) {
 	left: 0;
 	width: 100%;
 }
-#canvas {
+
+/* TODO: media queries and adjust container based on window size */
+/* TODO: Allow resize container vertically and horizontally */
+#canvas-container {
 	position: fixed;
-	top: 0;
-	left: 0;
+	width: 90%;
+	height: 90%;
+	top: 5%;
+	left: 5%;
 	cursor: grab;
+	background-color: black;
+	border-radius: 20px;
+	box-shadow: 1px -1px 10px #222, -1px -1px 10px #222
+}
+#canvas {
+	border-radius: 20px;
 }
