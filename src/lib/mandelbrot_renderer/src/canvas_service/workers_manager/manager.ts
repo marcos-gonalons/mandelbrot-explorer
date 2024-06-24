@@ -29,7 +29,9 @@ export type WorkersManager = ReturnType<typeof createWorkersManager>;
 export const createWorkersManager = (
 	getImageData: () => ImageData,
 	getCanvas: () => HTMLCanvasElement,
+	getCanvasContaier: () => HTMLDivElement,
 	getCtx: () => CanvasRenderingContext2D,
+	initCanvas: () => void,
 	progressBar: Line
 ) => {
 	let workers: Worker[] = [];
@@ -39,6 +41,8 @@ export const createWorkersManager = (
 
 	let listeners: Listeners = createListeners(
 		getCanvas,
+		getCanvasContaier,
+		initCanvas,
 		getCtx,
 		() => workers,
 		progressBar,

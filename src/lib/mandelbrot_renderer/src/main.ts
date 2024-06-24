@@ -19,6 +19,6 @@ canvasInit(
 	new ProgressBar.Line(progressBar, {
 		easing: 'easeInOut',
 		strokeWidth: 0.25,
-		color: '#56ef25'
+		color: '#e41f1f'
 	})
 );

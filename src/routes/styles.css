@@ -124,7 +124,7 @@ button:focus:not(:focus-visible) {
 	cursor: grab;
 	background-color: black;
 	border-radius: 20px;
-	box-shadow: 1px -1px 10px #222, -1px -1px 10px #222
+	box-shadow: 1px -1px 5px #222, -1px -1px 5px #000000
 }
 #canvas {
 	border-radius: 20px;

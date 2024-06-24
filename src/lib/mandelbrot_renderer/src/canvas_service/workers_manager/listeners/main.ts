@@ -12,10 +12,14 @@ import {
 import { calculateSegmentFinishedListener } from './calculateSegmentFinishedListener/listener';
 import { calculationProgressListener } from './calculationProgressListener/listener';
 import { initWasmListener } from './initWasmListener/listener';
+import { maxFloat128DepthReachedListener } from './maxFloat128DepthReachedListener/listener';
+import { maxFloat64DepthReachedListener } from './maxFloat64DepthReachedListener/listener';
 
 export type Listeners = ReturnType<typeof createListeners>;
 export const createListeners = (
 	getCanvas: () => HTMLCanvasElement,
+	getCanvasContainer: () => HTMLDivElement,
+	initCanvas: () => void,
 	getCtx: () => CanvasRenderingContext2D,
 	getWorkers: () => Worker[],
 	progressBar: Line,
@@ -51,8 +55,10 @@ export const createListeners = (
 				calculationProgressListener(progressBar, workerMessage.data);
 				break;
 			case WorkerToMainMessageType.MAX_FLOAT64_DEPTH_REACHED:
+				maxFloat64DepthReachedListener(getCanvasContainer(), initCanvas);
 				break;
 			case WorkerToMainMessageType.MAX_FLOAT128_DEPTH_REACHED:
+				maxFloat128DepthReachedListener();
 				break;
 		}
 	};

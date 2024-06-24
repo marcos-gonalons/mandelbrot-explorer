@@ -38,7 +38,9 @@ export const init = async (
 		const workersManager = createWorkersManager(
 			() => imageData,
 			() => canvas,
+			() => canvasContainer,
 			() => ctx,
+			initCanvas,
 			progressBar
 		);
 
