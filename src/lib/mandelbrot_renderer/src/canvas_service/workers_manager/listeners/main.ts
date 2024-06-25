@@ -55,10 +55,10 @@ export const createListeners = (
 				calculationProgressListener(progressBar, workerMessage.data);
 				break;
 			case WorkerToMainMessageType.MAX_FLOAT64_DEPTH_REACHED:
-				maxFloat64DepthReachedListener(getCanvasContainer(), initCanvas);
+				maxFloat64DepthReachedListener(getCanvasContainer(), getWorkers(), initCanvas);
 				break;
 			case WorkerToMainMessageType.MAX_FLOAT128_DEPTH_REACHED:
-				maxFloat128DepthReachedListener();
+				maxFloat128DepthReachedListener(getWorkers());
 				break;
 		}
 	};

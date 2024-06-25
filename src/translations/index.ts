@@ -1,14 +1,17 @@
 import * as enTranslations from './en.json';
+import * as esTranslations from './es.json';
 
 type TranslationsJSON = { [key: string]: TranslationsJSON | string };
+type Language = 'en' | 'es';
 
-const translations: TranslationsJSON = {
-	en: enTranslations
+const translations: { [key in Language]: TranslationsJSON } = {
+	en: enTranslations,
+	es: esTranslations
 };
 
-let language = 'en';
+let language: Language = 'en';
 
-export function setLanguage(l: string) {
+export function setLanguage(l: Language) {
 	language = l;
 }
 

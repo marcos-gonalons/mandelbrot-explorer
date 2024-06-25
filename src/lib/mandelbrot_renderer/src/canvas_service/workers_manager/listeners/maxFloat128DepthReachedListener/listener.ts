@@ -1,4 +1,19 @@
-export function maxFloat128DepthReachedListener(): void {
-	// TODO: Show toast saying that is not possible to go any deeper.
-	alert('TODO');
+import * as Toastify from 'toastify-js';
+
+// @ts-ignore
+import { getTranslation } from 'translations';
+
+let notificationsAmount = 0;
+
+export function maxFloat128DepthReachedListener(workers: Worker[]): void {
+	notificationsAmount++;
+	if (notificationsAmount < workers.length) return;
+	notificationsAmount = 0;
+
+	Toastify({
+		text: getTranslation('maxFloat128DepthReached'),
+		position: 'center',
+		duration: -1,
+		close: true
+	}).showToast();
 }

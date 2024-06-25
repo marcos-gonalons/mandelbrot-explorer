@@ -1,0 +1,4 @@
+{
+    "maxFloat64DepthReached": "Has alcanzado la profundidad máxima permitida por el tipo float 64. A esta profundidad, los renderizados serán mucho más lentos, por lo que el lienzo se ha ajustado para que se renderize más rápido",
+    "maxFloat128DepthReached": "Has alcanzado la profundidad máxima para el tipo float 128. Los renderizados más allá de este punto son extremadamente lentos, por lo que tomé la decisión de no renderizar más allá de este punto"
+}
