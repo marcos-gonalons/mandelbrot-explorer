@@ -30,7 +30,6 @@ export const init = async (
 
 		workersManager.parallelizeCalculation();
 	} catch (e) {
-		// TODO: Some toast or something else instead of an alert
 		alert('Sorry, an error occurred :( - Please try with another browser');
 	}
 

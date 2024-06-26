@@ -43,6 +43,5 @@ func (s *Float128Operator) LessOrEqualThan(f1, f2 Float) bool {
 }
 
 func (s *Float128Operator) Round(f1 Float, decimals uint64) Float {
-	// TODO
 	return f1
 }
