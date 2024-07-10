@@ -3,15 +3,14 @@
 
 	export let open = false;
 
-	let value: string | null = null;
+	let maxIterations: number = 2000;
 </script>
 
 <aside class="absolute w-full h-full bg-gray-200 border-r-2 shadow-lg" class:open>
 	<Textfield
-		type="email"
+		type="number"
 		updateInvalid
-		bind:value
-		label="To"
+		bind:value={maxIterations}
 		style="min-width: 250px;"
 		input$autocomplete="email"
 	/>

@@ -7,9 +7,10 @@
 		"build-wasm-golang": "cd src/lib/mandelbrot_renderer/wasm/golang; cross-env GOOS=js GOARCH=wasm go build -o \"../../../../../static/mandelbrot_renderer/main.wasm\";",
 		"build-mandelbrot-renderer": "npm run build-wasm-golang; cd src/lib/mandelbrot_renderer; webpack --mode=development --devtool=inline-source-map;",
 		"build-mandelbrot-renderer-prod": "npm run build-wasm-golang; cd src/lib/mandelbrot_renderer; webpack --mode=production;",
-		"dev": "npm run copy-static; npm run build-mandelbrot-renderer; vite dev",
+		"dev": "npm run copy-static; npm run copy-translations; npm run build-mandelbrot-renderer; vite dev",
 		"copy-static": "cp ./node_modules/svelte-material-ui/bare.css ./static/svelte-material-ui.css",
-		"build": "npm run copy-static; npm run build-mandelbrot-renderer-prod; vite build",
+		"copy-translations": "cp -r -Force ./src/translations ./node_modules/app-translations",
+		"build": "npm run copy-static; npm run copy-translations; npm run build-mandelbrot-renderer-prod; vite build",
 		"preview": "npm run build; vite preview",
 		"check": "svelte-kit sync; svelte-check --tsconfig ./tsconfig.json",
 		"check:watch": "svelte-kit sync; svelte-check --tsconfig ./tsconfig.json --watch",
@@ -46,8 +47,7 @@
 		"bowser": "^2.11.0",
 		"progressbar.js": "^1.1.1",
 		"svelte-material-ui": "^7.0.0",
-		"toastify-js": "^1.12.0",
-		"translations": ""
+		"toastify-js": "^1.12.0"
 	},
 	"type": "module"
 }
