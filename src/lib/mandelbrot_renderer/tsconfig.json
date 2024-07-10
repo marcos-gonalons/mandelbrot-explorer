@@ -9,5 +9,5 @@
 		"sourceMap": false,
 		"resolveJsonModule": true
 	},
-	"include": ["src/**/*", ""],
+	"include": ["src/**/*", ""]
 }
