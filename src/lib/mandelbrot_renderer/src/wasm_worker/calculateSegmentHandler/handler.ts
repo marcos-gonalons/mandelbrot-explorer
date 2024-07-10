@@ -1,5 +1,5 @@
-import { CalculateSegmentMessage } from '../types/mainToWorker';
-import { WorkerToMainMessageType, WorkerToMainPostMessage } from '../types/workerToMain';
+import { type CalculateSegmentMessage } from '../types/mainToWorker';
+import { WorkerToMainMessageType, type WorkerToMainPostMessage } from '../types/workerToMain';
 
 export function handleCalculateSegment(data: CalculateSegmentMessage['data']) {
 	self.WASM.sharedVariables.segmentData = new Uint8ClampedArray(data.segmentLength);

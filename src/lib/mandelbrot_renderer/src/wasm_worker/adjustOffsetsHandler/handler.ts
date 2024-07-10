@@ -1,5 +1,5 @@
-import { AdjustOffsetsMessage } from '../types/mainToWorker';
-import { WorkerToMainMessageType, WorkerToMainPostMessage } from '../types/workerToMain';
+import { type AdjustOffsetsMessage } from '../types/mainToWorker';
+import { WorkerToMainMessageType, type WorkerToMainPostMessage } from '../types/workerToMain';
 
 export function handleAdjustOffsets(data: AdjustOffsetsMessage['data']) {
 	const offsets = JSON.parse(self.WASM.functions.adjustOffsets(data.speed, data.angleInDegrees));

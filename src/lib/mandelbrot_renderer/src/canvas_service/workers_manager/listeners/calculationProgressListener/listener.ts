@@ -1,5 +1,6 @@
+// @ts-ignore
 import Line = require('progressbar.js/line');
-import { CalculationProgressMessage } from '../../../../wasm_worker/types/workerToMain';
+import { type CalculationProgressMessage } from '../../../../wasm_worker/types/workerToMain';
 
 export function calculationProgressListener(
 	progressBar: Line,

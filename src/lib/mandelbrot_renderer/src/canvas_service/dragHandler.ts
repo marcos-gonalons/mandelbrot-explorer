@@ -1,9 +1,9 @@
-import { AdjustOffsetsMessage } from '../wasm_worker/types/mainToWorker';
+import type { AdjustOffsetsMessage } from '../wasm_worker/types/mainToWorker';
 import { LOW_RESOLUTION } from './constants';
-import { KeypressHandler } from './keypressHandler';
-import { MouseCoordinatesHandler } from './mouseCoordinatesHandler';
-import { WorkersManager } from './workers_manager/manager';
-import { ZoomHandler } from './zoomHandler';
+import type { KeypressHandler } from './keypressHandler';
+import type { MouseCoordinatesHandler } from './mouseCoordinatesHandler';
+import type { WorkersManager } from './workers_manager/manager';
+import type { ZoomHandler } from './zoomHandler';
 
 export const createDragHandler = (
 	getCanvas: () => HTMLCanvasElement,
@@ -14,7 +14,7 @@ export const createDragHandler = (
 ) => {
 	let coordinatesAtStartOfDragging: number[] = [0, 0];
 	let isDraggingCanvas: boolean = false;
-	let draggingInterval: ReturnType<typeof setInterval>;
+	let draggingInterval: ReturnType<typeof setInterval> | null;
 
 	addEventListener('mousedown', onMouseDown);
 	addEventListener('mouseup', onMouseUp);
@@ -64,7 +64,7 @@ export const createDragHandler = (
 				return;
 			}
 
-			clearInterval(draggingInterval);
+			clearInterval(draggingInterval as ReturnType<typeof setInterval>);
 			draggingInterval = null;
 
 			workersManager.parallelizeCalculation();

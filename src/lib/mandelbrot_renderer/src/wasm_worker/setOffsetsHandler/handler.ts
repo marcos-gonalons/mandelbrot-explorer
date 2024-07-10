@@ -1,5 +1,5 @@
-import { SetOffsetsMessage } from '../types/mainToWorker';
-import { WorkerToMainMessageType, WorkerToMainPostMessage } from '../types/workerToMain';
+import { type SetOffsetsMessage } from '../types/mainToWorker';
+import { WorkerToMainMessageType, type WorkerToMainPostMessage } from '../types/workerToMain';
 
 export function handleSetOffsets(data: SetOffsetsMessage['data']) {
 	const result = self.WASM.functions.setOffsets(data.xAsENotation, data.yAsENotation);

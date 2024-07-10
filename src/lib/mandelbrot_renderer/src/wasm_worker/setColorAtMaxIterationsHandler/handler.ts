@@ -1,5 +1,5 @@
-import { SetColorAtMaxIterationsMessage } from '../types/mainToWorker';
-import { WorkerToMainMessageType, WorkerToMainPostMessage } from '../types/workerToMain';
+import { type SetColorAtMaxIterationsMessage } from '../types/mainToWorker';
+import { WorkerToMainMessageType, type WorkerToMainPostMessage } from '../types/workerToMain';
 
 export function handleSetColorAtMaxIterations({
 	color: { R, G, B, A }

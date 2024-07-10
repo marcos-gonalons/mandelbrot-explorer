@@ -10,12 +10,12 @@
 		"dev": "npm run copy-static; npm run copy-translations; npm run build-mandelbrot-renderer; vite dev",
 		"copy-static": "cp ./node_modules/svelte-material-ui/bare.css ./static/svelte-material-ui.css",
 		"copy-translations": "cp -r -Force ./src/translations ./node_modules/app-translations",
-		"build": "npm run copy-static; npm run copy-translations; npm run build-mandelbrot-renderer-prod; vite build",
+		"build": "npm run copy-static; npm run copy-translations; npm run check; npm run build-mandelbrot-renderer-prod; vite build",
 		"preview": "npm run build; vite preview",
 		"check": "svelte-kit sync; svelte-check --tsconfig ./tsconfig.json",
 		"check:watch": "svelte-kit sync; svelte-check --tsconfig ./tsconfig.json --watch",
 		"format": "prettier --write .",
-		"deploy": "npm run check; npm run build; vercel --prod;"
+		"deploy": "npm run build; vercel --prod;"
 	},
 	"author": "Marcos Goñalons",
 	"license": "ISC",

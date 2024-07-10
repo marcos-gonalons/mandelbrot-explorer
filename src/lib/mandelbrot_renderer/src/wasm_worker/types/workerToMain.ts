@@ -1,4 +1,4 @@
-import { Size } from '../../types';
+import { type Size } from '../../types';
 import { MainToWorkerMessageType } from './mainToWorker';
 
 export enum WorkerToMainMessageType {

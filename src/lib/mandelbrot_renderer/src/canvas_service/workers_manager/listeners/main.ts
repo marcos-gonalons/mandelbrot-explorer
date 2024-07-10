@@ -1,3 +1,4 @@
+// @ts-ignore
 import Line = require('progressbar.js/line');
 
 import {
@@ -5,7 +6,7 @@ import {
 	MainToWorkerMessageType
 } from '../../../wasm_worker/types/mainToWorker';
 import {
-	WorkerToMainMessage,
+	type WorkerToMainMessage,
 	WorkerToMainMessageType,
 	getMessageTypeMap
 } from '../../../wasm_worker/types/workerToMain';
@@ -21,7 +22,7 @@ export const createListeners = (
 	getCanvasContainer: () => HTMLDivElement,
 	initCanvas: () => void,
 	getCtx: () => CanvasRenderingContext2D,
-	getWorkers: () => Worker[],
+	getWorkers: () => (Worker | null)[],
 	progressBar: Line,
 	onFinishFunctionExecutionCallback: (type: MainToWorkerMessageType) => void
 ) => {
@@ -30,12 +31,14 @@ export const createListeners = (
 
 	const onNewWorkerMessageReceived = (
 		messageEvent: MessageEvent<WorkerToMainMessage>,
-		onWorkersInitialized: (workers: Worker[]) => void,
+		onWorkersInitialized: (workers: (Worker | null)[]) => void,
 		onFailure: (e: Error) => void
 	): void => {
 		const workerMessage = messageEvent.data;
 
-		handleFinishExecutionCallback(getMessageTypeMap().get(workerMessage.type));
+		handleFinishExecutionCallback(
+			getMessageTypeMap().get(workerMessage.type) as MainToWorkerMessageType
+		);
 
 		switch (workerMessage.type) {
 			case WorkerToMainMessageType.INIT_WASM_FINISHED:
@@ -64,7 +67,7 @@ export const createListeners = (
 	};
 
 	const handleFinishExecutionCallback = (type: MainToWorkerMessageType) => {
-		let finishedAmount = finishedByTypeMap.get(type);
+		let finishedAmount = finishedByTypeMap.get(type) as number;
 		finishedAmount++;
 
 		if (finishedAmount !== getWorkers().length) {

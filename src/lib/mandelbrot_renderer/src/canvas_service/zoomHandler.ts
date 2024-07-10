@@ -1,8 +1,8 @@
-import { AdjustZoomMessage } from '../wasm_worker/types/mainToWorker';
+import { type AdjustZoomMessage } from '../wasm_worker/types/mainToWorker';
 import { LOW_RESOLUTION } from './constants';
-import { KeypressHandler } from './keypressHandler';
-import { MouseCoordinatesHandler } from './mouseCoordinatesHandler';
-import { WorkersManager } from './workers_manager/manager';
+import { type KeypressHandler } from './keypressHandler';
+import { type MouseCoordinatesHandler } from './mouseCoordinatesHandler';
+import { type WorkersManager } from './workers_manager/manager';
 
 export type ZoomHandler = ReturnType<typeof createZoomHandler>;
 export enum ZoomingStrategy {
@@ -16,7 +16,7 @@ export const createZoomHandler = (
 	workersManager: WorkersManager,
 	keypressHandler: KeypressHandler
 ) => {
-	let scrollingInterval: ReturnType<typeof setInterval>;
+	let scrollingInterval: ReturnType<typeof setInterval> | null;
 	let lastScrollAt: number;
 
 	addEventListener('wheel', onMouseWheel, { passive: false });
@@ -49,7 +49,7 @@ export const createZoomHandler = (
 			const now = new Date().getTime();
 
 			if (now - lastScrollAt > 350) {
-				clearInterval(scrollingInterval);
+				clearInterval(scrollingInterval as ReturnType<typeof setInterval>);
 				scrollingInterval = null;
 				workersManager.parallelizeCalculation();
 			}

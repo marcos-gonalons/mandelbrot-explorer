@@ -1,5 +1,5 @@
-import { AdjustZoomMessage } from '../types/mainToWorker';
-import { WorkerToMainMessageType, WorkerToMainPostMessage } from '../types/workerToMain';
+import { type AdjustZoomMessage } from '../types/mainToWorker';
+import { WorkerToMainMessageType, type WorkerToMainPostMessage } from '../types/workerToMain';
 
 export function handleAdjustZoom(data: AdjustZoomMessage['data']) {
 	const postMessage = self.postMessage as WorkerToMainPostMessage;

@@ -1,5 +1,5 @@
-import { SetStateMessage } from '../types/mainToWorker';
-import { WorkerToMainMessageType, WorkerToMainPostMessage } from '../types/workerToMain';
+import { type SetStateMessage } from '../types/mainToWorker';
+import { WorkerToMainMessageType, type WorkerToMainPostMessage } from '../types/workerToMain';
 
 export function handleSetState(data: SetStateMessage['data']) {
 	const result = self.WASM.functions.setState(JSON.stringify(data.state));

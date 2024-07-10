@@ -1,13 +1,14 @@
+// @ts-ignore
 import Line = require('progressbar.js/line');
-import { Size } from '../../../../types';
-import { CalculateSegmentFinishedMessage } from '../../../../wasm_worker/types/workerToMain';
+import { type Size } from '../../../../types';
+import { type CalculateSegmentFinishedMessage } from '../../../../wasm_worker/types/workerToMain';
 
 let finishedSegments: CalculateSegmentFinishedMessage['data'][] = [];
 
 export function calculateSegmentFinishedListener(
 	data: CalculateSegmentFinishedMessage['data'],
 	progressBar: Line,
-	workers: Worker[],
+	workers: (Worker | null)[],
 	canvas: HTMLCanvasElement,
 	ctx: CanvasRenderingContext2D
 ): void {
@@ -35,7 +36,7 @@ export function calculateSegmentFinishedListener(
 		);
 
 		const invisibleCanvas = document.createElement('canvas');
-		const invisibleCtx = invisibleCanvas.getContext('2d');
+		const invisibleCtx = invisibleCanvas.getContext('2d') as CanvasRenderingContext2D;
 		invisibleCanvas.width = imageData.width;
 		invisibleCanvas.height = imageData.height;
 

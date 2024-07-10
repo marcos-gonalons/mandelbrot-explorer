@@ -1,17 +1,17 @@
 import * as Bowser from 'bowser';
-import { Size } from '../../types';
+import { type Size } from '../../types';
 import {
-	AdjustOffsetsMessage,
-	AdjustZoomMessage,
+	type AdjustOffsetsMessage,
+	type AdjustZoomMessage,
 	MAIN_TO_WORKER_MESSAGE_TYPES,
-	MainToWorkerMessage,
+	type MainToWorkerMessage,
 	MainToWorkerMessageType,
-	MainToWorkerPostMessage,
-	SetColorAtMaxIterationsMessage,
-	SetMaxIterationsMessage,
-	SetOffsetsMessage,
-	SetStateMessage,
-	SetZoomMessage
+	type MainToWorkerPostMessage,
+	type SetColorAtMaxIterationsMessage,
+	type SetMaxIterationsMessage,
+	type SetOffsetsMessage,
+	type SetStateMessage,
+	type SetZoomMessage
 } from '../../wasm_worker/types/mainToWorker';
 import { NORMAL_RESOLUTION } from '../constants';
 import {
@@ -21,7 +21,8 @@ import {
 	WASM_FILE_PATH,
 	WORKERS_SCRIPT_PATH
 } from './constants';
-import { Listeners, createListeners } from './listeners/main';
+import { type Listeners, createListeners } from './listeners/main';
+// @ts-ignore
 import Line = require('progressbar.js/line');
 
 export type WorkersManager = ReturnType<typeof createWorkersManager>;

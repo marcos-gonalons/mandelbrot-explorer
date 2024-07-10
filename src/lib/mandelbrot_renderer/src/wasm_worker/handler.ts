@@ -7,7 +7,7 @@ import { handleSetMaxIterations } from './setMaxIterationsHandler/handler';
 import { handleSetOffsets } from './setOffsetsHandler/handler';
 import { handleSetState } from './setStateHandler/handler';
 import { handleSetZoom } from './setZoomHandler/handler';
-import { MainToWorkerMessage, MainToWorkerMessageType } from './types/mainToWorker';
+import { type MainToWorkerMessage, MainToWorkerMessageType } from './types/mainToWorker';
 
 const typeMap = new Map();
 

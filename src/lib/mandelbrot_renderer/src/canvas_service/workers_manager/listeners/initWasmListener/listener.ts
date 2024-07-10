@@ -1,6 +1,6 @@
 import {
-	InitWASMErrorMessage,
-	WorkerToMainMessage,
+	type InitWASMErrorMessage,
+	type WorkerToMainMessage,
 	WorkerToMainMessageType
 } from '../../../../wasm_worker/types/workerToMain';
 
@@ -9,8 +9,8 @@ let totalErrors: number = 0;
 
 export function initWasmListener(
 	{ data: message }: MessageEvent<WorkerToMainMessage>,
-	workers: Worker[],
-	onWorkersInitialized: (workers: Worker[]) => void,
+	workers: (Worker | null)[],
+	onWorkersInitialized: (workers: (Worker | null)[]) => void,
 	onFailure: (e: Error) => void
 ): void {
 	switch (message.type) {
@@ -24,7 +24,7 @@ export function initWasmListener(
 
 	function onInitWASMError({ workerIndex }: InitWASMErrorMessage['data']): void {
 		totalErrors++;
-		workers[workerIndex].terminate();
+		(workers[workerIndex] as Worker).terminate();
 		workers[workerIndex] = null;
 
 		if (totalErrors === workers.length) {

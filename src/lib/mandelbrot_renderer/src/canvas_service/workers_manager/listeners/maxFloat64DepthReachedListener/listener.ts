@@ -7,7 +7,7 @@ let notificationsAmount = 0;
 
 export function maxFloat64DepthReachedListener(
 	canvasContainer: HTMLDivElement,
-	workers: Worker[],
+	workers: (Worker | null)[],
 	initCanvas: () => void
 ): void {
 	notificationsAmount++;
@@ -19,6 +19,7 @@ export function maxFloat64DepthReachedListener(
 	canvasContainer.style.top = '25%';
 	canvasContainer.style.left = '30%';
 
+	// @ts-ignore
 	Toastify({
 		text: getTranslation('maxFloat64DepthReached'),
 		position: 'center',

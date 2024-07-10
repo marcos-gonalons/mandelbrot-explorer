@@ -1,3 +1,4 @@
+// @ts-ignore
 import Line = require('progressbar.js/line');
 import { createDragHandler } from './dragHandler';
 import { createKeypressHandler } from './keypressHandler';
@@ -10,9 +11,9 @@ export const init = async (
 	canvas: HTMLCanvasElement,
 	progressBar: Line
 ) => {
-	const ctx = canvas.getContext('2d');
+	const ctx = canvas.getContext('2d') as CanvasRenderingContext2D;
 	let imageData: ImageData;
-	let resizeInterval: ReturnType<typeof setInterval>;
+	let resizeInterval: ReturnType<typeof setInterval> | null;
 	let lastResizeAt: number;
 
 	const { workersManager } = initHandlers();
@@ -83,7 +84,7 @@ export const init = async (
 				const now = new Date().getTime();
 
 				if (now - lastResizeAt > 350) {
-					clearInterval(resizeInterval);
+					clearInterval(resizeInterval as ReturnType<typeof setInterval>);
 					resizeInterval = null;
 					initCanvas();
 					workersManager.parallelizeCalculation();

@@ -1,5 +1,5 @@
-import { InitWASMMessage } from '../types/mainToWorker';
-import { WorkerToMainMessageType, WorkerToMainPostMessage } from '../types/workerToMain';
+import { type InitWASMMessage } from '../types/mainToWorker';
+import { WorkerToMainMessageType, type WorkerToMainPostMessage } from '../types/workerToMain';
 
 export async function handleInitWasm({ workerIndex, wasmBytes }: InitWASMMessage['data']) {
 	try {

@@ -1,5 +1,5 @@
 import { ZoomingStrategy } from '../../canvas_service/zoomHandler';
-import { RGBColor, Size } from '../../types';
+import { type RGBColor, type Size } from '../../types';
 
 export enum MainToWorkerMessageType {
 	INIT_WASM,

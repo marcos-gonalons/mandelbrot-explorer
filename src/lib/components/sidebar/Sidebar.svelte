@@ -3,7 +3,7 @@
 
 	export let open = false;
 
-	let maxIterations: number = 2000;
+	let maxIterations: number = 2001;
 </script>
 
 <aside class="absolute w-full h-full bg-gray-200 border-r-2 shadow-lg" class:open>
