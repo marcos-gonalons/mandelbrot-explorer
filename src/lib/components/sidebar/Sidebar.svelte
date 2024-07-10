@@ -1,9 +1,20 @@
 <script lang="ts">
+	import Textfield from '@smui/textfield';
+
 	export let open = false;
+
+	let value: string | null = null;
 </script>
 
 <aside class="absolute w-full h-full bg-gray-200 border-r-2 shadow-lg" class:open>
-	<nav class="p-12 text-xl">Sidebar</nav>
+	<Textfield
+		type="email"
+		updateInvalid
+		bind:value
+		label="To"
+		style="min-width: 250px;"
+		input$autocomplete="email"
+	/>
 </aside>
 
 <style>

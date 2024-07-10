@@ -1,11 +1,11 @@
 <script lang="ts">
 	import Hamburger from '../hamburger/Hamburger.svelte';
 
-	export let sidebar = false;
+	export let isSidebarOpen = false;
 </script>
 
 <nav class="flex navbar">
-	<Hamburger bind:open={sidebar} />
+	<Hamburger bind:open={isSidebarOpen} />
 </nav>
 
 <style>
