@@ -1,16 +1,15 @@
 <script lang="ts">
 	import Textfield from '@smui/textfield';
+	import { stateStore } from '../../../stores/state/store';
 
 	export let open = false;
-
-	let maxIterations: number = 2001;
 </script>
 
 <aside class="absolute w-full h-full bg-gray-200 border-r-2 shadow-lg" class:open>
 	<Textfield
 		type="number"
 		updateInvalid
-		bind:value={maxIterations}
+		bind:value={$stateStore.maxIterations}
 		style="min-width: 250px;"
 		input$autocomplete="email"
 	/>

@@ -1,7 +1,6 @@
 package operationmode
 
 import (
-	"errors"
 	"mandelbrot/objects/float128"
 )
 
@@ -99,7 +98,7 @@ func (s *Service) GetAsENotationString(f *Float) string {
 func (s *Service) NewFloatFromENotationString(v string) (Float, error) {
 	f128Value, amountOfDecimals, err := float128.FromENotationString(v)
 	if err != nil {
-		return NewFloat(0), errors.New("parse error")
+		return NewFloat(0), err
 	}
 
 	if s.IsFloat64() {

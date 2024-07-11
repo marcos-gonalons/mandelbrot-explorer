@@ -62,7 +62,7 @@ export type SetColorAtMaxIterationsMessage = {
 	type: MainToWorkerMessageType.SET_COLOR_AT_MAX_ITERATIONS;
 	data: { color: RGBColor };
 };
-export enum OperationModde {
+export enum OperationMode {
 	FLOAT64 = 0,
 	FLOAT128 = 1
 }
@@ -70,7 +70,7 @@ export type SetStateMessage = {
 	type: MainToWorkerMessageType.SET_STATE;
 	data: {
 		state: {
-			operationMode: OperationModde;
+			operationMode: OperationMode;
 			maxIterations: number;
 			zoomAsENotation: string;
 			magnitudeAsENotation: string;

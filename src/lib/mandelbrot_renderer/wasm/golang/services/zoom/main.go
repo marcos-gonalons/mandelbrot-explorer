@@ -105,6 +105,7 @@ func (z *Handler) Adjust(t bool, speed operationmode.Float, strategy Strategy) *
 
 func (z *Handler) Set(zoomLevelAsENotation string) error {
 	zoomLevel, err := z.operationMode.NewFloatFromENotationString(zoomLevelAsENotation)
+
 	if err != nil {
 		return err
 	}
