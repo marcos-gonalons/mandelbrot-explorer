@@ -40,6 +40,8 @@ export const createWorkersManager = (
 	const isExecutingFunctionMap = new Map<MainToWorkerMessageType, boolean>();
 	MAIN_TO_WORKER_MESSAGE_TYPES.forEach((t) => isExecutingFunctionMap.set(t, false));
 
+	let executionFinishedPromiseResolve = new Map<MainToWorkerMessageType, (...args: any) => void>();
+
 	let listeners: Listeners = createListeners(
 		getCanvas,
 		getCanvasContaier,
@@ -47,7 +49,12 @@ export const createWorkersManager = (
 		getCtx,
 		() => workers,
 		progressBar,
-		(type) => isExecutingFunctionMap.set(type, false)
+		(type) => {
+			isExecutingFunctionMap.set(type, false);
+
+			const resolvePromise = executionFinishedPromiseResolve.get(type);
+			if (resolvePromise) resolvePromise();
+		}
 	);
 
 	const init = async (): Promise<Worker[]> => {
@@ -166,13 +173,17 @@ export const createWorkersManager = (
 		);
 	};
 
-	const setState = (data: SetStateMessage['data']) => {
-		invokeWorkers(
-			Array<MainToWorkerMessage>(workers.length).fill({
-				type: MainToWorkerMessageType.SET_STATE,
-				data
-			})
-		);
+	const setState = async (data: SetStateMessage['data']) => {
+		// TODO: add promises for all worker functions
+		return new Promise((resolve) => {
+			executionFinishedPromiseResolve.set(MainToWorkerMessageType.SET_STATE, resolve);
+			invokeWorkers(
+				Array<MainToWorkerMessage>(workers.length).fill({
+					type: MainToWorkerMessageType.SET_STATE,
+					data
+				})
+			);
+		});
 	};
 
 	const terminate = () => {

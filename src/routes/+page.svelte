@@ -10,9 +10,9 @@
 
 	onMount(async () => {
 		await waitUntilWASMWorkersAreReady();
-		workersManager.setState({ state: $stateStore });
 
-		await waitUntilWASMWorkersAreReady();
+		await workersManager.setState({ state: $stateStore });
+
 		workersManager.parallelizeCalculation();
 	});
 </script>
