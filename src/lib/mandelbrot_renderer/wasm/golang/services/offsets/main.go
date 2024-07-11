@@ -70,7 +70,6 @@ func (o *Handler) DecrementY(decrement operationmode.Float) *Handler {
 }
 
 func (o *Handler) Set(xAsENotation, yAsENotation string) error {
-
 	x, err := o.operationMode.NewFloatFromENotationString(xAsENotation)
 	if err != nil {
 		return err
