@@ -7,7 +7,7 @@ export const stateStore = (() => {
 		operationMode: OperationMode.FLOAT64,
 		maxIterations: 2000,
 		zoomAsENotation: '+1.2e-0',
-		magnitudeAsENotation: '1e-1',
+		magnitudeAsENotation: '+1e-1',
 		magnitudeDecimals: '1',
 		offsetsAsENotation: {
 			x: '-2e-1',
