@@ -21,7 +21,7 @@ export const createZoomHandler = (
 
 	addEventListener('wheel', onMouseWheel, { passive: false });
 
-	function onMouseWheel(event: WheelEvent): void {
+	async function onMouseWheel(event: WheelEvent): Promise<void> {
 		event.preventDefault();
 
 		lastScrollAt = new Date().getTime();
@@ -35,7 +35,7 @@ export const createZoomHandler = (
 			mouseCoordinates,
 			canvasSize: { width: imageData.width, height: imageData.height }
 		};
-		workersManager.adjustZoom(data);
+		await workersManager.adjustZoom(data);
 
 		workersManager.parallelizeCalculation(LOW_RESOLUTION);
 

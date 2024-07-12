@@ -37,7 +37,7 @@ export const createDragHandler = (
 		stopDragging();
 	}
 
-	function onMouseMove(event: MouseEvent): void {
+	async function onMouseMove(event: MouseEvent): Promise<void> {
 		if (!isDraggingCanvas || zoomHandler.isScrolling()) {
 			return;
 		}
@@ -47,7 +47,7 @@ export const createDragHandler = (
 			return;
 		}
 
-		updateOffsets();
+		await updateOffsets();
 
 		workersManager.parallelizeCalculation(LOW_RESOLUTION);
 	}
@@ -71,7 +71,7 @@ export const createDragHandler = (
 		}, 50);
 	}
 
-	function updateOffsets(): void {
+	async function updateOffsets(): Promise<void> {
 		const mouseCoordinates = mouseCoordinatesHandler.getCoordinates();
 
 		let speed = getDistanceBetweenCoordinates(coordinatesAtStartOfDragging, mouseCoordinates) / 10;
@@ -92,7 +92,7 @@ export const createDragHandler = (
 			)
 		};
 
-		workersManager.adjustOffsets(data);
+		await workersManager.adjustOffsets(data);
 	}
 
 	const getDistanceBetweenCoordinates = (c1: number[], c2: number[]): number => {
