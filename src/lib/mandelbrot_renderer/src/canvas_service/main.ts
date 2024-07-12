@@ -28,8 +28,6 @@ export const init = async (
 		////////////////////////////////////////////////
 		(window as any).workersManager = workersManager;
 		////////////////////////////////////////////////
-
-		workersManager.parallelizeCalculation();
 	} catch (e) {
 		alert('Sorry, an error occurred :( - Please try with another browser');
 	}

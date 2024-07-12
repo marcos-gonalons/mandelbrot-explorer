@@ -94,87 +94,110 @@ export const createWorkersManager = (
 	};
 
 	/** @param resolution - The higher the number the worse the resolution */
-	const parallelizeCalculation = (resolution: number = NORMAL_RESOLUTION) => {
-		const canvasSize: Size = {
-			width: Math.floor(getImageData().width / resolution),
-			height: Math.floor(getImageData().height / resolution)
-		};
-		const size = canvasSize.width * canvasSize.height;
-		const segmentLength = Math.floor(size / workers.length);
-		const lastSegmentLength = segmentLength + (size % workers.length);
+	const parallelizeCalculation = async (resolution: number = NORMAL_RESOLUTION) => {
+		return new Promise((resolve) => {
+			executionFinishedPromiseResolve.set(MainToWorkerMessageType.CALCULATE_SEGMENT, resolve);
+			const canvasSize: Size = {
+				width: Math.floor(getImageData().width / resolution),
+				height: Math.floor(getImageData().height / resolution)
+			};
+			const size = canvasSize.width * canvasSize.height;
+			const segmentLength = Math.floor(size / workers.length);
+			const lastSegmentLength = segmentLength + (size % workers.length);
 
-		const messages: MainToWorkerMessage[] = [];
-		workers.forEach((worker, index) => {
-			messages.push({
-				type: MainToWorkerMessageType.CALCULATE_SEGMENT,
-				data: {
-					resolution,
-					canvasSize,
-					startsAt: 4 * index * segmentLength,
-					segmentLength: (index === workers.length - 1 ? lastSegmentLength : segmentLength) * 4
-				}
+			const messages: MainToWorkerMessage[] = [];
+			workers.forEach((_, index) => {
+				messages.push({
+					type: MainToWorkerMessageType.CALCULATE_SEGMENT,
+					data: {
+						resolution,
+						canvasSize,
+						startsAt: 4 * index * segmentLength,
+						segmentLength: (index === workers.length - 1 ? lastSegmentLength : segmentLength) * 4
+					}
+				});
 			});
+
+			invokeWorkers(messages);
 		});
-
-		invokeWorkers(messages);
 	};
 
-	const adjustZoom = (data: AdjustZoomMessage['data']) => {
-		invokeWorkers(
-			Array<MainToWorkerMessage>(workers.length).fill({
-				type: MainToWorkerMessageType.ADJUST_ZOOM,
-				data
-			})
-		);
+	const adjustZoom = async (data: AdjustZoomMessage['data']) => {
+		return new Promise((resolve) => {
+			executionFinishedPromiseResolve.set(MainToWorkerMessageType.ADJUST_ZOOM, resolve);
+			invokeWorkers(
+				Array<MainToWorkerMessage>(workers.length).fill({
+					type: MainToWorkerMessageType.ADJUST_ZOOM,
+					data
+				})
+			);
+		});
 	};
 
-	const setZoom = (data: SetZoomMessage['data']) => {
-		invokeWorkers(
-			Array<MainToWorkerMessage>(workers.length).fill({
-				type: MainToWorkerMessageType.SET_ZOOM,
-				data
-			})
-		);
+	const setZoom = async (data: SetZoomMessage['data']) => {
+		return new Promise((resolve) => {
+			executionFinishedPromiseResolve.set(MainToWorkerMessageType.SET_ZOOM, resolve);
+			invokeWorkers(
+				Array<MainToWorkerMessage>(workers.length).fill({
+					type: MainToWorkerMessageType.SET_ZOOM,
+					data
+				})
+			);
+		});
 	};
 
-	const adjustOffsets = (data: AdjustOffsetsMessage['data']) => {
-		invokeWorkers(
-			Array<MainToWorkerMessage>(workers.length).fill({
-				type: MainToWorkerMessageType.ADJUST_OFFSETS,
-				data
-			})
-		);
+	const adjustOffsets = async (data: AdjustOffsetsMessage['data']) => {
+		return new Promise((resolve) => {
+			executionFinishedPromiseResolve.set(MainToWorkerMessageType.ADJUST_OFFSETS, resolve);
+			invokeWorkers(
+				Array<MainToWorkerMessage>(workers.length).fill({
+					type: MainToWorkerMessageType.ADJUST_OFFSETS,
+					data
+				})
+			);
+		});
 	};
 
-	const setOffsets = (data: SetOffsetsMessage['data']) => {
-		invokeWorkers(
-			Array<MainToWorkerMessage>(workers.length).fill({
-				type: MainToWorkerMessageType.SET_OFFSETS,
-				data
-			})
-		);
+	const setOffsets = async (data: SetOffsetsMessage['data']) => {
+		return new Promise((resolve) => {
+			executionFinishedPromiseResolve.set(MainToWorkerMessageType.SET_OFFSETS, resolve);
+			invokeWorkers(
+				Array<MainToWorkerMessage>(workers.length).fill({
+					type: MainToWorkerMessageType.SET_OFFSETS,
+					data
+				})
+			);
+		});
 	};
 
-	const setMaxIterations = (data: SetMaxIterationsMessage['data']) => {
-		invokeWorkers(
-			Array<MainToWorkerMessage>(workers.length).fill({
-				type: MainToWorkerMessageType.SET_MAX_ITERATIONS,
-				data
-			})
-		);
+	const setMaxIterations = async (data: SetMaxIterationsMessage['data']) => {
+		return new Promise((resolve) => {
+			executionFinishedPromiseResolve.set(MainToWorkerMessageType.SET_MAX_ITERATIONS, resolve);
+			invokeWorkers(
+				Array<MainToWorkerMessage>(workers.length).fill({
+					type: MainToWorkerMessageType.SET_MAX_ITERATIONS,
+					data
+				})
+			);
+		});
 	};
 
-	const setColorAtMaxIterations = (data: SetColorAtMaxIterationsMessage['data']) => {
-		invokeWorkers(
-			Array<MainToWorkerMessage>(workers.length).fill({
-				type: MainToWorkerMessageType.SET_COLOR_AT_MAX_ITERATIONS,
-				data
-			})
-		);
+	const setColorAtMaxIterations = async (data: SetColorAtMaxIterationsMessage['data']) => {
+		return new Promise((resolve) => {
+			executionFinishedPromiseResolve.set(
+				MainToWorkerMessageType.SET_COLOR_AT_MAX_ITERATIONS,
+				resolve
+			);
+			invokeWorkers(
+				Array<MainToWorkerMessage>(workers.length).fill({
+					type: MainToWorkerMessageType.SET_COLOR_AT_MAX_ITERATIONS,
+					data
+				})
+			);
+		});
 	};
 
 	const setState = async (data: SetStateMessage['data']) => {
-		// TODO: add promises for all worker functions
 		return new Promise((resolve) => {
 			executionFinishedPromiseResolve.set(MainToWorkerMessageType.SET_STATE, resolve);
 			invokeWorkers(
@@ -187,13 +210,6 @@ export const createWorkersManager = (
 	};
 
 	const terminate = () => {
-		// 1. call 1 worker and get state (zoom, offsets, max iterations, colors, operationmode)
-		// 2. In listeners, listen to get state finished
-		// terminate all workers
-		// initialize all workers by calling init
-
-		// at the end, call setState with the same state from getState BUT with less maxIterations
-
 		workers.forEach((w) => w.terminate());
 		progressBar.set(0);
 	};
