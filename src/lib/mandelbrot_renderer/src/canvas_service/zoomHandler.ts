@@ -24,6 +24,10 @@ export const createZoomHandler = (
 	async function onMouseWheel(event: WheelEvent): Promise<void> {
 		event.preventDefault();
 
+		if (!(event.target instanceof HTMLCanvasElement)) {
+			return;
+		}
+
 		lastScrollAt = new Date().getTime();
 		const mouseCoordinates = mouseCoordinatesHandler.getCoordinates();
 
