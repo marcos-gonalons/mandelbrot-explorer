@@ -1,6 +1,4 @@
-import * as Toastify from 'toastify-js';
-
-// @ts-ignore
+import Toastify from 'toastify-js';
 import { getTranslation } from '../../../../../../../translations';
 
 let notificationsAmount = 0;
@@ -19,7 +17,6 @@ export function maxFloat64DepthReachedListener(
 	canvasContainer.style.top = '25%';
 	canvasContainer.style.left = '30%';
 
-	// @ts-ignore
 	Toastify({
 		text: getTranslation('maxFloat64DepthReached'),
 		position: 'center',

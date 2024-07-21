@@ -1,5 +1,4 @@
-// @ts-ignore
-import * as Line from 'progressbar.js/line';
+import Line from 'progressbar.js/line';
 import { type Size } from '../../../../types';
 import { type CalculateSegmentFinishedMessage } from '../../../../wasm_worker/types/workerToMain';
 

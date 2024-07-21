@@ -1,4 +1,5 @@
 import Bowser from 'bowser';
+import Line from 'progressbar.js/line';
 import { type Size } from '../../types';
 import {
 	type AdjustOffsetsMessage,
@@ -22,8 +23,6 @@ import {
 	WORKERS_SCRIPT_PATH
 } from './constants';
 import { type Listeners, createListeners } from './listeners/main';
-// @ts-ignore
-import * as Line from 'progressbar.js/line';
 
 export type WorkersManager = ReturnType<typeof createWorkersManager>;
 
