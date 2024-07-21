@@ -2,14 +2,14 @@ import Line from 'progressbar.js/line';
 import { createDragHandler } from './dragHandler';
 import { createKeypressHandler } from './keypressHandler';
 import { createMouseCoordinatesHandler } from './mouseCoordinatesHandler';
-import { createWorkersManager } from './workers_manager/manager';
+import { createWorkersManager, type WorkersManager } from './workers_manager/manager';
 import { createZoomHandler } from './zoomHandler';
 
 export const init = async (
 	canvasContainer: HTMLDivElement,
 	canvas: HTMLCanvasElement,
 	progressBar: Line
-) => {
+): Promise<WorkersManager> => {
 	const ctx = canvas.getContext('2d') as CanvasRenderingContext2D;
 	let imageData: ImageData;
 	let resizeInterval: ReturnType<typeof setInterval> | null;
@@ -24,11 +24,10 @@ export const init = async (
 	try {
 		await workersManager.init();
 
-		////////////////////////////////////////////////
-		(window as any).workersManager = workersManager;
-		////////////////////////////////////////////////
+		return workersManager;
 	} catch (e) {
 		alert('Sorry, an error occurred :( - Please try with another browser');
+		throw e;
 	}
 
 	function initHandlers() {

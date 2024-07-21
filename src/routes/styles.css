@@ -113,33 +113,3 @@ button:focus:not(:focus-visible) {
 	width: 100%;
 }
 
-/* TODO: Allow resize container vertically and horizontally */
-#canvas-container {
-	position: fixed;
-	cursor: grab;
-	background-color: black;
-	box-shadow:
-		1px -1px 5px #222,
-		-1px -1px 5px #000000;
-}
-
-@media (min-width: 0px) {
-	#canvas-container {
-		width: 100%;
-		height: 100%;
-		top: 0%;
-		left: 0%;
-	}
-}
-@media (min-width: 1000px) {
-	#canvas-container {
-		top: 5%;
-		left: 5%;
-		width: 90%;
-		height: 90%;
-		border-radius: 20px;
-	}
-	#canvas {
-		border-radius: 20px;
-	}
-}

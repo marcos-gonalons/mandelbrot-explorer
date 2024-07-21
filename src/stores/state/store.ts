@@ -2,7 +2,7 @@ import { OperationMode } from '$lib/mandelbrot_renderer/src/wasm_worker/types/ma
 import { writable } from 'svelte/store';
 import type { State } from './types';
 
-export const stateStore = (() => {
+export const state = (() => {
 	const { subscribe, update } = writable<State>({
 		operationMode: OperationMode.FLOAT64,
 		maxIterations: 2000,
