@@ -1,5 +1,5 @@
 // @ts-ignore
-import Line = require('progressbar.js/line');
+import * as Line from 'progressbar.js/line';
 import { createDragHandler } from './dragHandler';
 import { createKeypressHandler } from './keypressHandler';
 import { createMouseCoordinatesHandler } from './mouseCoordinatesHandler';

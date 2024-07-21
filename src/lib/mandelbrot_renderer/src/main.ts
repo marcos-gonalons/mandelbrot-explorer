@@ -1,3 +1,4 @@
+/*
 import * as ProgressBar from 'progressbar.js';
 import { init as canvasInit } from './canvas_service/main';
 
@@ -22,3 +23,4 @@ canvasInit(
 		color: '#e41f1f'
 	})
 );
+*/

@@ -1,4 +1,4 @@
-import * as Bowser from 'bowser';
+import Bowser from 'bowser';
 import { type Size } from '../../types';
 import {
 	type AdjustOffsetsMessage,
@@ -23,7 +23,7 @@ import {
 } from './constants';
 import { type Listeners, createListeners } from './listeners/main';
 // @ts-ignore
-import Line = require('progressbar.js/line');
+import * as Line from 'progressbar.js/line';
 
 export type WorkersManager = ReturnType<typeof createWorkersManager>;
 

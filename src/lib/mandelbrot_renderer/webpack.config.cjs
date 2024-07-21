@@ -2,7 +2,6 @@ const path = require('path');
 
 module.exports = {
 	entry: {
-		bundle: './src/main.ts',
 		'golang-wasm-worker': './src/wasm_worker/main.js'
 	},
 	output: {

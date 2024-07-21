@@ -1,7 +1,7 @@
 import * as Toastify from 'toastify-js';
 
 // @ts-ignore
-import { getTranslation } from 'app-translations';
+import { getTranslation } from '../../../../../../../translations';
 
 let notificationsAmount = 0;
 

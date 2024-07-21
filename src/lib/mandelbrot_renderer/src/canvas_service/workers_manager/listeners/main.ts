@@ -1,5 +1,5 @@
 // @ts-ignore
-import Line = require('progressbar.js/line');
+import * as Line from 'progressbar.js/line';
 
 import {
 	MAIN_TO_WORKER_MESSAGE_TYPES,
