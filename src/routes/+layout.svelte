@@ -25,6 +25,7 @@
 		display: flex;
 		flex-direction: column;
 		min-height: 100vh;
-		background-image: url('$lib/images/bg.jpg');
+		/*background-image: url('$lib/images/bg.jpg');*/
+		background: radial-gradient(circle at center, black, #004873, white 108%);
 	}
 </style>
