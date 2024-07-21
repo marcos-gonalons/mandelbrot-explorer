@@ -2,6 +2,7 @@
 	import Textfield from '@smui/textfield';
 	import { defaultState, state } from '../../../../stores/state/store';
 	import { workersManager } from '../../../../stores/workersManager/store';
+	import { getTranslation } from '../../../../translations';
 
 	async function onChangeMaxIterations({ target }: Event) {
 		const value = parseInt((target as HTMLInputElement).value);
@@ -21,4 +22,5 @@
 	value={$state.maxIterations}
 	on:change={onChangeMaxIterations}
 	style="min-width: 250px;"
+	label={getTranslation('sidebar.maxIterationsLabel')}
 />
