@@ -1,5 +1,6 @@
 <script lang="ts">
 	import Textfield from '@smui/textfield';
+
 	import { defaultState, state } from '../../../../stores/state/store';
 	import { workersManager } from '../../../../stores/workersManager/store';
 	import { getTranslation } from '../../../../translations';
@@ -18,9 +19,8 @@
 </script>
 
 <Textfield
-	type="number"
 	value={$state.maxIterations}
 	on:change={onChangeMaxIterations}
-	style="min-width: 250px;"
+	style="width: 100%"
 	label={getTranslation('sidebar.maxIterationsLabel')}
 />

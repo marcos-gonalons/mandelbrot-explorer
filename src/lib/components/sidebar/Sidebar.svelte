@@ -5,7 +5,10 @@
 </script>
 
 <aside class="absolute w-full h-full bg-gray-200 border-r-2 shadow-lg" class:open>
-	<MaxIterations />
+	<header class="header">Mandelbrot Explorer</header>
+	<section class="configurations">
+		<MaxIterations />
+	</section>
 </aside>
 
 <style>
@@ -25,9 +28,24 @@
 
 	aside {
 		transition: right 0.3s ease-in-out;
+		padding: 0 25px;
 	}
 
 	.open {
 		right: 0;
+	}
+
+	.header {
+		padding-left: 10px;
+		margin-top: 14px;
+		margin-bottom: 40px;
+		font-weight: bold;
+		font-family: 'Trebuchet MS', 'Lucida Sans Unicode', 'Lucida Grande', 'Lucida Sans', Arial,
+			sans-serif;
+		font-size: 25px;
+	}
+
+	.configurations {
+		overflow: hidden;
 	}
 </style>
