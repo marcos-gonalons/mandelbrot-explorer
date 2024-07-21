@@ -241,11 +241,11 @@ export const createWorkersManager = (
 	const getMaxWorkersToSpawn = (): number => {
 		const browser = Bowser.getParser(window.navigator.userAgent);
 
-		if (browser.getBrowserName() === 'Firefox') {
-			return MAX_WORKERS_TO_SPAWN_FIREFOX;
-		}
 		if (browser.getPlatform().type === 'mobile') {
 			return MAX_WORKERS_TO_SPAWN_MOBILE;
+		}
+		if (browser.getBrowserName() === 'Firefox') {
+			return MAX_WORKERS_TO_SPAWN_FIREFOX;
 		}
 
 		return MAX_WORKERS_TO_SPAWN;
