@@ -1,30 +1,11 @@
 <script lang="ts">
-	import Textfield from '@smui/textfield';
-	import { defaultState, state } from '../../../stores/state/store';
-	import { workersManager } from '../../../stores/workersManager/store';
+	import MaxIterations from './maxIterations/MaxIterations.svelte';
 
 	export let open = false;
-
-	async function onChangeMaxIterations({ target }: Event) {
-		const value = parseInt((target as HTMLInputElement).value);
-
-		// todo: validate and show toast for invalid values
-		state.setMaxIterations(isNaN(value) ? defaultState.maxIterations : value);
-
-		// todo: make sure $state.maxIterations is valid
-		await $workersManager.setMaxIterations({ value: $state.maxIterations });
-
-		$workersManager.parallelizeCalculation();
-	}
 </script>
 
 <aside class="absolute w-full h-full bg-gray-200 border-r-2 shadow-lg" class:open>
-	<Textfield
-		type="number"
-		value={$state.maxIterations}
-		on:change={onChangeMaxIterations}
-		style="min-width: 250px;"
-	/>
+	<MaxIterations />
 </aside>
 
 <style>
