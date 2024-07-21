@@ -2,10 +2,10 @@ const path = require('path');
 
 module.exports = {
 	entry: {
-		'golang-wasm-worker': './src/wasm_worker/main.js'
+		'golang-wasm-worker': './src/lib/mandelbrot_renderer/src/wasm_worker/main.js'
 	},
 	output: {
-		path: path.resolve(__dirname, '../../../static/mandelbrot_renderer'),
+		path: path.resolve(__dirname, 'static/mandelbrot_renderer'),
 		filename: '[name].js'
 	},
 	resolve: {
