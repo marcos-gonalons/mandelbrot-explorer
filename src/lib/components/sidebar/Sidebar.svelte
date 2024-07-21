@@ -9,7 +9,6 @@
 		const value = parseInt((target as HTMLInputElement).value);
 
 		// todo: validate and show toast for invalid values
-		console.log(defaultState.maxIterations);
 		state.setMaxIterations(isNaN(value) ? defaultState.maxIterations : value);
 
 		// todo: make sure $state.maxIterations is valid
