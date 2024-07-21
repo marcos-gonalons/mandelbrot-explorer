@@ -1,6 +1,6 @@
 <script lang="ts">
 	import Textfield from '@smui/textfield';
-	import { state } from '../../../stores/state/store';
+	import { defaultState, state } from '../../../stores/state/store';
 	import { workersManager } from '../../../stores/workersManager/store';
 
 	export let open = false;
@@ -8,8 +8,9 @@
 	async function onChangeMaxIterations({ target }: Event) {
 		const value = parseInt((target as HTMLInputElement).value);
 
-		// todo: validate value, if invalid maybe use default original value
-		state.setMaxIterations(isNaN(value) ? 2000 : value);
+		// todo: validate and show toast for invalid values
+		console.log(defaultState.maxIterations);
+		state.setMaxIterations(isNaN(value) ? defaultState.maxIterations : value);
 
 		// todo: make sure $state.maxIterations is valid
 		await $workersManager.setMaxIterations({ value: $state.maxIterations });
