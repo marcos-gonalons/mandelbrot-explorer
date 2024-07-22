@@ -102,7 +102,7 @@ func (s *Service) NewFloatFromENotationString(v string) (Float, error) {
 	}
 
 	if s.IsFloat64() {
-		return NewFloat(f128Value.Float64()), nil
+		return NewFloat64(f128Value.Float64(), uint64(amountOfDecimals)), nil
 	}
 
 	if s.IsFloat128() {
