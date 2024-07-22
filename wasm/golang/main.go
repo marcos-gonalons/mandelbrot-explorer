@@ -120,8 +120,8 @@ func AdjustOffsets(this js.Value, arguments []js.Value) interface{} {
 	coordinates := offsetsHandler.GetAsCoordinates()
 
 	r, _ := json.Marshal(objects.CoordinatesAsENotationString{
-		X: operationMode.GetAsENotationString(&coordinates.X),
-		Y: operationMode.GetAsENotationString(&coordinates.Y),
+		X: operationMode.GetAsENotationString(&coordinates.X, 32),
+		Y: operationMode.GetAsENotationString(&coordinates.Y, 32),
 	})
 	return string(r)
 }

@@ -1,5 +1,5 @@
-import { OperationMode } from '$lib/mandelbrot_renderer/src/wasm_worker/types/mainToWorker';
 import { writable } from 'svelte/store';
+import { OperationMode } from '../../lib/mandelbrot_renderer/src/wasm_worker/types/mainToWorker';
 import type { State } from './types';
 
 export const defaultState: State = {

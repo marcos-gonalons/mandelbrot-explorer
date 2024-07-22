@@ -79,11 +79,11 @@ func (z *Handler) GetZoomLevel() operationmode.Float {
 }
 
 func (z *Handler) GetZoomLevelAsENotation() string {
-	return z.operationMode.GetAsENotationString(&z.zoomLevel)
+	return z.operationMode.GetAsENotationString(&z.zoomLevel, 3)
 }
 
 func (z *Handler) GetMagnitudeAsENotation() string {
-	return z.operationMode.GetAsENotationString(&z.magnitude)
+	return z.operationMode.GetAsENotationString(&z.magnitude, 3)
 }
 
 func (z *Handler) GetMagnitudeDecimals() uint64 {
@@ -100,6 +100,7 @@ func (z *Handler) Adjust(t bool, speed operationmode.Float, strategy Strategy) *
 	z.handleOperationModeChange()
 
 	z.previousLevel = operationmode.Clone(z.zoomLevel)
+
 	return z
 }
 

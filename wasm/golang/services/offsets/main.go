@@ -89,8 +89,8 @@ func (o *Handler) GetAsCoordinates() objects.Coordinates {
 
 func (o *Handler) GetAsENotationStrings() objects.CoordinatesAsENotationString {
 	return objects.CoordinatesAsENotationString{
-		X: o.operationMode.GetAsENotationString(&o.x),
-		Y: o.operationMode.GetAsENotationString(&o.y),
+		X: o.operationMode.GetAsENotationString(&o.x, 32),
+		Y: o.operationMode.GetAsENotationString(&o.y, 32),
 	}
 }
 

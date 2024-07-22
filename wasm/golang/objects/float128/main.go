@@ -394,8 +394,11 @@ func (f *Float128) toDigits(precision int) (digits string, expn int) {
 }
 
 // Convert to string for output
-func (f Float128) String() string {
-	digits, exponent := f.toDigits(32)
+func (f Float128) String(precision int) string {
+	if precision == 0 {
+		precision = 32
+	}
+	digits, exponent := f.toDigits(precision)
 	s := "+"
 	if f[0] < 0.0 {
 		s = "-"

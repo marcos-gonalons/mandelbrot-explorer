@@ -83,13 +83,13 @@ func (s *Service) ConvertFloat(f *Float) {
 	}
 }
 
-func (s *Service) GetAsENotationString(f *Float) string {
+func (s *Service) GetAsENotationString(f *Float, precision int) string {
 	if s.IsFloat64() {
-		return float128.SetFloat64(f.GetFloat64()).String()
+		return float128.SetFloat64(f.GetFloat64()).String(precision)
 	}
 
 	if s.IsFloat128() {
-		return f.GetFloat128().String()
+		return f.GetFloat128().String(precision)
 	}
 
 	panic("operation mode not set or unsupported")
