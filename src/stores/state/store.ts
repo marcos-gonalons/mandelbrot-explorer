@@ -30,6 +30,12 @@ export const state = (() => {
 			update((state) => {
 				state.maxIterations = value;
 				return state;
+			}),
+
+		setZoom: (value: State['zoomAsENotation']) =>
+			update((state) => {
+				state.zoomAsENotation = value;
+				return state;
 			})
 	};
 })();

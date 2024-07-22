@@ -1,5 +1,6 @@
 <script lang="ts">
 	import MaxIterations from './maxIterations/MaxIterations.svelte';
+	import Zoom from './zoom/Zoom.svelte';
 
 	export let open = false;
 </script>
@@ -7,7 +8,8 @@
 <aside class="absolute w-full h-full bg-gray-200 border-r-2 shadow-lg" class:open>
 	<header class="header">Mandelbrot Explorer</header>
 	<section class="configurations">
-		<MaxIterations />
+		<div class="input-container"><MaxIterations /></div>
+		<div class="input-container"><Zoom /></div>
 	</section>
 </aside>
 
@@ -47,5 +49,9 @@
 
 	.configurations {
 		overflow: hidden;
+	}
+
+	.input-container {
+		margin-bottom: 20px;
 	}
 </style>
