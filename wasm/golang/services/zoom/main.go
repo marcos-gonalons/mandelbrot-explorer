@@ -127,6 +127,8 @@ func (z *Handler) Set(zoomLevelAsENotation string) error {
 			z.operationMode.Set(operationmode.FLOAT128, false)
 			z.offsetsHandler.OnChangeOperationMode(operationmode.FLOAT128)
 		}
+
+		// todo: max depth callback
 	}
 	if z.magnitudeDecimals < MAX_FLOAT64_MAGNITUDE_DECIMALS {
 		z.magnitude = operationmode.NewFloat64(math.Pow(10, -float64(z.magnitudeDecimals)), z.magnitudeDecimals)
