@@ -1,5 +1,5 @@
 import { state } from '../../../.././../../../stores/state/store';
-import { AdjustZoomFinishedMessage } from '../../../../wasm_worker/types/workerToMain';
+import { type AdjustZoomFinishedMessage } from '../../../../wasm_worker/types/workerToMain';
 
 let finishedWorkers = 0;
 

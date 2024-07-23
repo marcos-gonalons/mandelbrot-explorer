@@ -2,7 +2,11 @@
 	"maxFloat64DepthReached": "You have reached the maximum depth of what is allowed by the float 64 type. At this depths renders will be much slower, so the canvas has been adjusted to make renders faster.",
 	"maxFloat128DepthReached": "Maximum depth depth reached for float 128 type. Renders beyond this point are extremely slow so I made the decision to not render beyond this point.",
 	"sidebar": {
-		"maxIterationsLabel": "Max Iterations",
+		"maxIterations": {
+			"label": "Max Iterations",
+			"tooFewValidationMessage": "a",
+			"tooManyValidationMessage": "b"
+		},
 		"zoomLabel": "Zoom"
 	}
 }
