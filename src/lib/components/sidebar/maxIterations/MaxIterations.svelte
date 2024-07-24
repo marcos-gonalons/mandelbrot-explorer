@@ -11,5 +11,5 @@
 	value={$state.maxIterations}
 	on:change={onChange}
 	style="width: 100%"
-	label={getTranslation('sidebar.maxIterationsLabel')}
+	label={getTranslation('sidebar.maxIterations.label')}
 />

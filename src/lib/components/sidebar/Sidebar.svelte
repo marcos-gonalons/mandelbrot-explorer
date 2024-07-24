@@ -1,5 +1,6 @@
 <script lang="ts">
 	import MaxIterations from './maxIterations/MaxIterations.svelte';
+	import Reset from './reset/Reset.svelte';
 	import Zoom from './zoom/Zoom.svelte';
 
 	export let open = false;
@@ -10,6 +11,7 @@
 	<section class="configurations">
 		<div class="input-container"><MaxIterations /></div>
 		<div class="input-container"><Zoom /></div>
+		<Reset />
 	</section>
 </aside>
 

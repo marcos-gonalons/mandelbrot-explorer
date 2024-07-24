@@ -39,7 +39,10 @@ export const createWorkersManager = (
 	const isExecutingFunctionMap = new Map<MainToWorkerMessageType, boolean>();
 	MAIN_TO_WORKER_MESSAGE_TYPES.forEach((t) => isExecutingFunctionMap.set(t, false));
 
-	let executionFinishedPromiseResolve = new Map<MainToWorkerMessageType, (...args: any) => void>();
+	const executionFinishedPromiseResolve = new Map<
+		MainToWorkerMessageType,
+		(...args: any) => void
+	>();
 
 	let listeners: Listeners = createListeners(
 		getCanvas,
@@ -208,11 +211,6 @@ export const createWorkersManager = (
 		});
 	};
 
-	const terminate = () => {
-		workers.forEach((w) => w.terminate());
-		progressBar.set(0);
-	};
-
 	const invokeWorkers = (messages: MainToWorkerMessage[]) => {
 		if (isCalculating()) return;
 
@@ -274,7 +272,6 @@ export const createWorkersManager = (
 		setOffsets,
 		setMaxIterations,
 		setColorAtMaxIterations,
-		setState,
-		terminate
+		setState
 	};
 };
