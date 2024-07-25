@@ -9,6 +9,7 @@ import {
 	WorkerToMainMessageType,
 	getMessageTypeMap
 } from '../../../wasm_worker/types/workerToMain';
+import { adjustOffsetsFinishedListener } from './adjustOffsetsFinishedListener/listener';
 import { adjustZoomFinishedListener } from './adjustZoomFinishedListener/listener';
 import { calculateSegmentFinishedListener } from './calculateSegmentFinishedListener/listener';
 import { calculationProgressListener } from './calculationProgressListener/listener';
@@ -65,6 +66,9 @@ export const createListeners = (
 				break;
 			case WorkerToMainMessageType.ADJUST_ZOOM_FINISHED:
 				adjustZoomFinishedListener(getWorkers(), workerMessage.data);
+				break;
+			case WorkerToMainMessageType.ADJUST_OFFSETS_FINISHED:
+				adjustOffsetsFinishedListener(getWorkers(), workerMessage.data);
 				break;
 		}
 	};

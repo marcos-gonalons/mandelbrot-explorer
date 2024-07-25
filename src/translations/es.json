@@ -7,6 +7,8 @@
 			"tooFewValidationMessage": "a",
 			"tooManyValidationMessage": "b"
 		},
-		"zoomLabel": "Zoom"
+		"zoomLabel": "Zoom",
+		"xOffsetLabel": "X Offset",
+		"yOffsetLabel": "Y Offset"
 	}
 }

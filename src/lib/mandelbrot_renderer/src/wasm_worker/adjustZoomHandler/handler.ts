@@ -15,18 +15,20 @@ export function handleAdjustZoom(data: AdjustZoomMessage['data']) {
 		});
 	};
 
-	const zoomAsENotation = self.WASM.functions.adjustZoom(
-		data.type,
-		data.speed,
-		data.strategy,
-		data.mouseCoordinates[0],
-		data.mouseCoordinates[1],
-		data.canvasSize.width,
-		data.canvasSize.height
+	const result = JSON.parse(
+		self.WASM.functions.adjustZoom(
+			data.type,
+			data.speed,
+			data.strategy,
+			data.mouseCoordinates[0],
+			data.mouseCoordinates[1],
+			data.canvasSize.width,
+			data.canvasSize.height
+		)
 	);
 
 	postMessage({
 		type: WorkerToMainMessageType.ADJUST_ZOOM_FINISHED,
-		data: { zoomAsENotation }
+		data: { ...result }
 	});
 }

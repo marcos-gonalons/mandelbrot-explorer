@@ -10,6 +10,6 @@ type Coordinates struct {
 }
 
 type CoordinatesAsENotationString struct {
-	X string
-	Y string
+	X string `json:"x"`
+	Y string `json:"y"`
 }

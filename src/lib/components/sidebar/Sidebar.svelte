@@ -1,7 +1,12 @@
 <script lang="ts">
-	import MaxIterations from './maxIterations/MaxIterations.svelte';
+	import { state } from '../../../stores/state/store';
+	import { getTranslation } from '../../../translations';
+	import { onChange as onChangeMaxIterations } from './maxIterations/onChange';
+	import XOffset from './offsets/XOffset.svelte';
+	import YOffset from './offsets/YOffset.svelte';
 	import Reset from './reset/Reset.svelte';
-	import Zoom from './zoom/Zoom.svelte';
+	import TextInput from './TextInput.svelte';
+	import { onChange as onChangeZoom } from './zoom/onChange';
 
 	export let open = false;
 </script>
@@ -9,8 +14,26 @@
 <aside class="absolute w-full h-full bg-gray-200 border-r-2 shadow-lg" class:open>
 	<header class="header">Mandelbrot Explorer</header>
 	<section class="configurations">
-		<div class="input-container"><MaxIterations /></div>
-		<div class="input-container"><Zoom /></div>
+		<div class="input-container">
+			<TextInput
+				value={$state.maxIterations.toString()}
+				onChange={onChangeMaxIterations}
+				label={getTranslation('sidebar.maxIterations.label')}
+			/>
+		</div>
+		<div class="input-container">
+			<TextInput
+				value={$state.zoomAsENotation}
+				onChange={onChangeZoom}
+				label={getTranslation('sidebar.zoomLabel')}
+			/>
+		</div>
+		<div class="input-container">
+			<XOffset />
+		</div>
+		<div class="input-container">
+			<YOffset />
+		</div>
 		<Reset />
 	</section>
 </aside>

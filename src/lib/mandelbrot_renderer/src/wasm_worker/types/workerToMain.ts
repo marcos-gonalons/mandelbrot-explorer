@@ -93,7 +93,11 @@ export type SetOffsetsFinishedMessage = {
 };
 export type AdjustZoomFinishedMessage = {
 	type: WorkerToMainMessageType.ADJUST_ZOOM_FINISHED;
-	data: { zoomAsENotation: string };
+	data: {
+		zoomAsENotation: string;
+		xOffsetAsENotation: string;
+		yOffsetAsENotation: string;
+	};
 };
 export type SetZoomFinishedMessage = {
 	type: WorkerToMainMessageType.SET_ZOOM_FINISHED;

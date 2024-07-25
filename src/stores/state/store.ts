@@ -9,7 +9,7 @@ export const defaultState: State = {
 	magnitudeAsENotation: '+1e-1',
 	magnitudeDecimals: '1',
 	offsetsAsENotation: {
-		x: '-2e-1',
+		x: '-4e-1',
 		y: '-2e-1'
 	},
 	colorAtMaxIterations: {
@@ -35,6 +35,12 @@ export const state = (() => {
 		setZoom: (value: State['zoomAsENotation']) =>
 			update((state) => {
 				state.zoomAsENotation = value;
+				return state;
+			}),
+
+		setOffsets: (value: State['offsetsAsENotation']) =>
+			update((state) => {
+				state.offsetsAsENotation = value;
 				return state;
 			})
 	};

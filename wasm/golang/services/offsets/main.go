@@ -2,6 +2,7 @@ package offsets
 
 import (
 	"mandelbrot/objects"
+	"mandelbrot/objects/float128"
 	operationmode "mandelbrot/services/operation_mode"
 )
 
@@ -70,17 +71,20 @@ func (o *Handler) DecrementY(decrement operationmode.Float) *Handler {
 }
 
 func (o *Handler) Set(xAsENotation, yAsENotation string) error {
-	x, err := o.operationMode.NewFloatFromENotationString(xAsENotation)
+	x, amountOfDecimals, err := float128.FromENotationString(xAsENotation)
 	if err != nil {
 		return err
 	}
-	y, err := o.operationMode.NewFloatFromENotationString(yAsENotation)
-	if err != nil {
-		return err
-	}
+	o.x = operationmode.NewFloat128(x, uint64(amountOfDecimals))
+	o.x.SetFloat64(o.x.GetFloat128().Float64())
 
-	o.x = x
-	o.y = y
+	y, amountOfDecimals, err := float128.FromENotationString(yAsENotation)
+	if err != nil {
+		return err
+	}
+	o.y = operationmode.NewFloat128(y, uint64(amountOfDecimals))
+	o.y.SetFloat64(o.y.GetFloat128().Float64())
+
 	return nil
 }
 func (o *Handler) GetAsCoordinates() objects.Coordinates {

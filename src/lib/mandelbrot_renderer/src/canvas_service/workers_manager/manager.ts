@@ -272,6 +272,7 @@ export const createWorkersManager = (
 		setOffsets,
 		setMaxIterations,
 		setColorAtMaxIterations,
-		setState
+		setState,
+		initCanvas
 	};
 };

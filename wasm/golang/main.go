@@ -143,7 +143,19 @@ func AdjustZoom(this js.Value, arguments []js.Value) interface{} {
 		zoom.Strategy(arguments[2].Int()),
 	)
 
-	return zoomHandler.GetZoomLevelAsENotation()
+	offsets := offsetsHandler.GetAsCoordinates()
+
+	r, _ := json.Marshal(struct {
+		XOffset string `json:"xOffsetAsENotation"`
+		YOffset string `json:"yOffsetAsENotation"`
+		Zoom    string `json:"zoomAsENotation"`
+	}{
+		XOffset: operationMode.GetAsENotationString(&offsets.X, 32),
+		YOffset: operationMode.GetAsENotationString(&offsets.Y, 32),
+		Zoom:    zoomHandler.GetZoomLevelAsENotation(),
+	})
+
+	return string(r)
 }
 
 func SetZoom(this js.Value, arguments []js.Value) interface{} {

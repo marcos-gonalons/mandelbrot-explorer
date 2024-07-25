@@ -105,32 +105,20 @@ func (z *Handler) Adjust(t bool, speed operationmode.Float, strategy Strategy) *
 }
 
 func (z *Handler) Set(zoomLevelAsENotation string) error {
-	zoomLevel, err := z.operationMode.NewFloatFromENotationString(zoomLevelAsENotation)
-
+	zoomLevel, amountOfDecimals, err := float128.FromENotationString(zoomLevelAsENotation)
 	if err != nil {
 		return err
 	}
 
-	z.zoomLevel = zoomLevel
-	z.previousLevel = operationmode.Clone(z.zoomLevel)
-
 	// TODO: Check max decimals on JS side and remove this IF
-	if zoomLevel.GetDecimalsAmount() > MAX_FLOAT128_MAGNITUDE_DECIMALS {
+	if amountOfDecimals >= MAX_FLOAT128_MAGNITUDE_DECIMALS {
 		return errors.New("remove me")
 	}
 
-	z.magnitudeDecimals = zoomLevel.GetDecimalsAmount()
-	if z.magnitudeDecimals >= MAX_FLOAT64_MAGNITUDE_DECIMALS {
-		z.magnitude = operationmode.NewFloat128(float128.PowerI(float128.SetFloat64(10), -int64(z.magnitudeDecimals)), z.magnitudeDecimals)
+	z.magnitudeDecimals = z.zoomLevel.GetDecimalsAmount()
 
-		if !z.operationMode.IsFloat128() {
-			z.operationMode.Set(operationmode.FLOAT128, false)
-			z.offsetsHandler.OnChangeOperationMode(operationmode.FLOAT128)
-		}
-
-		// todo: max depth callback
-	}
-	if z.magnitudeDecimals < MAX_FLOAT64_MAGNITUDE_DECIMALS {
+	if amountOfDecimals < MAX_FLOAT64_MAGNITUDE_DECIMALS-1 {
+		z.zoomLevel = operationmode.NewFloat64(zoomLevel.Float64(), uint64(amountOfDecimals))
 		z.magnitude = operationmode.NewFloat64(math.Pow(10, -float64(z.magnitudeDecimals)), z.magnitudeDecimals)
 
 		if !z.operationMode.IsFloat64() {
@@ -138,6 +126,19 @@ func (z *Handler) Set(zoomLevelAsENotation string) error {
 			z.offsetsHandler.OnChangeOperationMode(operationmode.FLOAT64)
 		}
 	}
+	if amountOfDecimals >= MAX_FLOAT64_MAGNITUDE_DECIMALS-1 {
+		z.zoomLevel = operationmode.NewFloat128(zoomLevel, uint64(amountOfDecimals))
+		z.magnitude = operationmode.NewFloat128(float128.PowerI(float128.SetFloat64(10), -int64(z.magnitudeDecimals)), z.magnitudeDecimals)
+
+		if !z.operationMode.IsFloat128() {
+			z.operationMode.Set(operationmode.FLOAT128, false)
+			z.offsetsHandler.OnChangeOperationMode(operationmode.FLOAT128)
+
+			z.onMaxFloat64DepthReached()
+		}
+	}
+
+	z.previousLevel = operationmode.Clone(z.zoomLevel)
 
 	return nil
 }

@@ -33,7 +33,7 @@
 
 		$workersManager.parallelizeCalculation();
 
-		spinner.remove();
+		spinner.style.visibility = 'hidden';
 	});
 </script>
 

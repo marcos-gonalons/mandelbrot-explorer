@@ -94,20 +94,3 @@ func (s *Service) GetAsENotationString(f *Float, precision int) string {
 
 	panic("operation mode not set or unsupported")
 }
-
-func (s *Service) NewFloatFromENotationString(v string) (Float, error) {
-	f128Value, amountOfDecimals, err := float128.FromENotationString(v)
-	if err != nil {
-		return NewFloat(0), err
-	}
-
-	if s.IsFloat64() {
-		return NewFloat64(f128Value.Float64(), uint64(amountOfDecimals)), nil
-	}
-
-	if s.IsFloat128() {
-		return NewFloat128(f128Value, uint64(amountOfDecimals)), nil
-	}
-
-	panic("operation mode not set or unsupported")
-}

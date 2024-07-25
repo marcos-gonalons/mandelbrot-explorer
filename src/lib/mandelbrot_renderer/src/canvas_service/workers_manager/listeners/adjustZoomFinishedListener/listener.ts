@@ -12,4 +12,5 @@ export function adjustZoomFinishedListener(
 	finishedWorkers = 0;
 
 	state.setZoom(data.zoomAsENotation);
+	state.setOffsets({ x: data.xOffsetAsENotation, y: data.yOffsetAsENotation });
 }

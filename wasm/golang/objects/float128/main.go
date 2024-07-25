@@ -184,16 +184,16 @@ func FromENotationString(v string) (Float128, int, error) {
 	}
 
 	decimals := splits[0]
-	amountOfLeadingZeroes, _ := strconv.Atoi(splits[1])
+	magnitude, _ := strconv.Atoi(splits[1])
 
 	sign := decimals[0]
 	if sign != '-' && sign != '+' {
 		return Zero(), 0, errors.New("missign negative or positive sign")
 	}
-	decimalsWithoutSign := decimals[1:]
+	decimalsWithoutSign := strings.TrimRight(decimals[1:], "0")
 
 	zeroes := ""
-	for i := 0; i < amountOfLeadingZeroes; i++ {
+	for i := 0; i < magnitude; i++ {
 		zeroes = zeroes + "0"
 	}
 	finalString := zeroes + decimalsWithoutSign
@@ -211,7 +211,7 @@ func FromENotationString(v string) (Float128, int, error) {
 		f.Neg()
 	}
 
-	return f, amountOfDecimals, nil
+	return f, magnitude, nil
 }
 
 func (f *Float128) Scan(s fmt.ScanState, ch rune) (err error) {
