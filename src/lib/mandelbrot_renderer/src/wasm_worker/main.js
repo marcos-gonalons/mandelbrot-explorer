@@ -1,4 +1,5 @@
 import { handle } from './handler.ts';
+import { setupCallbacks } from './wasm_callbacks.ts';
 
 (() => {
 	const enosys = () => {
@@ -634,4 +635,5 @@ import { handle } from './handler.ts';
 	};
 })();
 
+setupCallbacks();
 self.onmessage = handle;

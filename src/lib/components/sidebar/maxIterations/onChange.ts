@@ -21,11 +21,12 @@ export const onChange = async ({ target }: Event) => {
 		validationToast(getTranslation('sidebar.maxIterations.tooManyValidationMessage'));
 	}
 
-	state.setMaxIterations(maxIterations);
-
-	await get(workersManager).setMaxIterations({ value: get(state).maxIterations });
-
-	get(workersManager).parallelizeCalculation();
+	const manager = get(workersManager);
+	manager.queue(async () => {
+		state.setMaxIterations(maxIterations);
+		await manager.setMaxIterations({ value: get(state).maxIterations });
+		manager.parallelizeCalculation();
+	});
 };
 
 function validationToast(message: string) {

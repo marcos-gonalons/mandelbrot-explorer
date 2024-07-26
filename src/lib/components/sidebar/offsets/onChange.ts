@@ -10,14 +10,18 @@ export const onChange = async (value: string, offset: 'x' | 'y') => {
 
 	try {
 		offsets[offset] = validateENotation(value.toLowerCase(), 100);
-		state.setOffsets(offsets);
 
-		await get(workersManager).setOffsets({
-			xAsENotation: offsets.x,
-			yAsENotation: offsets.y
+		const manager = get(workersManager);
+		manager.queue(async () => {
+			state.setOffsets(offsets);
+
+			await get(workersManager).setOffsets({
+				xAsENotation: offsets.x,
+				yAsENotation: offsets.y
+			});
+
+			get(workersManager).parallelizeCalculation();
 		});
-
-		get(workersManager).parallelizeCalculation();
 	} catch (e: unknown) {
 		Toastify({
 			text: (e as Error).message,

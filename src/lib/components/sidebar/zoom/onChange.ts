@@ -9,10 +9,13 @@ export const onChange = async ({ target }: Event) => {
 	try {
 		const value = validateENotation((target as HTMLInputElement).value.toLowerCase(), 30);
 
-		state.setZoom(value);
-		await get(workersManager).setZoom({ zoomLevelAsENotation: get(state).zoomAsENotation });
+		const manager = get(workersManager);
+		manager.queue(async () => {
+			state.setZoom(value);
+			await get(workersManager).setZoom({ zoomLevelAsENotation: get(state).zoomAsENotation });
 
-		get(workersManager).parallelizeCalculation();
+			get(workersManager).parallelizeCalculation();
+		});
 	} catch (e: unknown) {
 		Toastify({
 			text: (e as Error).message,

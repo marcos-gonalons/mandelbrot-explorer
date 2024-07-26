@@ -260,6 +260,15 @@ export const createWorkersManager = (
 	const isExecutingAnyFunction = (): boolean =>
 		Boolean(Array.from(isExecutingFunctionMap.values()).find((isExecuting) => isExecuting));
 
+	const queue = (f: () => void) => {
+		let interval = setInterval(() => {
+			if (isExecutingAnyFunction()) return;
+
+			f();
+			clearInterval(interval);
+		}, 50);
+	};
+
 	return {
 		init,
 		isCalculating,
@@ -273,6 +282,7 @@ export const createWorkersManager = (
 		setMaxIterations,
 		setColorAtMaxIterations,
 		setState,
-		initCanvas
+		initCanvas,
+		queue
 	};
 };
