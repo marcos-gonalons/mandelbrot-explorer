@@ -10,5 +10,9 @@
 		"zoomLabel": "Zoom",
 		"xOffsetLabel": "X Offset",
 		"yOffsetLabel": "Y Offset"
+	},
+	"validations": {
+		"invalidENotationFormat": "Formato incorrecto - El formato debe ser '1.23e-04'",
+		"maxMagnitudeError": "La magnitud debe ser igual o inferior a {magnitude}"
 	}
 }
