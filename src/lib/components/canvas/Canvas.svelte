@@ -69,13 +69,14 @@
 		}
 	}
 	@media (min-width: 1000px) {
-		#canvas-container {
+		/*#canvas-container {
 			top: 5%;
 			left: 5%;
 			width: 90%;
 			height: 90%;
 			border-radius: 20px;
-		}
+		
+		}*/
 		#canvas {
 			border-radius: 20px;
 		}

@@ -1,6 +1,7 @@
 <script lang="ts">
 	import { state } from '../../../stores/state/store';
 	import { getTranslation } from '../../../translations';
+	import Donations from './donations/Donations.svelte';
 	import { onChange as onChangeMaxIterations } from './maxIterations/onChange';
 	import XOffset from './offsets/XOffset.svelte';
 	import YOffset from './offsets/YOffset.svelte';
@@ -12,30 +13,35 @@
 </script>
 
 <aside class="absolute w-full h-full bg-gray-200 border-r-2 shadow-lg" class:open>
-	<header class="header">Mandelbrot Explorer</header>
-	<section class="configurations">
-		<div class="input-container">
-			<TextInput
-				value={$state.maxIterations.toString()}
-				onChange={onChangeMaxIterations}
-				label={getTranslation('sidebar.maxIterations.label')}
-			/>
-		</div>
-		<div class="input-container">
-			<TextInput
-				value={$state.zoomAsENotation}
-				onChange={onChangeZoom}
-				label={getTranslation('sidebar.zoomLabel')}
-			/>
-		</div>
-		<div class="input-container">
-			<XOffset />
-		</div>
-		<div class="input-container">
-			<YOffset />
-		</div>
-		<Reset />
-	</section>
+	<div class="main-container">
+		<header class="header">Mandelbrot Explorer</header>
+		<section class="configurations">
+			<div class="input-container">
+				<TextInput
+					value={$state.maxIterations.toString()}
+					onChange={onChangeMaxIterations}
+					label={getTranslation('sidebar.maxIterations.label')}
+				/>
+			</div>
+			<div class="input-container">
+				<TextInput
+					value={$state.zoomAsENotation}
+					onChange={onChangeZoom}
+					label={getTranslation('sidebar.zoomLabel')}
+				/>
+			</div>
+			<div class="input-container">
+				<XOffset />
+			</div>
+			<div class="input-container">
+				<YOffset />
+			</div>
+			<Reset />
+		</section>
+	</div>
+	<div class="donations-container">
+		<Donations />
+	</div>
 </aside>
 
 <style>
@@ -55,7 +61,15 @@
 
 	aside {
 		transition: right 0.3s ease-in-out;
+	}
+
+	.main-container {
+		overflow-y: scroll;
+		height: 80%;
 		padding: 0 25px;
+	}
+	.donations-container {
+		height: 20%;
 	}
 
 	.open {

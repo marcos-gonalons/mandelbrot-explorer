@@ -22,7 +22,7 @@ export const createZoomHandler = (
 	addEventListener('wheel', onMouseWheel, { passive: false });
 
 	async function onMouseWheel(event: WheelEvent): Promise<void> {
-		event.preventDefault();
+		disableBrowserZooming(event);
 
 		if (!(event.target instanceof HTMLCanvasElement)) {
 			return;
@@ -64,6 +64,12 @@ export const createZoomHandler = (
 		if (keypressHandler.isPressingShift()) return 6;
 		if (keypressHandler.isPressingControl()) return 1;
 		return 2;
+	}
+
+	function disableBrowserZooming(event: WheelEvent): void {
+		if (keypressHandler.isPressingControl()) {
+			event.preventDefault();
+		}
 	}
 
 	return {
