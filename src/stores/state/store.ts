@@ -13,10 +13,10 @@ export const defaultState: State = {
 		y: '-2e-1'
 	},
 	colorAtMaxIterations: {
-		R: 0,
-		G: 0,
-		B: 0,
-		A: 255
+		r: 0,
+		g: 0,
+		b: 0,
+		a: 255
 	}
 };
 
@@ -41,6 +41,12 @@ export const state = (() => {
 		setOffsets: (value: State['offsetsAsENotation']) =>
 			update((state) => {
 				state.offsetsAsENotation = value;
+				return state;
+			}),
+
+		setColorAtMaxIterations: (value: State['colorAtMaxIterations']) =>
+			update((state) => {
+				state.colorAtMaxIterations = value;
 				return state;
 			})
 	};

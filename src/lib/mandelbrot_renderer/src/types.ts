@@ -4,8 +4,8 @@ export type Size = {
 };
 
 export type RGBColor = {
-	R: number;
-	G: number;
-	B: number;
-	A: number;
+	r: number;
+	g: number;
+	b: number;
+	a: number;
 };

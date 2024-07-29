@@ -9,7 +9,10 @@
 		},
 		"zoomLabel": "Zoom",
 		"xOffsetLabel": "X Offset",
-		"yOffsetLabel": "Y Offset"
+		"yOffsetLabel": "Y Offset",
+		"colorAtMaxIterations": {
+			"label": "Color at max iterations"
+		}
 	},
 	"validations": {
 		"invalidENotationFormat": "Invalid format - number should be in the format of '1.23e-04'",
