@@ -1,5 +1,5 @@
 <script lang="ts">
-	import { state } from '../../../stores/state/store';
+	import { state } from '../../../stores/mandelbrotState/store';
 	import { getTranslation } from '../../../translations';
 	import ColorAtMaxIterations from './colotAtMaxIterations/ColorAtMaxIterations.svelte';
 	import Donations from './donations/Donations.svelte';
@@ -7,6 +7,7 @@
 	import XOffset from './offsets/XOffset.svelte';
 	import YOffset from './offsets/YOffset.svelte';
 	import Reset from './reset/Reset.svelte';
+	import Resizer from './resizer/Resizer.svelte';
 	import TextInput from './TextInput.svelte';
 	import { onChange as onChangeZoom } from './zoom/onChange';
 
@@ -39,6 +40,9 @@
 			</div>
 			<div class="input-container">
 				<ColorAtMaxIterations />
+			</div>
+			<div class="input-container">
+				<Resizer />
 			</div>
 			<Reset />
 		</section>

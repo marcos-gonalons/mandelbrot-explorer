@@ -2,7 +2,8 @@
 	import { onMount } from 'svelte';
 	import { Shadow } from 'svelte-loading-spinners';
 
-	import { state } from '../../../stores/state/store';
+	import { canvasContainer as canvasContainerStore } from '../../../stores/canvasContainer/store';
+	import { state } from '../../../stores/mandelbrotState/store';
 	import { workersManager } from '../../../stores/workersManager/store';
 
 	let canvasContainer: HTMLDivElement;
@@ -36,6 +37,8 @@
 
 			spinner.style.visibility = 'hidden';
 		} catch (e: unknown) {}
+
+		canvasContainerStore.set(canvasContainer);
 	});
 </script>
 
@@ -54,33 +57,15 @@
 		box-shadow:
 			1px -1px 5px #222,
 			-1px -1px 5px #000000;
+		width: 100%;
+		height: 100%;
+		top: 0%;
+		left: 0%;
 	}
 
 	.spinner-container {
 		left: 50%;
 		position: absolute;
 		top: 50%;
-	}
-
-	@media (min-width: 0px) {
-		#canvas-container {
-			width: 100%;
-			height: 100%;
-			top: 0%;
-			left: 0%;
-		}
-	}
-	@media (min-width: 1000px) {
-		/*#canvas-container {
-			top: 5%;
-			left: 5%;
-			width: 90%;
-			height: 90%;
-			border-radius: 20px;
-		
-		}*/
-		#canvas {
-			border-radius: 20px;
-		}
 	}
 </style>

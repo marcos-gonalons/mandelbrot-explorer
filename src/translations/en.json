@@ -13,7 +13,10 @@
 		"colorAtMaxIterations": {
 			"label": "Color at max iterations"
 		},
-		"resetButton": "Reset"
+		"resetButton": "Reset",
+		"resizer": {
+			"label": "Canvas size"
+		}
 	},
 	"validations": {
 		"invalidENotationFormat": "Invalid format - number should be in the format of '1.23e-04'",

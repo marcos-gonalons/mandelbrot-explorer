@@ -3,7 +3,7 @@ import Toastify from 'toastify-js';
 
 import { getTranslation } from '../../../../translations';
 
-import { defaultState, state } from '../../../../stores/state/store';
+import { defaultState, state } from '../../../../stores/mandelbrotState/store';
 import { workersManager } from '../../../../stores/workersManager/store';
 
 const TOO_MANY_ITERATIONS = 10000;

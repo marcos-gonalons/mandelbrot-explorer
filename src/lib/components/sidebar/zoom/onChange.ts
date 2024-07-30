@@ -2,7 +2,7 @@ import { get } from 'svelte/store';
 import Toastify from 'toastify-js';
 
 import { validateENotation } from '$lib/utils/utils';
-import { state } from '../../../../stores/state/store';
+import { state } from '../../../../stores/mandelbrotState/store';
 import { workersManager } from '../../../../stores/workersManager/store';
 
 export const onChange = async ({ target }: Event) => {

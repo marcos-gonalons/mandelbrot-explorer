@@ -1,4 +1,4 @@
-import { state } from '../../../.././../../../stores/state/store';
+import { state } from '../../../../../../../stores/mandelbrotState/store';
 import { type AdjustZoomFinishedMessage } from '../../../../wasm_worker/types/workerToMain';
 
 let finishedWorkers = 0;

@@ -1,5 +1,5 @@
 <script lang="ts">
-	import { state } from '../../../../stores/state/store';
+	import { state } from '../../../../stores/mandelbrotState/store';
 	import { getTranslation } from '../../../../translations';
 	import TextInput from '../TextInput.svelte';
 	import { onChange as onChangeOffset } from './onChange';

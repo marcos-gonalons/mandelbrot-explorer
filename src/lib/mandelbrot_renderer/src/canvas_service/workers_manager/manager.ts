@@ -103,6 +103,7 @@ export const createWorkersManager = (
 				width: Math.floor(getImageData().width / resolution),
 				height: Math.floor(getImageData().height / resolution)
 			};
+
 			const size = canvasSize.width * canvasSize.height;
 			const segmentLength = Math.floor(size / workers.length);
 			const lastSegmentLength = segmentLength + (size % workers.length);

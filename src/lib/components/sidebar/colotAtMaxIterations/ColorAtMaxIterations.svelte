@@ -1,7 +1,7 @@
 <script lang="ts">
 	import type { RGBColor } from '$lib/mandelbrot_renderer/src/types';
 	import ColorPicker from 'svelte-awesome-color-picker';
-	import { defaultState, state } from '../../../../stores/state/store';
+	import { defaultState, state } from '../../../../stores/mandelbrotState/store';
 	import { workersManager } from '../../../../stores/workersManager/store';
 	import { getTranslation } from '../../../../translations';
 
