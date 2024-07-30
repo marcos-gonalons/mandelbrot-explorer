@@ -12,7 +12,8 @@
 		"yOffsetLabel": "Y Offset",
 		"colorAtMaxIterations": {
 			"label": "Color at max iterations"
-		}
+		},
+		"resetButton": "Reset"
 	},
 	"validations": {
 		"invalidENotationFormat": "Invalid format - number should be in the format of '1.23e-04'",
