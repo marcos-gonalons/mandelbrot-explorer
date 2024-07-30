@@ -5,12 +5,18 @@
 	import { inject } from '@vercel/analytics';
 	import { onMount } from 'svelte';
 	import { language } from '../stores/language/store';
-	import type { Language } from '../translations';
+	import { defaultLanguage, type Language } from '../translations';
 	import './styles.css';
 
 	inject({ mode: dev ? 'development' : 'production' });
 
-	onMount(() => language.set(navigator.language.split('-')[0] as Language));
+	onMount(() =>
+		language.set(
+			navigator && navigator.language
+				? (navigator.language.split('-')[0] as Language)
+				: defaultLanguage
+		)
+	);
 </script>
 
 <svelte:head>
