@@ -17,23 +17,25 @@
 		progressBar.setAttribute('id', 'progress-bar');
 		document.body.prepend(progressBar);
 
-		workersManager.set(
-			await initRenderer(
-				canvasContainer,
-				canvas,
-				new ProgressBar.Line(progressBar, {
-					easing: 'easeInOut',
-					strokeWidth: 0.25,
-					color: '#e41f1f'
-				})
-			)
-		);
+		try {
+			workersManager.set(
+				await initRenderer(
+					canvasContainer,
+					canvas,
+					new ProgressBar.Line(progressBar, {
+						easing: 'easeInOut',
+						strokeWidth: 0.25,
+						color: '#e41f1f'
+					})
+				)
+			);
 
-		await $workersManager.setState({ state: $state });
+			await $workersManager.setState({ state: $state });
 
-		$workersManager.parallelizeCalculation();
+			$workersManager.parallelizeCalculation();
 
-		spinner.style.visibility = 'hidden';
+			spinner.style.visibility = 'hidden';
+		} catch (e: unknown) {}
 	});
 </script>
 

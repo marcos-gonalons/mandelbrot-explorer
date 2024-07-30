@@ -3,9 +3,14 @@
 
 	import { dev } from '$app/environment';
 	import { inject } from '@vercel/analytics';
+	import { onMount } from 'svelte';
+	import { language } from '../stores/language/store';
+	import type { Language } from '../translations';
 	import './styles.css';
 
 	inject({ mode: dev ? 'development' : 'production' });
+
+	onMount(() => language.set(navigator.language.split('-')[0] as Language));
 </script>
 
 <svelte:head>
@@ -15,11 +20,13 @@
 	<script src="https://www.paypalobjects.com/donate/sdk/donate-sdk.js" charset="UTF-8"></script>
 </svelte:head>
 
-<div class="app">
-	<main>
-		<slot />
-	</main>
-</div>
+{#key $language}
+	<div class="app">
+		<main>
+			<slot />
+		</main>
+	</div>
+{/key}
 
 <style>
 	.app {

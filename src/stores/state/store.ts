@@ -4,7 +4,7 @@ import type { State } from './types';
 
 export const defaultState: State = {
 	operationMode: OperationMode.FLOAT64,
-	maxIterations: 2000,
+	maxIterations: 1000,
 	zoomAsENotation: '+1.2e-0',
 	magnitudeAsENotation: '+1e-1',
 	magnitudeDecimals: '1',

@@ -10,6 +10,10 @@ export const init = async (
 	canvas: HTMLCanvasElement,
 	progressBar: Line
 ): Promise<WorkersManager> => {
+	if (!canvas || !canvasContainer) {
+		throw new Error('Missing canvas or canvas container elements');
+	}
+
 	const ctx = canvas.getContext('2d') as CanvasRenderingContext2D;
 	let imageData: ImageData;
 	let resizeInterval: ReturnType<typeof setInterval> | null;
