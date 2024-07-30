@@ -63,6 +63,10 @@
 		left: 0%;
 	}
 
+	#canvas {
+		border-radius: 20px;
+	}
+
 	.spinner-container {
 		left: 50%;
 		position: absolute;
