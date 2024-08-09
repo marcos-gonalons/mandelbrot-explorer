@@ -8,6 +8,7 @@
 	import YOffset from './offsets/YOffset.svelte';
 	import Reset from './reset/Reset.svelte';
 	import Resizer from './resizer/Resizer.svelte';
+	import Resolution from './resolution/Resolution.svelte';
 	import TextInput from './TextInput.svelte';
 	import { onChange as onChangeZoom } from './zoom/onChange';
 
@@ -37,6 +38,9 @@
 			</div>
 			<div class="input-container">
 				<YOffset />
+			</div>
+			<div class="input-container">
+				<Resolution />
 			</div>
 			<div class="input-container">
 				<ColorAtMaxIterations />

@@ -16,7 +16,8 @@
 		"resetButton": "Reset",
 		"resizer": {
 			"label": "Tamaño del canvas"
-		}
+		},
+		"resolutionLabel": "Resolución"
 	},
 	"validations": {
 		"invalidENotationFormat": "Formato incorrecto - El formato debe ser '1.23e-04'",
