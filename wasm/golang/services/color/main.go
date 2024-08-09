@@ -7,17 +7,17 @@ import (
 type Service struct {
 	colors               []objects.RGBColor
 	maxIterations        int64
-	colorAssignments     []ColorAssignment
+	colorScheme          []objects.RGBColor
 	colorAtMaxIterations objects.RGBColor
 }
 
 const CHANGE_COLOR_EVERY_N_ITERATIONS = 20
 
 func New() *Service {
-	service := &Service{
-		colorAssignments: colorAssignments,
-	}
+	service := &Service{}
 	service.prepareColors()
+
+	service.SetColorScheme(service.getColorScheme()) // todo: send scheme from JS
 
 	return service
 }
@@ -25,6 +25,12 @@ func New() *Service {
 func (s *Service) SetColorAtMaxIterations(colorAtMaxIterations objects.RGBColor) *Service {
 	s.colorAtMaxIterations = colorAtMaxIterations
 	return s
+}
+
+func (s *Service) SetColorScheme(colorScheme []objects.RGBColor) *Service {
+	s.colorScheme = colorScheme
+	return s
+
 }
 
 func (s *Service) GetColorAtMaxIterationsObject() objects.RGBColor {
@@ -57,7 +63,7 @@ func (s *Service) prepareColors() {
 	for i := int64(0); i < s.maxIterations; i++ {
 		if i%(CHANGE_COLOR_EVERY_N_ITERATIONS) == 0 {
 			currentAssignment++
-			if currentAssignment == len(s.colorAssignments) {
+			if currentAssignment == len(s.colorScheme) {
 				currentAssignment = 0
 			}
 		}
@@ -69,77 +75,54 @@ func (s *Service) prepareColors() {
 }
 
 func (s *Service) getIterationColor(iteration, currentAssignment int64) (r, g, b, a byte) {
-	r = byte(0)
-	g = byte(0)
-	b = byte(0)
-	a = byte(iteration % (255) * 2)
+	alpha := byte(iteration % (255) * 2)
 
-	max := byte(255)
-	half := byte(127)
+	color := s.colorScheme[currentAssignment]
+	color.A = alpha
 
-	switch s.colorAssignments[currentAssignment] {
-	case RED:
-		r = max
-	case LIME:
-		g = max
-	case BLUE:
-		b = max
-	case YELLOW:
-		r = max
-		g = max
-	case FUCHSIA:
-		r = max
-		b = max
-	case AQUA:
-		b = max
-		g = max
-	case WHITE:
-		r = max
-		g = max
-		b = max
-	case ELECTRIC_INDIGO:
-		r = half
-		b = max
-	case DEEP_PINK:
-		r = max
-		b = half
-	case CHARTREUSE:
-		r = half
-		g = max
-	case DARK_ORANGE:
-		r = max
-		g = half
-	case SPRING_GREEN:
-		g = max
-		b = half
-	case DODGER_BLUE:
-		b = max
-		g = half
-	case LIGHT_SLATE_BLUE:
-		r = half
-		g = half
-		b = max
-	case LIGHT_CORAL:
-		r = max
-		g = half
-		b = half
-	case LIGHT_GREEN:
-		r = half
-		g = max
-		b = half
-	case CANARY:
-		r = max
-		g = max
-		b = half
-	case ELECTRIC_BLUE:
-		r = half
-		g = max
-		b = max
-	case FUCHSIA_PINK:
-		r = max
-		g = half
-		b = max
+	return color.R, color.G, color.B, color.A
+}
+
+func (s *Service) getColorScheme() []objects.RGBColor {
+	// Second color dictactes the main color at default zoom
+	return []objects.RGBColor{
+		// CHARTREUSE
+		{R: 127, G: 255, B: 0},
+		// DODGER_BLUE
+		{R: 0, G: 127, B: 255},
+		// LIGHT_SLATE_BLUE
+		{R: 127, G: 127, B: 255},
+		// WHITE
+		{R: 255, G: 255, B: 255},
+		// LIGHT_CORAL
+		{R: 255, G: 127, B: 127},
+		// CANARY
+		{R: 255, G: 255, B: 127},
+		// LIGHT_GREEN
+		{R: 127, G: 255, B: 127},
+		// ELECTRIC_BLUE
+		{R: 127, G: 255, B: 255},
+		// ELECTRIC_INDIGO
+		{R: 127, G: 0, B: 255},
+		// SPRING_GREEN
+		{R: 0, G: 255, B: 127},
+		// BLUE
+		{R: 0, G: 0, B: 255},
+		// FUCHSIA_PINK
+		{R: 255, G: 127, B: 255},
+		// DARK_ORANGE
+		{R: 255, G: 127, B: 0},
+		// DEEP_PINK
+		{R: 255, G: 0, B: 127},
+		// FUCHSIA
+		{R: 255, G: 0, B: 255},
+		// AQUA
+		{R: 0, G: 255, B: 255},
+		// RED
+		{R: 255, G: 0, B: 0},
+		// LIME
+		{R: 0, G: 255, B: 0},
+		// YELLOW
+		{R: 255, G: 255, B: 0},
 	}
-
-	return
 }
