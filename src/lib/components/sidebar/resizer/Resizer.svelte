@@ -1,7 +1,7 @@
 <script lang="ts">
 	import FormField from '@smui/form-field';
 	import Slider from '@smui/slider';
-	import { canvasContainer } from '../../../../stores/canvasContainer/store';
+	import { canvasStore } from '../../../../stores/canvas/store';
 	import { workersManager } from '../../../../stores/workersManager/store';
 	import { getTranslation } from '../../../../translations';
 
@@ -10,14 +10,19 @@
 	const onChange = (e: CustomEvent) => {
 		const value = (e.detail as { value: number }).value;
 
-		$canvasContainer.style.borderRadius = '0px';
-		$canvasContainer.style.width = `${value}%`;
-		$canvasContainer.style.height = `${value}%`;
-		$canvasContainer.style.top = `${(100 - value) / 2}%`;
-		$canvasContainer.style.left = `${(100 - value) / 2}%`;
+		const container = $canvasStore.canvasContainer!;
+		const canvas = $canvasStore.canvas!;
+
+		container.style.borderRadius = '0px';
+		canvas.style.borderRadius = '0px';
+		container.style.width = `${value}%`;
+		container.style.height = `${value}%`;
+		container.style.top = `${(100 - value) / 2}%`;
+		container.style.left = `${(100 - value) / 2}%`;
 
 		if (value < 100) {
-			$canvasContainer.style.borderRadius = '20px';
+			container.style.borderRadius = '20px';
+			canvas.style.borderRadius = '0px';
 		}
 
 		$workersManager.initCanvas();

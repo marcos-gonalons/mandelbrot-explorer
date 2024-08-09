@@ -2,7 +2,7 @@
 	import { onMount } from 'svelte';
 	import { Shadow } from 'svelte-loading-spinners';
 
-	import { canvasContainer as canvasContainerStore } from '../../../stores/canvasContainer/store';
+	import { canvasStore } from '../../../stores/canvas/store';
 	import { state } from '../../../stores/mandelbrotState/store';
 	import { workersManager } from '../../../stores/workersManager/store';
 
@@ -38,7 +38,8 @@
 			spinner.style.visibility = 'hidden';
 		} catch (e: unknown) {}
 
-		canvasContainerStore.set(canvasContainer);
+		canvasStore.setContainer(canvasContainer);
+		canvasStore.setCanvas(canvas);
 	});
 </script>
 
@@ -61,10 +62,6 @@
 		height: 100%;
 		top: 0%;
 		left: 0%;
-	}
-
-	#canvas {
-		border-radius: 20px;
 	}
 
 	.spinner-container {
