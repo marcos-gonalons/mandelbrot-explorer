@@ -17,15 +17,6 @@ var colorService *color.Service
 var segmentCalculatorService *segmentcalculator.Service
 var operationMode *operationmode.Service
 
-var defaultOperationMode = operationmode.FLOAT64
-var defaultMaxIterations int64 = 2000
-var defaultZoom float64 = 1.2
-var defaultMagnitude float64 = 0.1
-var defaultMagnitudeDecimals uint64 = 1
-var defaultXOffset float64 = -0.2
-var defaultYOffset float64 = -0.2
-var defaultColorAtMaxIterations = objects.RGBColor{R: 0, G: 0, B: 0, A: 128}
-
 func main() {
 	initServices()
 
@@ -47,20 +38,13 @@ func main() {
 func initServices() {
 	jsCallbacks := js.Global().Get("WASM").Get("callbacks")
 
-	operationMode = operationmode.New(defaultOperationMode)
+	operationMode = operationmode.New()
 
-	offsetsHandler = offsets.New(
-		operationMode,
-		operationmode.NewFloat(defaultXOffset),
-		operationmode.NewFloat(defaultYOffset),
-	)
+	offsetsHandler = offsets.New(operationMode)
 
 	zoomHandler = zoom.New(
 		operationMode,
 		offsetsHandler,
-		operationmode.NewFloat(defaultZoom),
-		operationmode.NewFloat(defaultMagnitude),
-		defaultMagnitudeDecimals,
 		func() {
 			jsCallbacks.Call("maxFloat64DepthReached")
 		},
@@ -69,14 +53,13 @@ func initServices() {
 		},
 	)
 
-	colorService = color.New(defaultMaxIterations, defaultColorAtMaxIterations)
+	colorService = color.New()
 
 	segmentCalculatorService = segmentcalculator.New(
 		operationMode,
 		offsetsHandler,
 		zoomHandler,
 		colorService,
-		defaultMaxIterations,
 		func(progress float64) {
 			jsCallbacks.Call("progress", progress)
 		},
@@ -197,10 +180,11 @@ func SetState(this js.Value, arguments []js.Value) interface{} {
 	err := json.Unmarshal([]byte(arguments[0].String()), state)
 
 	colorService.SetMaxIterations(state.MaxIterations)
+	colorService.SetColorAtMaxIterations(state.ColorAtMaxIterations)
 	segmentCalculatorService.SetMaxIterations(state.MaxIterations)
+
 	zoomHandler.Set(state.ZoomAsENotation)
 	offsetsHandler.Set(state.OffsetsAsENotation.X, state.OffsetsAsENotation.Y)
-	colorService.SetColorAtMaxIterations(state.ColorAtMaxIterations)
 	operationMode.Set(state.OperationMode, false)
 
 	if err != nil {

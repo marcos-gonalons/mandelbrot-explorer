@@ -13,11 +13,9 @@ type Service struct {
 
 const CHANGE_COLOR_EVERY_N_ITERATIONS = 20
 
-func New(maxIterations int64, colorAtMaxIterations objects.RGBColor) *Service {
+func New() *Service {
 	service := &Service{
-		maxIterations:        maxIterations,
-		colorAssignments:     colorAssignments,
-		colorAtMaxIterations: colorAtMaxIterations,
+		colorAssignments: colorAssignments,
 	}
 	service.prepareColors()
 

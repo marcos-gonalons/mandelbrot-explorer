@@ -25,16 +25,14 @@ func New(
 	offsetsHandler *offsets.Handler,
 	zoomHandler *zoom.Handler,
 	colorService *color.Service,
-	maxIterations int64,
 	progressCallback func(progress float64),
 ) *Service {
 	return &Service{
-		operationMode,
-		offsetsHandler,
-		zoomHandler,
-		colorService,
-		maxIterations,
-		progressCallback,
+		operationMode:    operationMode,
+		offsetsHandler:   offsetsHandler,
+		zoomHandler:      zoomHandler,
+		colorService:     colorService,
+		progressCallback: progressCallback,
 	}
 }
 

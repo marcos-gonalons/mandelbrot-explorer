@@ -41,18 +41,13 @@ type Handler struct {
 func New(
 	operationMode *operationmode.Service,
 	offsetsHandler *offsets.Handler,
-	zoomLevel, magnitude operationmode.Float,
-	magnitudeDecimals uint64,
 	onMaxFloat64DepthReached func(),
 	onMaxFloat128DepthReached func(),
 ) *Handler {
 	return &Handler{
 		operationMode:             operationMode,
 		offsetsHandler:            offsetsHandler,
-		zoomLevel:                 zoomLevel,
-		magnitude:                 magnitude,
 		magnitudeIncrement:        3,
-		magnitudeDecimals:         magnitudeDecimals,
 		onMaxFloat64DepthReached:  onMaxFloat64DepthReached,
 		onMaxFloat128DepthReached: onMaxFloat128DepthReached,
 	}

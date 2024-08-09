@@ -25,9 +25,8 @@ type Service struct {
 	listeners []listener
 }
 
-func New(mode Mode) *Service {
+func New() *Service {
 	return &Service{
-		mode:             mode,
 		float64Operator:  &Float64Operator{},
 		float128Operator: &Float128Operator{},
 	}

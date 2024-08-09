@@ -13,11 +13,9 @@ type Handler struct {
 	y operationmode.Float
 }
 
-func New(operationMode *operationmode.Service, x, y operationmode.Float) *Handler {
+func New(operationMode *operationmode.Service) *Handler {
 	return &Handler{
 		operationMode: operationMode,
-		x:             x,
-		y:             y,
 	}
 }
 
