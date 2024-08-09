@@ -12,10 +12,9 @@
 	const onChange = (e: CustomEvent) => {
 		const resolution = lowestResolution + 1 - (e.detail as { value: number }).value;
 
-		console.log(resolution);
-		$workersManager.queue(() => {
+		$workersManager.queue(async () => {
 			$workersManager.setResolution(resolution);
-			$workersManager.parallelizeCalculation();
+			await $workersManager.parallelizeCalculation();
 		});
 	};
 </script>
