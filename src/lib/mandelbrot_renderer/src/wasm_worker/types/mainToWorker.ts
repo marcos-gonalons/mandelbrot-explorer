@@ -80,6 +80,7 @@ export type SetStateMessage = {
 				y: string;
 			};
 			colorAtMaxIterations: RGBColor;
+			colorScheme: RGBColor[];
 		};
 	};
 };

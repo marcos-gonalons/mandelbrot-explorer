@@ -168,6 +168,7 @@ func GetState(this js.Value, arguments []js.Value) interface{} {
 		MagnitudeDecimals:    zoomHandler.GetMagnitudeDecimals(),
 		OffsetsAsENotation:   offsetsHandler.GetAsENotationStrings(),
 		ColorAtMaxIterations: colorService.GetColorAtMaxIterationsObject(),
+		ColorScheme:          colorService.GetColorScheme(),
 	}
 
 	r, _ := json.Marshal(state)
@@ -180,7 +181,9 @@ func SetState(this js.Value, arguments []js.Value) interface{} {
 	err := json.Unmarshal([]byte(arguments[0].String()), state)
 
 	colorService.SetMaxIterations(state.MaxIterations)
+	colorService.SetColorScheme(state.ColorScheme)
 	colorService.SetColorAtMaxIterations(state.ColorAtMaxIterations)
+
 	segmentCalculatorService.SetMaxIterations(state.MaxIterations)
 
 	zoomHandler.Set(state.ZoomAsENotation)

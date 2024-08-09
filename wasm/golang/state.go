@@ -13,4 +13,5 @@ type State struct {
 	MagnitudeDecimals    uint64
 	OffsetsAsENotation   objects.CoordinatesAsENotationString
 	ColorAtMaxIterations objects.RGBColor
+	ColorScheme          []objects.RGBColor
 }

@@ -17,7 +17,49 @@ export const defaultState: State = {
 		g: 0,
 		b: 0,
 		a: 255
-	}
+	},
+	colorScheme: [
+		// Second color dictactes the main color at default zoom
+
+		// CHARTREUSE
+		{ r: 127, g: 255, b: 0, a: 255 },
+		// DODGER_BLUE
+		{ r: 0, g: 127, b: 255, a: 255 },
+		// LIGHT_SLATE_BLUE
+		{ r: 127, g: 127, b: 255, a: 255 },
+		// WHITE
+		{ r: 255, g: 255, b: 255, a: 255 },
+		// LIGHT_CORAL
+		{ r: 255, g: 127, b: 127, a: 255 },
+		// CANARY
+		{ r: 255, g: 255, b: 127, a: 255 },
+		// LIGHT_GREEN
+		{ r: 127, g: 255, b: 127, a: 255 },
+		// ELECTRIC_BLUE
+		{ r: 127, g: 255, b: 255, a: 255 },
+		// ELECTRIC_INDIGO
+		{ r: 127, g: 0, b: 255, a: 255 },
+		// SPRING_GREEN
+		{ r: 0, g: 255, b: 127, a: 255 },
+		// BLUE
+		{ r: 0, g: 0, b: 255, a: 255 },
+		// FUCHSIA_PINK
+		{ r: 255, g: 127, b: 255, a: 255 },
+		// DARK_ORANGE
+		{ r: 255, g: 127, b: 0, a: 255 },
+		// DEEP_PINK
+		{ r: 255, g: 0, b: 127, a: 255 },
+		// FUCHSIA
+		{ r: 255, g: 0, b: 255, a: 255 },
+		// AQUA
+		{ r: 0, g: 255, b: 255, a: 255 },
+		// RED
+		{ r: 255, g: 0, b: 0, a: 255 },
+		// LIME
+		{ r: 0, g: 255, b: 0, a: 255 },
+		// YELLOW
+		{ r: 255, g: 255, b: 0, a: 255 }
+	]
 };
 
 export const state = (() => {

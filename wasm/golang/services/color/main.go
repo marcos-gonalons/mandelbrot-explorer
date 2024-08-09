@@ -15,9 +15,6 @@ const CHANGE_COLOR_EVERY_N_ITERATIONS = 20
 
 func New() *Service {
 	service := &Service{}
-	service.prepareColors()
-
-	service.SetColorScheme(service.getColorScheme()) // todo: send scheme from JS
 
 	return service
 }
@@ -29,6 +26,8 @@ func (s *Service) SetColorAtMaxIterations(colorAtMaxIterations objects.RGBColor)
 
 func (s *Service) SetColorScheme(colorScheme []objects.RGBColor) *Service {
 	s.colorScheme = colorScheme
+	s.prepareColors()
+
 	return s
 
 }
@@ -40,6 +39,7 @@ func (s *Service) GetColorAtMaxIterationsObject() objects.RGBColor {
 func (s *Service) SetMaxIterations(maxIterations int64) *Service {
 	s.maxIterations = maxIterations
 	s.prepareColors()
+
 	return s
 }
 
@@ -57,7 +57,15 @@ func (s *Service) GetColorAtMaxIterations() (r, g, b, a byte) {
 	return s.colorAtMaxIterations.R, s.colorAtMaxIterations.G, s.colorAtMaxIterations.B, s.colorAtMaxIterations.A
 }
 
+func (s *Service) GetColorScheme() []objects.RGBColor {
+	return s.colorScheme
+}
+
 func (s *Service) prepareColors() {
+	if s.maxIterations == 0 || len(s.colorScheme) == 0 {
+		return
+	}
+
 	s.colors = nil
 	currentAssignment := 0
 	for i := int64(0); i < s.maxIterations; i++ {
@@ -81,48 +89,4 @@ func (s *Service) getIterationColor(iteration, currentAssignment int64) (r, g, b
 	color.A = alpha
 
 	return color.R, color.G, color.B, color.A
-}
-
-func (s *Service) getColorScheme() []objects.RGBColor {
-	// Second color dictactes the main color at default zoom
-	return []objects.RGBColor{
-		// CHARTREUSE
-		{R: 127, G: 255, B: 0},
-		// DODGER_BLUE
-		{R: 0, G: 127, B: 255},
-		// LIGHT_SLATE_BLUE
-		{R: 127, G: 127, B: 255},
-		// WHITE
-		{R: 255, G: 255, B: 255},
-		// LIGHT_CORAL
-		{R: 255, G: 127, B: 127},
-		// CANARY
-		{R: 255, G: 255, B: 127},
-		// LIGHT_GREEN
-		{R: 127, G: 255, B: 127},
-		// ELECTRIC_BLUE
-		{R: 127, G: 255, B: 255},
-		// ELECTRIC_INDIGO
-		{R: 127, G: 0, B: 255},
-		// SPRING_GREEN
-		{R: 0, G: 255, B: 127},
-		// BLUE
-		{R: 0, G: 0, B: 255},
-		// FUCHSIA_PINK
-		{R: 255, G: 127, B: 255},
-		// DARK_ORANGE
-		{R: 255, G: 127, B: 0},
-		// DEEP_PINK
-		{R: 255, G: 0, B: 127},
-		// FUCHSIA
-		{R: 255, G: 0, B: 255},
-		// AQUA
-		{R: 0, G: 255, B: 255},
-		// RED
-		{R: 255, G: 0, B: 0},
-		// LIME
-		{R: 0, G: 255, B: 0},
-		// YELLOW
-		{R: 255, G: 255, B: 0},
-	}
 }
