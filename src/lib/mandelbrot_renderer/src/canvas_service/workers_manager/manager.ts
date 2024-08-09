@@ -14,7 +14,6 @@ import {
 	type SetStateMessage,
 	type SetZoomMessage
 } from '../../wasm_worker/types/mainToWorker';
-import { NORMAL_RESOLUTION } from '../constants';
 import {
 	MAX_WORKERS_TO_SPAWN,
 	MAX_WORKERS_TO_SPAWN_FIREFOX,
@@ -34,6 +33,7 @@ export const createWorkersManager = (
 	initCanvas: () => void,
 	progressBar: Line
 ) => {
+	let resolution: number = 1;
 	let workers: Worker[] = [];
 
 	const isExecutingFunctionMap = new Map<MainToWorkerMessageType, boolean>();
@@ -96,12 +96,12 @@ export const createWorkersManager = (
 	};
 
 	/** @param resolution - The higher the number the worse the resolution */
-	const parallelizeCalculation = async (resolution: number = NORMAL_RESOLUTION) => {
+	const parallelizeCalculation = async (lowResolution: boolean = false) => {
 		return new Promise((resolve) => {
 			executionFinishedPromiseResolve.set(MainToWorkerMessageType.CALCULATE_SEGMENT, resolve);
 			const canvasSize: Size = {
-				width: Math.floor(getImageData().width / resolution),
-				height: Math.floor(getImageData().height / resolution)
+				width: Math.floor(getImageData().width / (lowResolution ? resolution * 4 : resolution)),
+				height: Math.floor(getImageData().height / (lowResolution ? resolution * 4 : resolution))
 			};
 
 			const size = canvasSize.width * canvasSize.height;
@@ -250,6 +250,10 @@ export const createWorkersManager = (
 		return MAX_WORKERS_TO_SPAWN;
 	};
 
+	const setResolution = (value: number): void => {
+		resolution = value;
+	};
+
 	const isExecutingFunction = (workerFunction: MainToWorkerMessageType): boolean =>
 		Boolean(
 			Array.from(isExecutingFunctionMap.entries()).find((v) => v[0] === workerFunction && v[1])
@@ -284,6 +288,7 @@ export const createWorkersManager = (
 		setColorAtMaxIterations,
 		setState,
 		initCanvas,
+		setResolution,
 		queue
 	};
 };

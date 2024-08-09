@@ -1,5 +1,4 @@
 import type { AdjustOffsetsMessage } from '../wasm_worker/types/mainToWorker';
-import { LOW_RESOLUTION } from './constants';
 import type { KeypressHandler } from './keypressHandler';
 import type { MouseCoordinatesHandler } from './mouseCoordinatesHandler';
 import type { WorkersManager } from './workers_manager/manager';
@@ -49,7 +48,7 @@ export const createDragHandler = (
 
 		await updateOffsets();
 
-		workersManager.parallelizeCalculation(LOW_RESOLUTION);
+		workersManager.parallelizeCalculation(true);
 	}
 
 	function stopDragging() {

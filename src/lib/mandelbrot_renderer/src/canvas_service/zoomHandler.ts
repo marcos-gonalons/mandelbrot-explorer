@@ -1,5 +1,4 @@
 import { type AdjustZoomMessage } from '../wasm_worker/types/mainToWorker';
-import { LOW_RESOLUTION } from './constants';
 import { type KeypressHandler } from './keypressHandler';
 import { type MouseCoordinatesHandler } from './mouseCoordinatesHandler';
 import { type WorkersManager } from './workers_manager/manager';
@@ -41,7 +40,7 @@ export const createZoomHandler = (
 		};
 		await workersManager.adjustZoom(data);
 
-		workersManager.parallelizeCalculation(LOW_RESOLUTION);
+		workersManager.parallelizeCalculation(true);
 
 		if (scrollingInterval) return;
 
