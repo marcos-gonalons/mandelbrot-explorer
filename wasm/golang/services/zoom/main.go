@@ -1,7 +1,6 @@
 package zoom
 
 import (
-	"errors"
 	"mandelbrot/objects"
 	"mandelbrot/objects/float128"
 	"mandelbrot/services/offsets"
@@ -103,11 +102,6 @@ func (z *Handler) Set(zoomLevelAsENotation string) error {
 	zoomLevel, amountOfDecimals, err := float128.FromENotationString(zoomLevelAsENotation)
 	if err != nil {
 		return err
-	}
-
-	// TODO: Check max decimals on JS side and remove this IF
-	if amountOfDecimals >= MAX_FLOAT128_MAGNITUDE_DECIMALS {
-		return errors.New("remove me")
 	}
 
 	z.magnitudeDecimals = z.zoomLevel.GetDecimalsAmount()
