@@ -4,8 +4,8 @@
 	"sidebar": {
 		"maxIterations": {
 			"label": "Iteraciones Máximas",
-			"tooFewValidationMessage": "a",
-			"tooManyValidationMessage": "b"
+			"tooFewValidationMessage": "Las iteraciones máximas no pueden ser menores que 1",
+			"tooManyValidationMessage": "Con iteraciones máximas muy altas los renderizados se pueden volver muy lentos"
 		},
 		"zoomLabel": "Zoom",
 		"xOffsetLabel": "X Offset",
