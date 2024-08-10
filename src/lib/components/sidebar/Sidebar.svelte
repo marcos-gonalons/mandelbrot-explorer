@@ -43,10 +43,10 @@
 				<Resolution />
 			</div>
 			<div class="input-container">
-				<ColorAtMaxIterations />
+				<Resizer />
 			</div>
 			<div class="input-container">
-				<Resizer />
+				<ColorAtMaxIterations />
 			</div>
 			<Reset />
 		</section>
@@ -61,6 +61,12 @@
 		right: -350px;
 		width: 350px;
 		transition: right 0.3s ease-in-out;
+		background: linear-gradient(
+			240deg,
+			rgb(255, 255, 255) 0%,
+			rgb(255, 255, 255) 0%,
+			rgb(201, 234, 255) 100%
+		);
 	}
 
 	.main-container {
