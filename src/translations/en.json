@@ -18,7 +18,10 @@
 			"label": "Canvas size"
 		},
 		"resolutionLabel": "Resolution",
-		"saturationLabel": "Saturation"
+		"saturationLabel": "Saturation",
+		"colorScheme": {
+			"label": "Color scheme"
+		}
 	},
 	"validations": {
 		"invalidENotationFormat": "Invalid format - number should be in the format of '1.23e-04'",

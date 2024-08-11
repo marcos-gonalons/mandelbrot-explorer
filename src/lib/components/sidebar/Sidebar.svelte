@@ -1,9 +1,9 @@
 <script lang="ts">
 	import { state } from '../../../stores/mandelbrotState/store';
 	import { getTranslation } from '../../../translations';
+	import ColorScheme from './colorScheme/ColorScheme.svelte';
 	import ColorAtMaxIterations from './colotAtMaxIterations/ColorAtMaxIterations.svelte';
 	import Donations from './donations/Donations.svelte';
-	import { onChange as onChangeMaxIterations } from './maxIterations/onChange';
 	import XOffset from './offsets/XOffset.svelte';
 	import YOffset from './offsets/YOffset.svelte';
 	import Reset from './reset/Reset.svelte';
@@ -20,13 +20,7 @@
 	<div class="main-container">
 		<header class="header">Mandelbrot Explorer</header>
 		<section class="configurations">
-			<div class="input-container">
-				<TextInput
-					value={$state.maxIterations.toString()}
-					onChange={onChangeMaxIterations}
-					label={getTranslation('sidebar.maxIterations.label')}
-				/>
-			</div>
+			<div class="input-container"></div>
 			<div class="input-container">
 				<TextInput
 					value={$state.zoomAsENotation}
@@ -51,6 +45,9 @@
 			</div>
 			<div class="input-container">
 				<ColorAtMaxIterations />
+			</div>
+			<div class="input-container">
+				<ColorScheme />
 			</div>
 			<Reset />
 		</section>
