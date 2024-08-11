@@ -10,7 +10,9 @@
 	<span>{getTranslation('sidebar.colorScheme.label')}</span>
 </button>
 
-<Modal open={isModalVisible} onClose={() => (isModalVisible = false)} />
+{#if isModalVisible}
+	<Modal onClose={() => (isModalVisible = false)} />
+{/if}
 
 <style>
 	button {

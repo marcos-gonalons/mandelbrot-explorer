@@ -1,7 +1,7 @@
 <script lang="ts">
 	import type { RGBColor } from '$lib/mandelbrot_renderer/src/types';
 	import ColorPicker from 'svelte-awesome-color-picker';
-	import { defaultState, state } from '../../../../stores/mandelbrotState/store';
+	import { state } from '../../../../stores/mandelbrotState/store';
 	import { workersManager } from '../../../../stores/workersManager/store';
 	import { getTranslation } from '../../../../translations';
 
@@ -35,7 +35,7 @@
 
 <ColorPicker
 	label={getTranslation('sidebar.colorAtMaxIterations.label')}
-	rgb={defaultState.colorAtMaxIterations}
+	rgb={$state.colorAtMaxIterations}
 	position="responsive"
 	on:input={onChange}
 />

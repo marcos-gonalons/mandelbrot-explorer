@@ -1,5 +1,5 @@
 <script lang="ts">
-	import { defaultState, state } from '../../../../stores/mandelbrotState/store';
+	import { state } from '../../../../stores/mandelbrotState/store';
 	import { workersManager } from '../../../../stores/workersManager/store';
 	import { getTranslation } from '../../../../translations';
 
@@ -8,7 +8,7 @@
 	let min: number = 0.1;
 	let max: number = 100;
 	let step: number = 0.1;
-	let value: number = defaultState.saturation;
+	let value: number = $state.saturation;
 
 	const onChange = (e: CustomEvent) => {
 		const saturation = (e.detail as { value: number }).value;

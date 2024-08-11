@@ -99,6 +99,12 @@ export const state = (() => {
 			update((state) => {
 				state.saturation = value;
 				return state;
+			}),
+
+		setColorScheme: (value: State['colorScheme']) =>
+			update((state) => {
+				state.colorScheme = value;
+				return state;
 			})
 	};
 })();
