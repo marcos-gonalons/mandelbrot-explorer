@@ -1,9 +1,8 @@
 <script lang="ts">
-	import FormField from '@smui/form-field';
-	import Slider from '@smui/slider';
 	import { canvasStore } from '../../../../stores/canvas/store';
 	import { workersManager } from '../../../../stores/workersManager/store';
 	import { getTranslation } from '../../../../translations';
+	import Slider from '../Slider.svelte';
 
 	let value = 100;
 
@@ -30,12 +29,4 @@
 	};
 </script>
 
-<FormField align="end" style="display: flex;">
-	<Slider min={20} max={100} style="flex-grow: 1;" bind:value on:SMUISlider:input={onChange} />
-	<span slot="label" style="padding-right: 12px; width: max-content; display: block;">
-		{getTranslation('sidebar.resizer.label')}
-	</span>
-</FormField>
-
-<style>
-</style>
+<Slider label={getTranslation('sidebar.resizer.label')} {value} {onChange} min={20} max={100} />
