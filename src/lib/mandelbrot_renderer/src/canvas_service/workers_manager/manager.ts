@@ -8,11 +8,11 @@ import {
 	type MainToWorkerMessage,
 	MainToWorkerMessageType,
 	type MainToWorkerPostMessage,
-	type SetBrightnessMessage,
 	type SetColorAtMaxIterationsMessage,
 	type SetColorSchemeMessage,
 	type SetMaxIterationsMessage,
 	type SetOffsetsMessage,
+	type SetSaturationMessage,
 	type SetStateMessage,
 	type SetZoomMessage
 } from '../../wasm_worker/types/mainToWorker';
@@ -214,12 +214,12 @@ export const createWorkersManager = (
 		});
 	};
 
-	const setBrightness = async (data: SetBrightnessMessage['data']) => {
+	const setSaturation = async (data: SetSaturationMessage['data']) => {
 		return new Promise((resolve) => {
-			executionFinishedPromiseResolve.set(MainToWorkerMessageType.SET_BRIGHTNESS, resolve);
+			executionFinishedPromiseResolve.set(MainToWorkerMessageType.SET_SATURATION, resolve);
 			invokeWorkers(
 				Array<MainToWorkerMessage>(workers.length).fill({
-					type: MainToWorkerMessageType.SET_BRIGHTNESS,
+					type: MainToWorkerMessageType.SET_SATURATION,
 					data
 				})
 			);
@@ -313,7 +313,7 @@ export const createWorkersManager = (
 		setMaxIterations,
 		setColorAtMaxIterations,
 		setColorScheme,
-		setBrightness,
+		setSaturation,
 		setState,
 		initCanvas,
 		setResolution,

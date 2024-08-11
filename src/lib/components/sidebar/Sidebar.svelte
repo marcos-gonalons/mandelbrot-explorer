@@ -1,7 +1,6 @@
 <script lang="ts">
 	import { state } from '../../../stores/mandelbrotState/store';
 	import { getTranslation } from '../../../translations';
-	import Brightness from './brightness/Brightness.svelte';
 	import ColorAtMaxIterations from './colotAtMaxIterations/ColorAtMaxIterations.svelte';
 	import Donations from './donations/Donations.svelte';
 	import { onChange as onChangeMaxIterations } from './maxIterations/onChange';
@@ -10,6 +9,7 @@
 	import Reset from './reset/Reset.svelte';
 	import Resizer from './resizer/Resizer.svelte';
 	import Resolution from './resolution/Resolution.svelte';
+	import Saturation from './saturation/Saturation.svelte';
 	import TextInput from './TextInput.svelte';
 	import { onChange as onChangeZoom } from './zoom/onChange';
 
@@ -47,7 +47,7 @@
 				<Resizer />
 			</div>
 			<div class="input-container">
-				<Brightness />
+				<Saturation />
 			</div>
 			<div class="input-container">
 				<ColorAtMaxIterations />

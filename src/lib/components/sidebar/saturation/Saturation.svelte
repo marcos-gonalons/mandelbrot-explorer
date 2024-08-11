@@ -8,25 +8,25 @@
 	let min: number = 0.1;
 	let max: number = 100;
 	let step: number = 0.1;
-	let value: number = defaultState.brightness;
+	let value: number = defaultState.saturation;
 
 	const onChange = (e: CustomEvent) => {
-		const brightness = (e.detail as { value: number }).value;
+		const saturation = (e.detail as { value: number }).value;
 
 		$workersManager.queue(async () => {
-			$workersManager.setBrightness({ value: brightness });
+			$workersManager.setSaturation({ value: saturation });
 			await $workersManager.parallelizeCalculation();
 		});
 	};
 
 	const onInput = (e: CustomEvent) => {
-		const brightness = (e.detail as { value: number }).value;
-		state.setBrightness(brightness);
+		const saturation = (e.detail as { value: number }).value;
+		state.setSaturation(saturation);
 	};
 </script>
 
 <Slider
-	label={`${getTranslation('sidebar.brightnessLabel')} ${$state.brightness}%`}
+	label={`${getTranslation('sidebar.saturationLabel')} ${$state.saturation}%`}
 	{value}
 	{onChange}
 	{onInput}

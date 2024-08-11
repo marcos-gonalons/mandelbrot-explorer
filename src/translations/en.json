@@ -18,7 +18,7 @@
 			"label": "Canvas size"
 		},
 		"resolutionLabel": "Resolution",
-		"brightnessLabel": "Brightness"
+		"saturationLabel": "Saturation"
 	},
 	"validations": {
 		"invalidENotationFormat": "Invalid format - number should be in the format of '1.23e-04'",

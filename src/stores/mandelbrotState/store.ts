@@ -18,7 +18,7 @@ export const defaultState: State = {
 		b: 0,
 		a: 255
 	},
-	brightness: 1,
+	saturation: 1,
 	colorScheme: [
 		// Second color dictactes the main color at default zoom
 
@@ -93,9 +93,9 @@ export const state = (() => {
 				return state;
 			}),
 
-		setBrightness: (value: State['brightness']) =>
+		setSaturation: (value: State['saturation']) =>
 			update((state) => {
-				state.brightness = value;
+				state.saturation = value;
 				return state;
 			})
 	};

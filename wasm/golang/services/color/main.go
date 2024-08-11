@@ -8,7 +8,7 @@ type Service struct {
 	colors               []objects.RGBColor
 	maxIterations        int64
 	colorScheme          []objects.RGBColor
-	brightness           float64
+	saturation           float64
 	colorAtMaxIterations objects.RGBColor
 }
 
@@ -30,8 +30,8 @@ func (s *Service) SetColorScheme(colorScheme []objects.RGBColor) *Service {
 	return s
 }
 
-func (s *Service) SetBrightness(value float64) *Service {
-	s.brightness = value
+func (s *Service) SetSaturation(value float64) *Service {
+	s.saturation = value
 	s.prepareColors()
 
 	return s
@@ -90,9 +90,9 @@ func (s *Service) prepareColors() {
 func (s *Service) getIterationColor(iteration, currentAssignment int64) (r, g, b, a byte) {
 	color := s.colorScheme[currentAssignment]
 
-	brightness := (255 * s.brightness) / 100
+	saturation := (255 * s.saturation) / 100
 
-	color.A = byte(float64(iteration%(255)) * brightness)
+	color.A = byte(float64(iteration%(255)) * saturation)
 
 	return color.R, color.G, color.B, color.A
 }

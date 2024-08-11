@@ -14,5 +14,5 @@ type State struct {
 	OffsetsAsENotation   objects.CoordinatesAsENotationString
 	ColorAtMaxIterations objects.RGBColor
 	ColorScheme          []objects.RGBColor
-	Brightness           float64
+	Saturation           float64
 }

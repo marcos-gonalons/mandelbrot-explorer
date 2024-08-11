@@ -13,7 +13,7 @@ export enum WorkerToMainMessageType {
 	SET_MAX_ITERATIONS_FINISHED,
 	SET_COLOR_AT_MAX_ITERATIONS_FINISHED,
 	SET_COLOR_SCHEME_FINISHED,
-	SET_BRIGHTNESS_FINISHED,
+	SET_SATURATION_FINISHED,
 	SET_STATE_FINISHED,
 	MAX_FLOAT64_DEPTH_REACHED,
 	MAX_FLOAT128_DEPTH_REACHED
@@ -54,8 +54,8 @@ export function getMessageTypeMap(): Map<WorkerToMainMessageType, MainToWorkerMe
 		MainToWorkerMessageType.SET_COLOR_SCHEME
 	);
 	messageTypeMap.set(
-		WorkerToMainMessageType.SET_BRIGHTNESS_FINISHED,
-		MainToWorkerMessageType.SET_BRIGHTNESS
+		WorkerToMainMessageType.SET_SATURATION_FINISHED,
+		MainToWorkerMessageType.SET_SATURATION
 	);
 	messageTypeMap.set(WorkerToMainMessageType.SET_STATE_FINISHED, MainToWorkerMessageType.SET_STATE);
 
@@ -78,8 +78,8 @@ export type SetColorAtMaxIterationsMessage = {
 export type SetColorSchemeMessage = {
 	type: WorkerToMainMessageType.SET_COLOR_SCHEME_FINISHED;
 };
-export type SetBrightnessMessage = {
-	type: WorkerToMainMessageType.SET_BRIGHTNESS_FINISHED;
+export type SetSaturationMessage = {
+	type: WorkerToMainMessageType.SET_SATURATION_FINISHED;
 };
 export type CalculationProgressMessage = {
 	type: WorkerToMainMessageType.CALCULATION_PROGRESS;
@@ -136,7 +136,7 @@ export type WorkerToMainMessage =
 	| SetMaxIterationsMessage
 	| SetColorAtMaxIterationsMessage
 	| SetColorSchemeMessage
-	| SetBrightnessMessage
+	| SetSaturationMessage
 	| CalculationProgressMessage
 	| CalculateSegmentFinishedMessage
 	| AdjustOffsetsFinisheMessage
