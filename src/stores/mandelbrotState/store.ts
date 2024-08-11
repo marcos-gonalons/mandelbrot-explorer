@@ -91,6 +91,12 @@ export const state = (() => {
 			update((state) => {
 				state.colorAtMaxIterations = value;
 				return state;
+			}),
+
+		setBrightness: (value: State['brightness']) =>
+			update((state) => {
+				state.brightness = value;
+				return state;
 			})
 	};
 })();

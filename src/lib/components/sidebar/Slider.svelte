@@ -7,13 +7,14 @@
 	export let value: number;
 	export let min: number;
 	export let max: number;
+	export let step: number = 1;
 </script>
 
 <div>
 	<span class="label">{label}</span>
 	<div class="slider-container">
 		<FormField align="end" style="display: flex;">
-			<Slider {min} {max} style="flex-grow: 1;" bind:value on:SMUISlider:input={onChange} />
+			<Slider {step} {min} {max} style="flex-grow: 1;" bind:value on:SMUISlider:input={onChange} />
 		</FormField>
 	</div>
 </div>

@@ -1,6 +1,7 @@
 <script lang="ts">
 	import { state } from '../../../stores/mandelbrotState/store';
 	import { getTranslation } from '../../../translations';
+	import Brightness from './brightness/Brightness.svelte';
 	import ColorAtMaxIterations from './colotAtMaxIterations/ColorAtMaxIterations.svelte';
 	import Donations from './donations/Donations.svelte';
 	import { onChange as onChangeMaxIterations } from './maxIterations/onChange';
@@ -44,6 +45,9 @@
 			</div>
 			<div class="input-container">
 				<Resizer />
+			</div>
+			<div class="input-container">
+				<Brightness />
 			</div>
 			<div class="input-container">
 				<ColorAtMaxIterations />

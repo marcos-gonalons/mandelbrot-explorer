@@ -17,7 +17,8 @@
 		"resizer": {
 			"label": "Tamaño del canvas"
 		},
-		"resolutionLabel": "Resolución"
+		"resolutionLabel": "Resolución",
+		"brightnessLabel": "Brillo"
 	},
 	"validations": {
 		"invalidENotationFormat": "Formato incorrecto - El formato debe ser '1.23e-04'",

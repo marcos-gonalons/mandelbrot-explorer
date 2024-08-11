@@ -17,7 +17,8 @@
 		"resizer": {
 			"label": "Canvas size"
 		},
-		"resolutionLabel": "Resolution"
+		"resolutionLabel": "Resolution",
+		"brightnessLabel": "Brightness"
 	},
 	"validations": {
 		"invalidENotationFormat": "Invalid format - number should be in the format of '1.23e-04'",
