@@ -89,7 +89,10 @@ func (s *Service) prepareColors() {
 
 func (s *Service) getIterationColor(iteration, currentAssignment int64) (r, g, b, a byte) {
 	color := s.colorScheme[currentAssignment]
-	color.A = byte(float64(iteration%(255)) * s.brightness)
+
+	brightness := (255 * s.brightness) / 100
+
+	color.A = byte(float64(iteration%(255)) * brightness)
 
 	return color.R, color.G, color.B, color.A
 }

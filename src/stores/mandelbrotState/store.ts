@@ -18,7 +18,7 @@ export const defaultState: State = {
 		b: 0,
 		a: 255
 	},
-	brightness: 2,
+	brightness: 1,
 	colorScheme: [
 		// Second color dictactes the main color at default zoom
 

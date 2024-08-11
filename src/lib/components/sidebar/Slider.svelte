@@ -4,6 +4,7 @@
 
 	export let label: string;
 	export let onChange: (e: CustomEvent) => void;
+	export let onInput: (e: CustomEvent) => void = () => null;
 	export let value: number;
 	export let min: number;
 	export let max: number;
@@ -14,7 +15,15 @@
 	<span class="label">{label}</span>
 	<div class="slider-container">
 		<FormField align="end" style="display: flex;">
-			<Slider {step} {min} {max} style="flex-grow: 1;" bind:value on:SMUISlider:input={onChange} />
+			<Slider
+				{step}
+				{min}
+				{max}
+				style="flex-grow: 1;"
+				bind:value
+				on:SMUISlider:change={onChange}
+				on:SMUISlider:input={onInput}
+			/>
 		</FormField>
 	</div>
 </div>
