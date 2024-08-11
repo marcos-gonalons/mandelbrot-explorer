@@ -8,15 +8,14 @@ type Service struct {
 	colors               []objects.RGBColor
 	maxIterations        int64
 	colorScheme          []objects.RGBColor
+	brightness           float64
 	colorAtMaxIterations objects.RGBColor
 }
 
 const CHANGE_COLOR_EVERY_N_ITERATIONS = 20
 
 func New() *Service {
-	service := &Service{}
-
-	return service
+	return &Service{}
 }
 
 func (s *Service) SetColorAtMaxIterations(colorAtMaxIterations objects.RGBColor) *Service {
@@ -29,7 +28,13 @@ func (s *Service) SetColorScheme(colorScheme []objects.RGBColor) *Service {
 	s.prepareColors()
 
 	return s
+}
 
+func (s *Service) SetBrightness(value float64) *Service {
+	s.brightness = value
+	s.prepareColors()
+
+	return s
 }
 
 func (s *Service) GetColorAtMaxIterationsObject() objects.RGBColor {
@@ -83,11 +88,8 @@ func (s *Service) prepareColors() {
 }
 
 func (s *Service) getIterationColor(iteration, currentAssignment int64) (r, g, b, a byte) {
-	brightness := int64(2) // TODO: Adjust brightness from JS.
-	alpha := byte(iteration % (255) * brightness)
-
 	color := s.colorScheme[currentAssignment]
-	color.A = alpha
+	color.A = byte(float64(iteration%(255)) * s.brightness)
 
 	return color.R, color.G, color.B, color.A
 }

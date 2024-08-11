@@ -2,6 +2,7 @@ import { handleAdjustOffsets } from './adjustOffsetsHandler/handler';
 import { handleAdjustZoom } from './adjustZoomHandler/handler';
 import { handleCalculateSegment } from './calculateSegmentHandler/handler';
 import { handleInitWasm } from './initWasmHandler/handler';
+import { handleSetBrightness } from './setBrightness/handler';
 import { handleSetColorAtMaxIterations } from './setColorAtMaxIterationsHandler/handler';
 import { handleSetColorScheme } from './setColorScheme/handler';
 import { handleSetMaxIterations } from './setMaxIterationsHandler/handler';
@@ -21,6 +22,7 @@ typeMap.set(MainToWorkerMessageType.CALCULATE_SEGMENT, handleCalculateSegment);
 typeMap.set(MainToWorkerMessageType.SET_MAX_ITERATIONS, handleSetMaxIterations);
 typeMap.set(MainToWorkerMessageType.SET_COLOR_AT_MAX_ITERATIONS, handleSetColorAtMaxIterations);
 typeMap.set(MainToWorkerMessageType.SET_COLOR_SCHEME, handleSetColorScheme);
+typeMap.set(MainToWorkerMessageType.SET_BRIGHTNESS, handleSetBrightness);
 typeMap.set(MainToWorkerMessageType.SET_STATE, handleSetState);
 
 export const handle = async ({ data: message }: MessageEvent<MainToWorkerMessage>) => {
@@ -41,6 +43,7 @@ self.WASM = {
 		setMaxIterations: placeholder,
 		setColorAtMaxIterations: placeholder,
 		setColorScheme: placeholder,
+		setBrightness: placeholder,
 		adjustOffsets: placeholder,
 		setOffsets: placeholder,
 		adjustZoom: placeholder,

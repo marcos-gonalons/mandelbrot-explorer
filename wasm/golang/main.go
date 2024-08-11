@@ -30,6 +30,7 @@ func main() {
 	exportedFunctions.Set("setZoom", js.FuncOf(SetZoom))
 	exportedFunctions.Set("setColorAtMaxIterations", js.FuncOf(SetColorAtMaxIterations))
 	exportedFunctions.Set("setColorScheme", js.FuncOf(SetColorScheme))
+	exportedFunctions.Set("setBrightness", js.FuncOf(SetBrightness))
 	exportedFunctions.Set("getState", js.FuncOf(GetState))
 	exportedFunctions.Set("setState", js.FuncOf(SetState))
 
@@ -172,6 +173,11 @@ func SetColorScheme(this js.Value, arguments []js.Value) interface{} {
 	return nil
 }
 
+func SetBrightness(this js.Value, arguments []js.Value) interface{} {
+	colorService.SetBrightness(arguments[0].Float())
+	return nil
+}
+
 func GetState(this js.Value, arguments []js.Value) interface{} {
 	state := State{
 		OperationMode:        operationMode.Get(),
@@ -193,6 +199,7 @@ func SetState(this js.Value, arguments []js.Value) interface{} {
 
 	err := json.Unmarshal([]byte(arguments[0].String()), state)
 
+	colorService.SetBrightness(state.Brightness)
 	colorService.SetMaxIterations(state.MaxIterations)
 	colorService.SetColorScheme(state.ColorScheme)
 	colorService.SetColorAtMaxIterations(state.ColorAtMaxIterations)

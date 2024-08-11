@@ -24,6 +24,7 @@ declare global {
 				setMaxIterations: (value: number) => void;
 				setColorAtMaxIterations: (r: number, g: number, b: number, a: number) => void;
 				setColorScheme: (schemeAsJSONString: string) => void;
+				setBrightness: (value: number) => void;
 				adjustOffsets: (speed: number, angleInDegrees: number) => string;
 				setOffsets: (xAsENotation: string, yAsENotation: string) => string;
 				adjustZoom: (

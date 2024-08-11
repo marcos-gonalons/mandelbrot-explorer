@@ -11,6 +11,7 @@ export enum MainToWorkerMessageType {
 	SET_MAX_ITERATIONS,
 	SET_COLOR_AT_MAX_ITERATIONS,
 	SET_COLOR_SCHEME,
+	SET_BRIGHTNESS,
 	SET_STATE
 }
 export const MAIN_TO_WORKER_MESSAGE_TYPES: MainToWorkerMessageType[] = [
@@ -23,6 +24,7 @@ export const MAIN_TO_WORKER_MESSAGE_TYPES: MainToWorkerMessageType[] = [
 	MainToWorkerMessageType.SET_MAX_ITERATIONS,
 	MainToWorkerMessageType.SET_COLOR_AT_MAX_ITERATIONS,
 	MainToWorkerMessageType.SET_COLOR_SCHEME,
+	MainToWorkerMessageType.SET_BRIGHTNESS,
 	MainToWorkerMessageType.SET_STATE
 ];
 
@@ -68,6 +70,10 @@ export type SetColorSchemeMessage = {
 	type: MainToWorkerMessageType.SET_COLOR_SCHEME;
 	data: { scheme: RGBColor[] };
 };
+export type SetBrightnessMessage = {
+	type: MainToWorkerMessageType.SET_BRIGHTNESS;
+	data: { value: number };
+};
 export enum OperationMode {
 	FLOAT64 = 0,
 	FLOAT128 = 1
@@ -87,6 +93,7 @@ export type SetStateMessage = {
 			};
 			colorAtMaxIterations: RGBColor;
 			colorScheme: RGBColor[];
+			brightness: number;
 		};
 	};
 };
@@ -101,6 +108,7 @@ export type MainToWorkerMessage =
 	| SetMaxIterationsMessage
 	| SetColorAtMaxIterationsMessage
 	| SetColorSchemeMessage
+	| SetBrightnessMessage
 	| SetStateMessage;
 
 export type MainToWorkerPostMessage = (message: MainToWorkerMessage) => void;
