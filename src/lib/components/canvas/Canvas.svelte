@@ -35,6 +35,10 @@
 
 			$workersManager.parallelizeCalculation();
 
+			/// TODO: Remove me ///
+			(window as any).workersManager = $workersManager;
+			//////////////////////
+
 			spinner.style.visibility = 'hidden';
 		} catch (e: unknown) {}
 

@@ -83,7 +83,8 @@ func (s *Service) prepareColors() {
 }
 
 func (s *Service) getIterationColor(iteration, currentAssignment int64) (r, g, b, a byte) {
-	alpha := byte(iteration % (255) * 2)
+	brightness := int64(2) // TODO: Adjust brightness from JS.
+	alpha := byte(iteration % (255) * brightness)
 
 	color := s.colorScheme[currentAssignment]
 	color.A = alpha

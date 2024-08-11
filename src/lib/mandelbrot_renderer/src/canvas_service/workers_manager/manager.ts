@@ -9,6 +9,7 @@ import {
 	MainToWorkerMessageType,
 	type MainToWorkerPostMessage,
 	type SetColorAtMaxIterationsMessage,
+	type SetColorSchemeMessage,
 	type SetMaxIterationsMessage,
 	type SetOffsetsMessage,
 	type SetStateMessage,
@@ -200,6 +201,18 @@ export const createWorkersManager = (
 		});
 	};
 
+	const setColorScheme = async (data: SetColorSchemeMessage['data']) => {
+		return new Promise((resolve) => {
+			executionFinishedPromiseResolve.set(MainToWorkerMessageType.SET_COLOR_SCHEME, resolve);
+			invokeWorkers(
+				Array<MainToWorkerMessage>(workers.length).fill({
+					type: MainToWorkerMessageType.SET_COLOR_SCHEME,
+					data
+				})
+			);
+		});
+	};
+
 	const setState = async (data: SetStateMessage['data']) => {
 		return new Promise((resolve) => {
 			executionFinishedPromiseResolve.set(MainToWorkerMessageType.SET_STATE, resolve);
@@ -286,6 +299,7 @@ export const createWorkersManager = (
 		setOffsets,
 		setMaxIterations,
 		setColorAtMaxIterations,
+		setColorScheme,
 		setState,
 		initCanvas,
 		setResolution,

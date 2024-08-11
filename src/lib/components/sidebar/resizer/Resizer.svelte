@@ -22,7 +22,7 @@
 
 		if (value < 100) {
 			container.style.borderRadius = '20px';
-			canvas.style.borderRadius = '0px';
+			canvas.style.borderRadius = '20px';
 		}
 
 		$workersManager.initCanvas();
