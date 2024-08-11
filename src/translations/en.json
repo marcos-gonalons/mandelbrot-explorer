@@ -20,7 +20,9 @@
 		"resolutionLabel": "Resolution",
 		"saturationLabel": "Saturation",
 		"colorScheme": {
-			"label": "Color scheme"
+			"label": "Color scheme",
+			"applyButton": "Apply scheme",
+			"cancelButton": "Cancel"
 		}
 	},
 	"validations": {
