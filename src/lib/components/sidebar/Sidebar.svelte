@@ -42,6 +42,12 @@
 				<YOffset />
 			</div>
 			<div class="input-container">
+				<ColorAtMaxIterations />
+			</div>
+			<div class="input-container">
+				<ColorScheme />
+			</div>
+			<div class="input-container">
 				<Resolution />
 			</div>
 			<div class="input-container">
@@ -49,12 +55,6 @@
 			</div>
 			<div class="input-container">
 				<Saturation />
-			</div>
-			<div class="input-container">
-				<ColorAtMaxIterations />
-			</div>
-			<div class="input-container">
-				<ColorScheme />
 			</div>
 			<Reset />
 		</section>
