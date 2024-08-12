@@ -1,7 +1,6 @@
 <script lang="ts">
 	import type { RGBColor } from '$lib/mandelbrot_renderer/src/types';
 	import ColorPicker from 'svelte-awesome-color-picker';
-	import ColorInput from './ColorInput.svelte';
 	import ColorPickerWrapper from './ColorPickerWrapper.svelte';
 
 	export let color: RGBColor;
@@ -10,16 +9,24 @@
 	const _onChange = ({ detail }: CustomEvent) => onChange((detail as { rgb: RGBColor }).rgb);
 </script>
 
-<ColorPicker
-	components={{ wrapper: ColorPickerWrapper, input: ColorInput }}
-	rgb={color}
-	on:input={_onChange}
-/>
+<div class="color-modal-container">
+	<ColorPicker
+		components={{ wrapper: ColorPickerWrapper }}
+		label=""
+		--input-size="42px"
+		rgb={color}
+		on:input={_onChange}
+	/>
+</div>
 
 <div id="color-picker-portal"></div>
 
 <style>
 	#color-picker-portal {
 		position: absolute;
+	}
+
+	:global(.color-modal-container .color) {
+		box-shadow: 1px 1px 1px black;
 	}
 </style>
