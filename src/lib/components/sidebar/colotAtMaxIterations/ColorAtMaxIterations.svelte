@@ -7,6 +7,7 @@
 
 	let changeInterval: ReturnType<typeof setInterval> | null;
 	let latestColor: RGBColor;
+	let value = $state.colorAtMaxIterations;
 
 	const onChange = ({ detail }: CustomEvent) => {
 		const color = (detail as { rgb: RGBColor }).rgb;
@@ -35,7 +36,7 @@
 
 <ColorPicker
 	label={getTranslation('sidebar.colorAtMaxIterations.label')}
-	rgb={$state.colorAtMaxIterations}
+	rgb={value}
 	position="responsive"
 	on:input={onChange}
 />
