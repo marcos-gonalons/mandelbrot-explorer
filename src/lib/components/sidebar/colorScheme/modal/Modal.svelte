@@ -54,4 +54,7 @@
 		row-gap: 20px;
 		text-align: center;
 	}
+	:global(.mdc-dialog__surface) {
+		overflow-x: hidden;
+	}
 </style>
