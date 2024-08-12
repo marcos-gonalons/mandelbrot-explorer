@@ -26,10 +26,12 @@
 	aria-describedby="simple-content"
 >
 	<Title id="simple-title">{getTranslation('sidebar.colorScheme.label')}</Title>
-	<Content id="simple-content">
-		{#each colorScheme as color, i}
-			<Color {color} onChange={(c) => (colorScheme[i] = c)} />
-		{/each}
+	<Content>
+		<div id="content">
+			{#each colorScheme as color, i}
+				<Color {color} onChange={(c) => (colorScheme[i] = c)} />
+			{/each}
+		</div>
 	</Content>
 	<Actions>
 		<Button variant="raised" on:click={onSave}>
@@ -44,3 +46,12 @@
 		</Button>
 	</Actions>
 </Dialog>
+
+<style>
+	#content {
+		display: grid;
+		grid-template-columns: repeat(3, 33.3%);
+		row-gap: 20px;
+		text-align: center;
+	}
+</style>
