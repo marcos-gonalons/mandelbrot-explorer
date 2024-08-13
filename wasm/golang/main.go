@@ -73,8 +73,8 @@ func initServices() {
 
 func SetMaxIterations(this js.Value, arguments []js.Value) interface{} {
 	maxIterations := arguments[0].Int()
-	segmentCalculatorService.SetMaxIterations(int64(maxIterations))
-	colorService.SetMaxIterations(int64(maxIterations))
+	segmentCalculatorService.SetMaxIterations(uint64(maxIterations))
+	colorService.SetMaxIterations(uint64(maxIterations))
 	return nil
 }
 
@@ -182,6 +182,8 @@ func GetState(this js.Value, arguments []js.Value) interface{} {
 	state := State{
 		OperationMode:        operationMode.Get(),
 		MaxIterations:        colorService.GetMaxIterations(),
+		ColorChangeFrequency: colorService.GetColorChangeFrequency(),
+		Saturation:           colorService.GetSaturation(),
 		ZoomAsENotation:      zoomHandler.GetZoomLevelAsENotation(),
 		MagnitudeAsENotation: zoomHandler.GetMagnitudeAsENotation(),
 		MagnitudeDecimals:    zoomHandler.GetMagnitudeDecimals(),
@@ -202,6 +204,7 @@ func SetState(this js.Value, arguments []js.Value) interface{} {
 	colorService.SetSaturation(state.Saturation)
 	colorService.SetMaxIterations(state.MaxIterations)
 	colorService.SetColorScheme(state.ColorScheme)
+	colorService.SetColorChangeFrequency(state.ColorChangeFrequency)
 	colorService.SetColorAtMaxIterations(state.ColorAtMaxIterations)
 
 	segmentCalculatorService.SetMaxIterations(state.MaxIterations)

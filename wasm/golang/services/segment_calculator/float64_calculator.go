@@ -15,7 +15,7 @@ func (s *Service) getIterationsFloat64(
 	canvasSize objects.Size,
 	zoomLevel float64,
 	offsets objects.Coordinates,
-) int64 {
+) uint64 {
 	point := complexNumber64{
 		RealPart:      ((coordinates.X.GetFloat64()/float64(canvasSize.Width))*zoomLevel)*4 - 2.5 + offsets.X.GetFloat64(),
 		ImaginaryPart: ((coordinates.Y.GetFloat64()/float64(canvasSize.Height))*zoomLevel)*2 - 1 + offsets.Y.GetFloat64(),
@@ -25,7 +25,7 @@ func (s *Service) getIterationsFloat64(
 		RealPart:      0,
 		ImaginaryPart: 0,
 	}
-	for i := int64(0); i < s.maxIterations; i++ {
+	for i := uint64(0); i < s.maxIterations; i++ {
 		z = addComplex64(squareComplex64(z), point)
 
 		if math.Abs(z.RealPart) > THRESHOLD || math.Abs(z.ImaginaryPart) > THRESHOLD {

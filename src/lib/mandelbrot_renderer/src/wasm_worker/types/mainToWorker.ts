@@ -84,6 +84,7 @@ export type SetStateMessage = {
 		state: {
 			operationMode: OperationMode;
 			maxIterations: number;
+			colorChangeFrequency: number;
 			zoomAsENotation: string;
 			magnitudeAsENotation: string;
 			magnitudeDecimals: string;

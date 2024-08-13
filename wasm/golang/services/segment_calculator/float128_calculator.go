@@ -10,7 +10,7 @@ func (s *Service) getIterationsFloat128(
 	canvasSize objects.Size,
 	zoomLevel float128.Float128,
 	offsets objects.Coordinates,
-) int64 {
+) uint64 {
 	point := s.coordinatesToComplexNumber128(coordinates, canvasSize, zoomLevel, offsets)
 
 	z := ComplexNumber128{
@@ -18,7 +18,7 @@ func (s *Service) getIterationsFloat128(
 		ImaginaryPart: float128.Zero(),
 	}
 	threshold := float128.SetFloat64(THRESHOLD)
-	for i := int64(0); i < s.maxIterations; i++ {
+	for i := uint64(0); i < s.maxIterations; i++ {
 		z = addComplex128(squareComplex128(z), point)
 
 		if float128.IsGT(float128.Abs(z.RealPart), threshold) || float128.IsGT(float128.Abs(z.ImaginaryPart), threshold) {

@@ -7,7 +7,8 @@ import (
 
 type State struct {
 	OperationMode        operationmode.Mode
-	MaxIterations        int64
+	MaxIterations        uint64
+	ColorChangeFrequency uint64
 	ZoomAsENotation      string
 	MagnitudeAsENotation string
 	MagnitudeDecimals    uint64

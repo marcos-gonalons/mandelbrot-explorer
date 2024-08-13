@@ -14,7 +14,7 @@ type Service struct {
 	offsetsHandler   *offsets.Handler
 	zoomHandler      *zoom.Handler
 	colorService     *color.Service
-	maxIterations    int64
+	maxIterations    uint64
 	progressCallback func(progress float64)
 }
 
@@ -36,7 +36,7 @@ func New(
 	}
 }
 
-func (s *Service) SetMaxIterations(maxIterations int64) *Service {
+func (s *Service) SetMaxIterations(maxIterations uint64) *Service {
 	s.maxIterations = maxIterations
 	return s
 }
@@ -87,7 +87,7 @@ func (s *Service) getPixelColor(
 	zoomLevel operationmode.Float,
 	offsets objects.Coordinates,
 ) (r, g, b, a byte) {
-	var iterations int64
+	var iterations uint64
 
 	switch s.operationMode.Get() {
 	case operationmode.FLOAT64:

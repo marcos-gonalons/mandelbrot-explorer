@@ -5,6 +5,7 @@ import type { State } from './types';
 export const defaultState: State = {
 	operationMode: OperationMode.FLOAT64,
 	maxIterations: 1000,
+	colorChangeFrequency: 30,
 	zoomAsENotation: '+1.2e-0',
 	magnitudeAsENotation: '+1e-1',
 	magnitudeDecimals: '1',
