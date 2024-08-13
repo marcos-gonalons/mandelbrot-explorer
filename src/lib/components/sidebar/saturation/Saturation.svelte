@@ -26,7 +26,7 @@
 </script>
 
 <Slider
-	label={`${getTranslation('sidebar.saturationLabel')} ${$state.saturation}%`}
+	label={getTranslation('sidebar.saturationLabel')}
 	{value}
 	{onChange}
 	{onInput}
