@@ -102,6 +102,12 @@ export const state = (() => {
 				return state;
 			}),
 
+		setColorChangeFrequency: (value: State['colorChangeFrequency']) =>
+			update((state) => {
+				state.colorChangeFrequency = value;
+				return state;
+			}),
+
 		setColorScheme: (value: State['colorScheme']) =>
 			update((state) => {
 				state.colorScheme = value;

@@ -13,6 +13,7 @@ import {
 	type SetMaxIterationsMessage,
 	type SetOffsetsMessage,
 	type SetSaturationMessage,
+	type SetSColorChangeFrequencyMessage,
 	type SetStateMessage,
 	type SetZoomMessage
 } from '../../wasm_worker/types/mainToWorker';
@@ -23,7 +24,7 @@ import {
 	WASM_FILE_PATH,
 	WORKERS_SCRIPT_PATH
 } from './constants';
-import { type Listeners, createListeners } from './listeners/main';
+import { createListeners, type Listeners } from './listeners/main';
 
 export type WorkersManager = ReturnType<typeof createWorkersManager>;
 
@@ -226,6 +227,21 @@ export const createWorkersManager = (
 		});
 	};
 
+	const setColorChangeFrequency = async (data: SetSColorChangeFrequencyMessage['data']) => {
+		return new Promise((resolve) => {
+			executionFinishedPromiseResolve.set(
+				MainToWorkerMessageType.SET_COLOR_CHANGE_FREQUENCY,
+				resolve
+			);
+			invokeWorkers(
+				Array<MainToWorkerMessage>(workers.length).fill({
+					type: MainToWorkerMessageType.SET_COLOR_CHANGE_FREQUENCY,
+					data
+				})
+			);
+		});
+	};
+
 	const setState = async (data: SetStateMessage['data']) => {
 		return new Promise((resolve) => {
 			executionFinishedPromiseResolve.set(MainToWorkerMessageType.SET_STATE, resolve);
@@ -314,6 +330,7 @@ export const createWorkersManager = (
 		setColorAtMaxIterations,
 		setColorScheme,
 		setSaturation,
+		setColorChangeFrequency,
 		setState,
 		initCanvas,
 		setResolution,

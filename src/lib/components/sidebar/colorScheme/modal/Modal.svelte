@@ -27,9 +27,9 @@
 
 	const onAddNew = () => {
 		colorScheme.push({
-			r: 0,
-			g: 0,
-			b: 0,
+			r: parseInt((Math.random() * 255).toString()),
+			g: parseInt((Math.random() * 255).toString()),
+			b: parseInt((Math.random() * 255).toString()),
 			a: 255
 		});
 

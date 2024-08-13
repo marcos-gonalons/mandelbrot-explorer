@@ -23,7 +23,8 @@
 			"label": "Esquema de colores",
 			"applyButton": "Aplicar esquema",
 			"cancelButton": "Cancelar"
-		}
+		},
+		"colorChangeFrequencyLabel": "Frecuencia de cambio de color"
 	},
 	"validations": {
 		"invalidENotationFormat": "Formato incorrecto - El formato debe ser '1.23e-04'",

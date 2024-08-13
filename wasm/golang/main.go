@@ -31,6 +31,7 @@ func main() {
 	exportedFunctions.Set("setColorAtMaxIterations", js.FuncOf(SetColorAtMaxIterations))
 	exportedFunctions.Set("setColorScheme", js.FuncOf(SetColorScheme))
 	exportedFunctions.Set("setSaturation", js.FuncOf(SetSaturation))
+	exportedFunctions.Set("setColorChangeFrequency", js.FuncOf(SetColorChangeFrequency))
 	exportedFunctions.Set("getState", js.FuncOf(GetState))
 	exportedFunctions.Set("setState", js.FuncOf(SetState))
 
@@ -175,6 +176,11 @@ func SetColorScheme(this js.Value, arguments []js.Value) interface{} {
 
 func SetSaturation(this js.Value, arguments []js.Value) interface{} {
 	colorService.SetSaturation(arguments[0].Float())
+	return nil
+}
+
+func SetColorChangeFrequency(this js.Value, arguments []js.Value) interface{} {
+	colorService.SetColorChangeFrequency(uint64(arguments[0].Int()))
 	return nil
 }
 

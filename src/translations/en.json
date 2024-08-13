@@ -23,7 +23,8 @@
 			"label": "Color scheme",
 			"applyButton": "Apply scheme",
 			"cancelButton": "Cancel"
-		}
+		},
+		"colorChangeFrequencyLabel": "Color change frequency"
 	},
 	"validations": {
 		"invalidENotationFormat": "Invalid format - number should be in the format of '1.23e-04'",

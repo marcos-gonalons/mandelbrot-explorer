@@ -12,6 +12,7 @@ export enum MainToWorkerMessageType {
 	SET_COLOR_AT_MAX_ITERATIONS,
 	SET_COLOR_SCHEME,
 	SET_SATURATION,
+	SET_COLOR_CHANGE_FREQUENCY,
 	SET_STATE
 }
 export const MAIN_TO_WORKER_MESSAGE_TYPES: MainToWorkerMessageType[] = [
@@ -25,6 +26,7 @@ export const MAIN_TO_WORKER_MESSAGE_TYPES: MainToWorkerMessageType[] = [
 	MainToWorkerMessageType.SET_COLOR_AT_MAX_ITERATIONS,
 	MainToWorkerMessageType.SET_COLOR_SCHEME,
 	MainToWorkerMessageType.SET_SATURATION,
+	MainToWorkerMessageType.SET_COLOR_CHANGE_FREQUENCY,
 	MainToWorkerMessageType.SET_STATE
 ];
 
@@ -74,6 +76,10 @@ export type SetSaturationMessage = {
 	type: MainToWorkerMessageType.SET_SATURATION;
 	data: { value: number };
 };
+export type SetSColorChangeFrequencyMessage = {
+	type: MainToWorkerMessageType.SET_COLOR_CHANGE_FREQUENCY;
+	data: { value: number };
+};
 export enum OperationMode {
 	FLOAT64 = 0,
 	FLOAT128 = 1
@@ -110,6 +116,7 @@ export type MainToWorkerMessage =
 	| SetColorAtMaxIterationsMessage
 	| SetColorSchemeMessage
 	| SetSaturationMessage
+	| SetSColorChangeFrequencyMessage
 	| SetStateMessage;
 
 export type MainToWorkerPostMessage = (message: MainToWorkerMessage) => void;

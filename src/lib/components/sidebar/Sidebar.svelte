@@ -1,6 +1,7 @@
 <script lang="ts">
 	import { state } from '../../../stores/mandelbrotState/store';
 	import { getTranslation } from '../../../translations';
+	import ColorChangeFrequency from './colorChangeFrequency/ColorChangeFrequency.svelte';
 	import ColorScheme from './colorScheme/ColorScheme.svelte';
 	import ColorAtMaxIterations from './colotAtMaxIterations/ColorAtMaxIterations.svelte';
 	import Donations from './donations/Donations.svelte';
@@ -55,6 +56,9 @@
 			</div>
 			<div class="input-container">
 				<Saturation />
+			</div>
+			<div class="input-container">
+				<ColorChangeFrequency />
 			</div>
 			<Reset />
 		</section>
