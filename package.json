@@ -19,7 +19,7 @@
 	"author": "Marcos Goñalons",
 	"license": "ISC",
 	"devDependencies": {
-		"@fontsource/fira-mono": "^5.0.14",
+		"@fontsource/fira-mono": "^5.0.15",
 		"@neoconfetti/svelte": "^2.2.1",
 		"@smui/button": "^7.0.0",
 		"@smui/dialog": "^7.0.0",
@@ -40,7 +40,7 @@
 		"svelte-check": "^4.0.1",
 		"ts-loader": "^9.5.1",
 		"tslib": "^2.7.0",
-		"typescript": "^5.5.4",
+		"typescript": "^5.6.2",
 		"vite": "^5.4.3",
 		"webpack": "^5.94.0",
 		"webpack-cli": "^5.1.4"
@@ -53,7 +53,7 @@
 		"svelte-material-ui": "^7.0.0",
 		"svelte-portal": "^2.2.1",
 		"toastify-js": "^1.12.0",
-		"vercel": "^37.4.0"
+		"vercel": "^37.4.1"
 	},
 	"type": "module"
 }
